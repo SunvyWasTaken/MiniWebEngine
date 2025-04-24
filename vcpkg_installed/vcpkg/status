@@ -1,0 +1,193 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: aac2c9070da659a20dd4f2cf81641a3728b2e711f9d58fb5d7ffdaffae362af6
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 2935c91c1141092080e0e88ef8f2ca22061432f0a1f1448288be51752741ab08
+Status: install ok installed
+
+Package: egl-registry
+Version: 2024-01-25
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 9bab747cc08d0a79302ec2bb8e19b347f787509d3d23b10728bdd35f34a28409
+Description: EGL API and Extension Registry
+Status: purge ok not-installed
+
+Package: opengl-registry
+Version: 2024-02-10
+Port-Version: 1
+Depends: egl-registry
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 77abe4ed8bf76589d539e9b70783a5cc7e2bb8c9a8738c82add5df649c262c4f
+Description: OpenGL, OpenGL ES, and OpenGL ES-SC API and Extension Registry
+Status: purge ok not-installed
+
+Package: glad
+Version: 0.1.36
+Depends: egl-registry, opengl-registry, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: fbf47da39d20c6fdfd01f06b0104afddd52f233c9bf8d21ba89b55c7d4832366
+Description: Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs.
+Default-Features: loader
+Status: purge ok not-installed
+
+Package: glad
+Feature: loader
+Architecture: x64-windows
+Multi-Arch: same
+Description: Generate loader logic.
+Status: purge ok not-installed
+
+Package: glfw3
+Version: 3.4
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 8ca0c9f2f205d8cf0cdb6ef5c148d9ab4f031411db85c8f639298ab921f50234
+Description: GLFW is a free, Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan application development. It provides a simple, platform-independent API for creating windows, contexts and surfaces, reading input, handling events, etc.
+Status: purge ok not-installed
+
+Package: glm
+Version: 1.0.1
+Port-Version: 3
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 637fa9e2321de70b70af248df099f0580a4356904ff14b52b1fb82c6915a14fc
+Description: OpenGL Mathematics (GLM)
+Status: purge ok not-installed
+
+Package: imgui
+Version: 1.91.9
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: b9da11b576bd0e84317fc33b282e740d2019864fd77091e92b8a3d2ec129cf98
+Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
+Status: purge ok not-installed
+
+Package: imgui
+Feature: glfw-binding
+Depends: glfw3
+Architecture: x64-windows
+Multi-Arch: same
+Description: Make available GLFW binding
+Status: purge ok not-installed
+
+Package: stb
+Version: 2024-07-29
+Port-Version: 1
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 5277c9f5535a8fbd86488ffbfdd41f17f5924914ea4f90a4b69dd9f3526177b0
+Description: public domain header-only libraries
+Status: purge ok not-installed
+
+Package: entt
+Version: 3.15.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 748dfcc8d2e38d1e70b0fe434e1ed2958c2a345b484f28fd323e6d60442e9854
+Description: Gaming meets modern C++ - a fast and reliable entity-component system and much more
+Status: purge ok not-installed
+
+Package: entt
+Version: 3.15.0
+Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Abi: fbcbc9a2d90672488f7aeb0050c8b83cea78db4f70b537a82301e46073678221
+Description: Gaming meets modern C++ - a fast and reliable entity-component system and much more
+Status: install ok installed
+
+Package: egl-registry
+Version: 2024-01-25
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Abi: e2fac81664f2f9521841bd4ac82641009d63d464281e89900ae2dc345f74fcd6
+Description: EGL API and Extension Registry
+Status: install ok installed
+
+Package: opengl-registry
+Version: 2024-02-10
+Port-Version: 1
+Depends: egl-registry
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Abi: ac52ab15d71ae0fdbdf0f4110b407c70eed5ea1bb65792d26dddd0020d3c5eed
+Description: OpenGL, OpenGL ES, and OpenGL ES-SC API and Extension Registry
+Status: install ok installed
+
+Package: glad
+Version: 0.1.36
+Depends: egl-registry, opengl-registry, vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Abi: ef879bbff4cff600f685711a2e2c3df9fe5cc45fc181e8ad9035c8af5aeaf2e6
+Description: Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs.
+Default-Features: loader
+Status: install ok installed
+
+Package: glad
+Feature: loader
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Description: Generate loader logic.
+Status: install ok installed
+
+Package: glfw3
+Version: 3.4
+Port-Version: 1
+Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Abi: 60164b7b8375b2db95f227e4b4a89ed6c5622f5537813628575fc022527ec801
+Description: GLFW is a free, Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan application development. It provides a simple, platform-independent API for creating windows, contexts and surfaces, reading input, handling events, etc.
+Status: install ok installed
+
+Package: glm
+Version: 1.0.1
+Port-Version: 3
+Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Abi: 1d79e9877a77bf14e3c8c6cc56c00392c896db539a07a64dc9a6b927226e7957
+Description: OpenGL Mathematics (GLM)
+Status: install ok installed
+
+Package: imgui
+Version: 1.91.9
+Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Abi: abfe7beaf295edf3f0875bf7a7f9de26b417457f3908a2075a7f7f048b66cdb4
+Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
+Status: install ok installed
+
+Package: imgui
+Feature: glfw-binding
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Description: Make available GLFW binding
+Status: install ok installed
+
+Package: stb
+Version: 2024-07-29
+Port-Version: 1
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Abi: e2fbb50077147092526075577552de8331847b4696f9c18d692c919489d3a1f1
+Description: public domain header-only libraries
+Status: install ok installed
+

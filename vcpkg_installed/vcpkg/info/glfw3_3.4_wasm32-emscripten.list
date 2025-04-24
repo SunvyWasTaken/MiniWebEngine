@@ -1,0 +1,6 @@
+wasm32-emscripten/
+wasm32-emscripten/share/
+wasm32-emscripten/share/glfw3/
+wasm32-emscripten/share/glfw3/glfw3Config.cmake
+wasm32-emscripten/share/glfw3/vcpkg.spdx.json
+wasm32-emscripten/share/glfw3/vcpkg_abi_info.txt
