@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/imgui-wasm32-emscripten-1.91.9-9f762098-b28c-4f4c-907f-fe04b69fdd01",
-  "name": "imgui:wasm32-emscripten@1.91.9 abfe7beaf295edf3f0875bf7a7f9de26b417457f3908a2075a7f7f048b66cdb4",
+  "documentNamespace": "https://spdx.org/spdxdocs/imgui-wasm32-emscripten-1.91.9-bb5149d5-f682-4299-a9af-cea9b09b37f3",
+  "name": "imgui:wasm32-emscripten@1.91.9 3859e2a79fbd4e9c8aadbbaa353eb1cf9df2a1110c23eb2042868d2d284df8af",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2025-04-16-f9b6c6917b23c1ccf16c1a9f015ebabf8f615045"
     ],
-    "created": "2025-04-23T15:55:13Z"
+    "created": "2025-04-25T13:39:17Z"
   },
   "relationships": [
     {
@@ -84,7 +84,7 @@
     {
       "name": "imgui:wasm32-emscripten",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "abfe7beaf295edf3f0875bf7a7f9de26b417457f3908a2075a7f7f048b66cdb4",
+      "versionInfo": "3859e2a79fbd4e9c8aadbbaa353eb1cf9df2a1110c23eb2042868d2d284df8af",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",

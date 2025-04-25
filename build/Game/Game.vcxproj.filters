@@ -7,6 +7,9 @@
     <ClCompile Include="D:\source\Truc\Game\Private\Inputs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Private\Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\source\Truc\Game\Private\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -31,6 +34,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\source\Truc\Game\Public\Inputs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Public\Layer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\source\Truc\Game\Public\Object.h">

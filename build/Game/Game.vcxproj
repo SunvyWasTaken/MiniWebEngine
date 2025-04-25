@@ -298,6 +298,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <ClCompile Include="D:\source\Truc\Game\Private\Camera.cpp" />
     <ClCompile Include="D:\source\Truc\Game\Private\Inputs.cpp" />
+    <ClCompile Include="D:\source\Truc\Game\Private\Layer.cpp" />
     <ClCompile Include="D:\source\Truc\Game\Private\Object.cpp" />
     <ClCompile Include="D:\source\Truc\Game\Private\Render.cpp" />
     <ClCompile Include="D:\source\Truc\Game\Private\RenderObject.cpp" />
@@ -305,6 +306,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\source\Truc\Game\Private\Texture.cpp" />
     <ClInclude Include="D:\source\Truc\Game\Public\Camera.h" />
     <ClInclude Include="D:\source\Truc\Game\Public\Inputs.h" />
+    <ClInclude Include="D:\source\Truc\Game\Public\Layer.h" />
     <ClInclude Include="D:\source\Truc\Game\Public\Object.h" />
     <ClInclude Include="D:\source\Truc\Game\Public\Render.h" />
     <ClInclude Include="D:\source\Truc\Game\Public\RenderObject.h" />
