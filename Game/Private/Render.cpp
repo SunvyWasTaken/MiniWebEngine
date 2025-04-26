@@ -4,9 +4,6 @@
 
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 #include <GLES3/gl3.h>
 #else
 #include <glad/glad.h>
@@ -72,15 +69,13 @@ namespace Sunset
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+#ifndef __EMSCRIPTEN__
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		ImGui::StyleColorsDark();
 
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
-#ifdef __EMSCRIPTEN__
-		ImGui_ImplOpenGL3_Init("#version 300");
-#else
 		ImGui_ImplOpenGL3_Init("#version 330");
 #endif // __EMSCRIPTEN__
 	}
@@ -92,10 +87,11 @@ namespace Sunset
 
 	Render::~Render()
 	{
+#ifndef __EMSCRIPTEN__
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
-
+#endif
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 	}
@@ -112,10 +108,11 @@ namespace Sunset
 
 	void Render::Begin(const std::shared_ptr<Camera>& cam)
 	{
+#ifndef __EMSCRIPTEN__
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
+#endif
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -124,9 +121,10 @@ namespace Sunset
 
 	void Render::End()
 	{
+#ifndef __EMSCRIPTEN__
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+#endif
 		glUseProgram(0);
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();

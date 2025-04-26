@@ -69,7 +69,9 @@ namespace Sunset
 	class Square : public RenderObject
 	{
 	public:
-		Square();
+		explicit Square(const glm::vec2& coord);
+		virtual void PostRender() override;
+		glm::vec2 SpriteCoord;
 	};
 
 	class Sprite : public RenderObject

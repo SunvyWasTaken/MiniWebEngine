@@ -5,9 +5,11 @@
 
 #include <glm/glm.hpp>
 
+#ifndef __EMSCRIPTEN__
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#endif
 
 #include <variant>
 #include <vector>

@@ -11,10 +11,22 @@ namespace Sunset
 		return state == GLFW_PRESS;
 	}
 
-	bool Inputs::IsMouseButton(const int keyValue)
+	bool Inputs::IsKeyReleased(const int keyValue)
+	{
+		int state = glfwGetKey(Render::Get(), keyValue);
+		return state == GLFW_RELEASE;
+	}
+
+	bool Inputs::IsMouseButtonPressed(const int keyValue)
 	{
 		int state = glfwGetMouseButton(Render::Get(), keyValue);
 		return state == GLFW_PRESS;
+	}
+
+	bool Inputs::IsMouseButtonReleased(const int keyValue)
+	{
+		int state = glfwGetMouseButton(Render::Get(), keyValue);
+		return state == GLFW_RELEASE;
 	}
 
 	glm::vec2 Inputs::GetMouseScreenPosition()

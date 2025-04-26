@@ -4,6 +4,7 @@
 #include <entt/entt.hpp>
 
 #include <memory>
+#include <variant>
 #include <vector>
 
 namespace Sunset
@@ -28,6 +29,21 @@ namespace Sunset
 		bool bStatic;
 	};
 
+	namespace CollisionShape
+	{
+		struct Square{};
+		struct Sphere{};
+		using Type = std::variant<Square, Sphere>;
+	};
+
+	struct CollisionComponent : public BaseComponent
+	{
+		CollisionShape::Type type;
+		std::vector<Entity> IgnoreActor;
+		void Collision();
+		std::function<void()> OnCollision;
+	};
+
 	struct RenderObjectComponent : public BaseComponent
 	{
 		explicit RenderObjectComponent(RenderObject* obj)
@@ -47,7 +63,7 @@ namespace Sunset
 
 	struct CollisionTest
 	{
-		static bool Intersect(TransformComponent& A, TransformComponent& B);
+		static bool Intersect(const Entity& A, const Entity& B, World& world);
 
 		static void ResolveCollision(TransformComponent& A, TransformComponent& B, float deltatime);
 	};
