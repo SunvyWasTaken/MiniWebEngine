@@ -32,17 +32,17 @@ std::ostream& operator<<(std::ostream& io, const glm::vec2& vec)
 
 void TestWorldCollision(const Sunset::Entity& entity, Sunset::World& world, const std::function<void(const Sunset::Entity& A, const Sunset::Entity& B)>& func)
 {
-	auto entitys = world.group<Sunset::TransformComponent>();
-	for (const Sunset::Entity& tmp : entitys)
-	{
-		if (entity == tmp)
-			continue;
-
-		if (Sunset::CollisionTest::Intersect(entity, tmp, world))
+	auto entitys = world.view<Sunset::TransformComponent>();
+	entitys.each([&](Sunset::Entity tmp, Sunset::TransformComponent& transComp)
 		{
-			func(entity, tmp);
-		}
-	}
+			if (entity == tmp)
+				return;
+
+			if (Sunset::CollisionTest::Intersect(entity, tmp, world))
+			{
+				func(entity, tmp);
+			}
+		});
 }
 
 struct ProjectilComponent : public Sunset::BaseComponent
@@ -206,7 +206,7 @@ int main()
 					Sunset::CollisionTest::ResolveCollision(transA, transB, Deltatime);
 
 					world.destroy(entity);
-					//world.destroy(B);
+					world.destroy(B);
 				});
 		});
 
