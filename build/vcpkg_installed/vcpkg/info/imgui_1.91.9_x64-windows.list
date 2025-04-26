@@ -6,6 +6,8 @@ x64-windows/include/
 x64-windows/include/imconfig.h
 x64-windows/include/imgui.h
 x64-windows/include/imgui_impl_glfw.h
+x64-windows/include/imgui_impl_opengl3.h
+x64-windows/include/imgui_impl_opengl3_loader.h
 x64-windows/include/imgui_internal.h
 x64-windows/include/imgui_stdlib.h
 x64-windows/include/imstb_rectpack.h

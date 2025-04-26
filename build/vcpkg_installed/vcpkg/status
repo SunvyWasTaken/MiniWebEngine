@@ -72,7 +72,7 @@ Version: 1.91.9
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: b9da11b576bd0e84317fc33b282e740d2019864fd77091e92b8a3d2ec129cf98
+Abi: 0efc6d4ea1a9786cb04403d1ec0dcbed3510425cf2b803f5206820459d463f8b
 Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
 Status: install ok installed
 
@@ -100,5 +100,12 @@ Architecture: x64-windows
 Multi-Arch: same
 Abi: 748dfcc8d2e38d1e70b0fe434e1ed2958c2a345b484f28fd323e6d60442e9854
 Description: Gaming meets modern C++ - a fast and reliable entity-component system and much more
+Status: install ok installed
+
+Package: imgui
+Feature: opengl3-binding
+Architecture: x64-windows
+Multi-Arch: same
+Description: Make available OpenGL3/ES/ES2 (modern) binding
 Status: install ok installed
 

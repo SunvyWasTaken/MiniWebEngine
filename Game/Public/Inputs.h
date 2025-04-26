@@ -8,7 +8,11 @@ namespace Sunset
 	{
 		static bool IsKeyPressed(const int keyValue);
 
-		static bool IsMouseButton(const int keyValue);
+		static bool IsKeyReleased(const int keyValue);
+
+		static bool IsMouseButtonPressed(const int keyValue);
+
+		static bool IsMouseButtonReleased(const int keyValue);
 
 		static glm::vec2 GetMouseScreenPosition();
 	};

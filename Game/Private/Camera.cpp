@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Inputs.h"
+#include "Render.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -30,6 +31,8 @@ namespace Sunset
 
 	void Camera::Update(const double deltatime)
 	{
+		return;
+
 		if (Inputs::IsKeyPressed(87))
 		{
 			AddPosition({ 0.f, CameraMovementSpeed * deltatime });
@@ -82,7 +85,8 @@ namespace Sunset
 	glm::vec3 Camera::GetCurseurWorldPosition()
 	{
 		glm::vec2 screenPos = Inputs::GetMouseScreenPosition();
-		glm::vec4 viewport(0, 0, (float)res.x, (float)res.y);
+		glm::vec4 viewport(0, 0, (float)Render::GetWidth(), (float)Render::GetHeight());
+		screenPos.y = res.y - screenPos.y;
 		return glm::unProject(glm::vec3(screenPos.x, screenPos.y, 0.0f), GetView(), GetProjection(), viewport);
 	}
 

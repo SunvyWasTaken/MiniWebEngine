@@ -79,7 +79,6 @@ if(EMSCRIPTEN)
     set(SHADER_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Shaders)
 
     target_include_directories(${PROJECT_NAME} PRIVATE
-#        "${EMSCRIPTEN_ROOT_PATH}/system/include"
         "${CMAKE_SOURCE_DIR}/vcpkg_installed/wasm32-emscripten/include"
     )
 

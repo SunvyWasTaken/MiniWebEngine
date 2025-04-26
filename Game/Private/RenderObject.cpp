@@ -27,9 +27,13 @@ namespace Sunset
 		: VAO(0)
 		, VBO(0)
 		, EBO(0)
-		, texture("Ressources/Eula.png")
+#ifdef __EMSCRIPTEN__
+		, texture("Ressources/SpriteSheet.png")
+#else
+		, texture("../../Ressources/SpriteSheet.png")
+#endif
 	{
-		texture.SetSubUv({5, 1});
+		texture.SetSubUv({4, 4});
 	}
 
 	RenderObject::~RenderObject()
@@ -85,6 +89,7 @@ namespace Sunset
 		shader.SetMatrice4f("model", model);
 
 		shader.SetMatrice4f("viewProj", cam->GetProjectionView());
+		shader.SetVec2f("SubUv", texture.GetSubUv());
 
 		texture();
 
@@ -123,8 +128,9 @@ namespace Sunset
 		PostInit();
 	}
 
-	Square::Square()
+	Square::Square(const glm::vec2& coord)
 		: RenderObject()
+		, SpriteCoord(coord)
 	{
 		vertices =
 		{ {{ 0.5f,  0.5f}, {1.f, 1.f}, {1, 1, 1, 1}}
@@ -135,6 +141,11 @@ namespace Sunset
 		indexBuffer = {0, 1, 3, 1, 2, 3};
 
 		PostInit();
+	}
+
+	void Square::PostRender()
+	{
+		shader.SetVec2f("index", SpriteCoord);
 	}
 
 	Line::Line()

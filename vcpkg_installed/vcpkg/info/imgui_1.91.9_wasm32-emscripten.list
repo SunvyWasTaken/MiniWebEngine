@@ -6,6 +6,8 @@ wasm32-emscripten/include/
 wasm32-emscripten/include/imconfig.h
 wasm32-emscripten/include/imgui.h
 wasm32-emscripten/include/imgui_impl_glfw.h
+wasm32-emscripten/include/imgui_impl_opengl3.h
+wasm32-emscripten/include/imgui_impl_opengl3_loader.h
 wasm32-emscripten/include/imgui_internal.h
 wasm32-emscripten/include/imgui_stdlib.h
 wasm32-emscripten/include/imstb_rectpack.h

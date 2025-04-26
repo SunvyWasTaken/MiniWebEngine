@@ -37,7 +37,5 @@ namespace Sunset
 		float roll;
 		float pitch;
 		float yaw;
-
-		uint32_t uboCamera;
 	};
 }

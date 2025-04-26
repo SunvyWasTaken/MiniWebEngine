@@ -5,6 +5,12 @@
 
 #include <glm/glm.hpp>
 
+#ifndef __EMSCRIPTEN__
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#endif
+
 #include <variant>
 #include <vector>
 #include <memory>
@@ -37,9 +43,9 @@ namespace Sunset
 
 		void Close(const bool bShouldClose);
 
-		int GetWidth();
+		static int GetWidth();
 
-		int GetHeight();
+		static int GetHeight();
 
 		double GetTime();
 	};

@@ -72,7 +72,7 @@ Version: 1.91.9
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: b9da11b576bd0e84317fc33b282e740d2019864fd77091e92b8a3d2ec129cf98
+Abi: 0efc6d4ea1a9786cb04403d1ec0dcbed3510425cf2b803f5206820459d463f8b
 Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
 Status: purge ok not-installed
 
@@ -171,7 +171,7 @@ Version: 1.91.9
 Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: abfe7beaf295edf3f0875bf7a7f9de26b417457f3908a2075a7f7f048b66cdb4
+Abi: 3859e2a79fbd4e9c8aadbbaa353eb1cf9df2a1110c23eb2042868d2d284df8af
 Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
 Status: install ok installed
 
@@ -189,5 +189,19 @@ Architecture: wasm32-emscripten
 Multi-Arch: same
 Abi: e2fbb50077147092526075577552de8331847b4696f9c18d692c919489d3a1f1
 Description: public domain header-only libraries
+Status: install ok installed
+
+Package: imgui
+Feature: opengl3-binding
+Architecture: x64-windows
+Multi-Arch: same
+Description: Make available OpenGL3/ES/ES2 (modern) binding
+Status: purge ok not-installed
+
+Package: imgui
+Feature: opengl3-binding
+Architecture: wasm32-emscripten
+Multi-Arch: same
+Description: Make available OpenGL3/ES/ES2 (modern) binding
 Status: install ok installed
 

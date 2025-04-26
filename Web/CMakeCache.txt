@@ -121,9 +121,6 @@ CMAKE_OBJCOPY:FILEPATH=CMAKE_OBJCOPY-NOTFOUND
 //Path to a program.
 CMAKE_OBJDUMP:FILEPATH=CMAKE_OBJDUMP-NOTFOUND
 
-//No help, variable specified on the command line.
-CMAKE_PREFIX_PATH:UNINITIALIZED=D:/source/truc/vcpkg_installed/wasm32-emscripten
-
 //Value Computed by CMake
 CMAKE_PROJECT_DESCRIPTION:STATIC=
 
@@ -204,8 +201,8 @@ CMAKE_STRIP:FILEPATH=CMAKE_STRIP-NOTFOUND
 //Path to a program.
 CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 
-//No help, variable specified on the command line.
-CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=D:\Emscripten\emsdk\upstream\emscripten\cmake\Modules\Platform\Emscripten.cmake
+//The CMake toolchain file
+CMAKE_TOOLCHAIN_FILE:FILEPATH=D:/Emscripten/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
@@ -237,9 +234,6 @@ MiniMotorApp_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 MiniMotorApp_SOURCE_DIR:STATIC=D:/source/Truc
-
-//The directory containing a CMake configuration file for glm.
-glm_DIR:PATH=glm_DIR-NOTFOUND
 
 
 ########################

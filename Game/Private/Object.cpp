@@ -7,6 +7,12 @@ namespace Sunset
 {
 	constexpr double G = -9.81;
 
+	template<class... Ts>
+	struct Overloaded : Ts... {
+		using Ts::operator()...;
+	};
+	template<class... Ts> Overloaded(Ts...) -> Overloaded<Ts...>;
+
 	TransformComponent::TransformComponent(const glm::vec2& loc)
 		: location(loc)
 		, size(glm::vec3{0.1, 0.1, 1.0})
@@ -31,18 +37,40 @@ namespace Sunset
 		transform.location.y += velocity.y * deltatime;
 	}
 
-	bool CollisionTest::Intersect(TransformComponent& A, TransformComponent& B)
+	bool CollisionTest::Intersect(const Entity& A, const Entity& B, World& world)
 	{
-		glm::vec2 aMin = A.location - A.size * 0.5f;
-		glm::vec2 aMax = A.location + A.size * 0.5f;
+		auto [transCompA, colliCompA] = world.try_get<TransformComponent, CollisionComponent>(A);
+		auto [transCompB, colliCompB] = world.try_get<TransformComponent, CollisionComponent>(B);
+		if (!transCompA || !colliCompA || !transCompB || !colliCompB)
+			return false;
 
-		glm::vec2 bMin = B.location - B.size * 0.5f;
-		glm::vec2 bMax = B.location + B.size * 0.5f;
+		return std::visit(Overloaded{
+			[&](const CollisionShape::Square& a, const CollisionShape::Square& b)
+			{
+				glm::vec2 aMin = transCompA->location - transCompA->size * 0.5f;
+				glm::vec2 aMax = transCompA->location + transCompA->size * 0.5f;
 
-		bool overlapX = aMin.x <= bMax.x && aMax.x >= bMin.x;
-		bool overlapY = aMin.y <= bMax.y && aMax.y >= bMin.y;
+				glm::vec2 bMin = transCompB->location - transCompB->size * 0.5f;
+				glm::vec2 bMax = transCompB->location + transCompB->size * 0.5f;
 
-		return overlapX && overlapY;
+				bool overlapX = aMin.x <= bMax.x && aMax.x >= bMin.x;
+				bool overlapY = aMin.y <= bMax.y && aMax.y >= bMin.y;
+
+				return overlapX && overlapY;
+			},
+			[&](const CollisionShape::Square& a, const CollisionShape::Sphere& b)
+			{
+				return false;
+			},
+			[&](const CollisionShape::Sphere& a, const CollisionShape::Square& b)
+			{
+				return false;
+			},
+			[&](const CollisionShape::Sphere& a, const CollisionShape::Sphere& b)
+			{
+				return false;
+			}
+		}, colliCompA->type, colliCompB->type);
 	}
 
 	void CollisionTest::ResolveCollision(TransformComponent& A, TransformComponent& B, float deltatime)
@@ -65,6 +93,14 @@ namespace Sunset
 				A.location.y -= direction * overlap.y * 0.5f;
 			if (!B.bStatic)
 				B.location.y += direction * overlap.y * 0.5f;
+		}
+	}
+
+	void CollisionComponent::Collision()
+	{
+		if (OnCollision)
+		{
+			OnCollision();
 		}
 	}
 

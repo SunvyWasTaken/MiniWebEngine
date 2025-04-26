@@ -1,6 +1,9 @@
 
 #include "Camera.h"
 #include "Inputs.h"
+#ifndef __EMSCRIPTEN__
+#include "Layer.h"
+#endif
 #include "Object.h"
 #include "Render.h"
 #include "RenderObject.h"
@@ -13,48 +16,55 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
+#include <imgui.h>
+
+#include <array>
 #include <chrono>
 #include <functional>
 #include <iostream>
 #include <memory>
 #include <random>
 
-void CreateGround(Sunset::World& world)
+std::ostream& operator<<(std::ostream& io, const glm::vec2& vec)
 {
-	Sunset::Entity Ground = world.create();
-	world.emplace<Sunset::RenderObjectComponent>(Ground, new Sunset::Square());
-	Sunset::TransformComponent& TransComp = world.emplace<Sunset::TransformComponent>(Ground, glm::vec2{ 0, -2 });
-	TransComp.size = glm::vec2{ 5, 5 };
-	TransComp.bStatic = true;
+	return io << "x:" << vec.x << ", y:" << vec.y;
 }
-
-glm::vec2 minBounds{ -1.f, -1.f };
-glm::vec2 maxBounds{ +1.f, +1.f };
-
-constexpr float minX = -1.f, maxX = 1.f;
-constexpr float minY = -1.f, maxY = 1.f;
-
-static std::random_device rd;
-static std::mt19937       gen(rd());
-static std::uniform_real_distribution<float> distX(minX, maxX);
-static std::uniform_real_distribution<float> distY(minY, maxY);
 
 void TestWorldCollision(const Sunset::Entity& entity, Sunset::World& world, const std::function<void(const Sunset::Entity& A, const Sunset::Entity& B)>& func)
 {
-	auto entitys = world.group<Sunset::TransformComponent>();
-	for (const Sunset::Entity& tmp : entitys)
-	{
-		if (entity == tmp)
-			continue;
-
-		Sunset::TransformComponent& transA = world.get<Sunset::TransformComponent>(entity);
-		Sunset::TransformComponent& transB = world.get<Sunset::TransformComponent>(tmp);
-		if (Sunset::CollisionTest::Intersect(transA, transB))
+	auto entitys = world.view<Sunset::TransformComponent>();
+	entitys.each([&](Sunset::Entity tmp, Sunset::TransformComponent& transComp)
 		{
-			func(entity, tmp);
-		}
-	}
+			if (entity == tmp)
+				return;
+
+			if (Sunset::CollisionTest::Intersect(entity, tmp, world))
+			{
+				func(entity, tmp);
+			}
+		});
 }
+
+struct ProjectilComponent : public Sunset::BaseComponent
+{
+	explicit ProjectilComponent(const glm::vec2& direction)
+		: dir(direction)
+	{ }
+
+	bool UpdateLife(const double deltatime)
+	{
+		lifetime += deltatime;
+		return lifetime >= 1.f;
+	}
+
+	glm::vec2 dir;
+	float veloctiy = 5.f;
+	float lifetime = 0.f;
+};
+
+struct UpdateComponent : public Sunset::BaseComponent
+{
+};
 
 #ifdef __EMSCRIPTEN__
 void Mainloop(void* func)
@@ -64,134 +74,155 @@ void Mainloop(void* func)
 }
 #endif // __EMSCRIPTEN__
 
+void SpawnProjectil(Sunset::World& world, const glm::vec2 location, const glm::vec2& dir)
+{
+	Sunset::Entity projectil = world.create();
+	world.emplace<Sunset::TransformComponent>(projectil, location + dir * 0.1f);
+	world.emplace<Sunset::RenderObjectComponent>(projectil, new Sunset::Square({1, 3}));
+	world.emplace<ProjectilComponent>(projectil, dir);
+	world.emplace<Sunset::CollisionComponent>(projectil);
+}
+
+void SpawnEnnemie(Sunset::World& world, std::vector<Sunset::Entity>& entityToDestroy)
+{
+	Sunset::Entity ennemy = world.create();
+	// Get a random location btw -1 1
+	world.emplace<Sunset::TransformComponent>(ennemy);
+	world.emplace<Sunset::RenderObjectComponent>(ennemy, new Sunset::Square({2, 3}));
+	Sunset::CollisionComponent& colliComp = world.emplace<Sunset::CollisionComponent>(ennemy);
+	colliComp.OnCollision = [&, ennemy](){
+		entityToDestroy.emplace_back(ennemy);
+	};
+	world.emplace<UpdateComponent>(ennemy);
+}
 
 int main()
 {
 	Sunset::Render window;
 
+#ifndef __EMSCRIPTEN__
+	Sunset::LayerContainer layerContainer;
+	std::shared_ptr<Sunset::Layer> gameLayer = std::make_shared<Sunset::Layer>(Sunset::Layer{"Player Data"});
+	layerContainer(gameLayer);
+#endif
+
 	Sunset::World world;
+	std::vector<Sunset::Entity> EntityToDestroy;
+
+	Sunset::Entity player = world.create();
+	world.emplace<Sunset::RenderObjectComponent>(player, new Sunset::Square({0, 3}));
+	world.emplace<Sunset::TransformComponent>(player);
 
 	std::shared_ptr<Sunset::Camera> cam = std::make_shared<Sunset::Camera>();
 
-	for (int i = 0; i < 20; ++i)
-	{
-		glm::vec2 randPos{ distX(gen), distY(gen) };
+	Sunset::TransformComponent& PlayerTransComp = world.get<Sunset::TransformComponent>(player);
 
-		Sunset::Entity boid = world.create();
-		world.emplace<Sunset::TransformComponent>(boid, randPos);
-		world.emplace<Sunset::RenderObjectComponent>(boid, new Sunset::Square());
-		world.emplace<Sunset::PhysicComponent>(boid);
-	}
+	glm::vec3 curseurWorldPosition = cam->GetCurseurWorldPosition();
+
+	std::array<bool, 5> ListKeyPressed;
+	ListKeyPressed.fill(false);
+
+	double Deltatime = 0.0;
+
+	int32_t frameRate = 1;
+
+	float CurrSpawnTimeEnnemy = 0;
+
+#ifndef __EMSCRIPTEN__
+	gameLayer->datas.emplace_back(Sunset::GameData{"PlayerLoc", Sunset::GameDataType::Vec2{}, &PlayerTransComp.location});
+	gameLayer->datas.emplace_back(Sunset::GameData{"MouseLocation", Sunset::GameDataType::Vec3{}, &curseurWorldPosition});
+	gameLayer->datas.emplace_back(Sunset::GameData{"Deltatime", Sunset::GameDataType::Double{}, &Deltatime});
+	gameLayer->datas.emplace_back(Sunset::GameData{"Framerate", Sunset::GameDataType::Int32{}, &frameRate});
+#endif // !__EMSCRIPTEN__
 
 	double PreviousTime = window.GetTime();
 
 	// Main boucle out for emscripten
 	std::function<void()> func = [&]() {
+
 		double CurrentTime = window.GetTime();
-		double Deltatime = CurrentTime - PreviousTime;
+		Deltatime = CurrentTime - PreviousTime;
 		PreviousTime = CurrentTime;
 
-		if (Sunset::Inputs::IsKeyPressed(256))
+		frameRate = 1/Deltatime;
+
+		constexpr float PlayerMovementSpeed = 1.f;
+
+		curseurWorldPosition = cam->GetCurseurWorldPosition();
+
+		CurrSpawnTimeEnnemy += Deltatime;
+		if (CurrSpawnTimeEnnemy >= 5.f)
 		{
-			window.Close(true);
+			CurrSpawnTimeEnnemy = 0;
+			SpawnEnnemie(world, EntityToDestroy);
 		}
 
-		//if (Sunset::Inputs::IsMouseButton(Sunset::Inputs::Pressed{}, 0))
-		//{
-		//	glm::vec3 loc = cam->GetCurseurWorldPosition();
-
-		//	Sunset::Entity entity = world.create();
-		//	world.emplace<Sunset::TransformComponent>(entity, glm::vec2{loc.x, loc.y});
-		//	world.emplace<Sunset::RenderObjectComponent>(entity, new Sunset::Square());
-		//	world.emplace<Sunset::PhysicComponent>(entity);
-		//}
-
-		if (Sunset::Inputs::IsKeyPressed(32))
+		if (Sunset::Inputs::IsMouseButtonPressed(0) && !ListKeyPressed[0])
 		{
-			world.clear();
-			CreateGround(world);
-			std::cerr << "Clear\n";
+			glm::vec2 playerLoc = PlayerTransComp.location;
+			glm::vec2 dir = glm::vec2{curseurWorldPosition.x, curseurWorldPosition.y } - playerLoc;
+			dir = glm::normalize(dir);
+			SpawnProjectil(world, playerLoc, dir);
+			ListKeyPressed[0] = true;
+		}
+		if (Sunset::Inputs::IsMouseButtonReleased(0))
+		{
+			ListKeyPressed[0] = false;
+		}
+		if (Sunset::Inputs::IsKeyPressed(87))
+		{
+			PlayerTransComp.location += glm::vec2{ 0.f, PlayerMovementSpeed * Deltatime };
+		}
+		if (Sunset::Inputs::IsKeyPressed(83))
+		{
+			PlayerTransComp.location += glm::vec2{ 0.f, -PlayerMovementSpeed * Deltatime };
+		}
+		if (Sunset::Inputs::IsKeyPressed(65))
+		{
+			PlayerTransComp.location += glm::vec2{ -PlayerMovementSpeed * Deltatime, 0.f };
+		}
+		if (Sunset::Inputs::IsKeyPressed(68))
+		{
+			PlayerTransComp.location += glm::vec2{ PlayerMovementSpeed * Deltatime, 0.f };
 		}
 
-		static std::mt19937                              rng{ std::random_device{}() };
-		static std::uniform_real_distribution<float>     angleDist(0.0f, glm::two_pi<float>());
-
-		world.view<Sunset::PhysicComponent>().each(
-			[&](auto entity, Sunset::PhysicComponent& phys) {
-				if (phys.velocity == glm::vec2{ 0.0f }) {
-					float angle = angleDist(rng);
-					phys.velocity = glm::vec2{ std::cos(angle), std::sin(angle) } *phys.speed;
-				}
-			});
-
-		world.view<Sunset::TransformComponent>().each(
-			[&](auto entity, Sunset::TransformComponent& trans) {
-				TestWorldCollision(entity, world,
-					[&](const Sunset::Entity& A, const Sunset::Entity& B) {
-						auto* physA = world.try_get<Sunset::PhysicComponent>(A);
-						auto* physB = world.try_get<Sunset::PhysicComponent>(B);
-						if (!physA || !physB) return;
-
-						physA->velocity = glm::normalize(
-							physA->velocity + physB->velocity
-						) * physA->speed;
-					}
-				);
-			});
-
-		world.view<Sunset::TransformComponent, Sunset::PhysicComponent>().each(
-			[&](auto entity,
-				Sunset::TransformComponent& trans,
-				Sunset::PhysicComponent& phys)
+		auto Projectils = world.view<ProjectilComponent, Sunset::TransformComponent>();
+		Projectils.each([&](Sunset::Entity entity, ProjectilComponent& pro, Sunset::TransformComponent& transComp){
+			transComp.location += pro.dir * pro.veloctiy * (float)Deltatime;
+			if (pro.UpdateLife(Deltatime))
 			{
-				trans.location += phys.velocity * static_cast<float>(Deltatime);
+				world.destroy(entity);
+			}
+		});
 
-				if (trans.location.x < minBounds.x) {
-					trans.location.x = minBounds.x;
-					phys.velocity.x *= -1;
-				}
-				else if (trans.location.x > maxBounds.x) {
-					trans.location.x = maxBounds.x;
-					phys.velocity.x *= -1;
-				}
-
-				if (trans.location.y < minBounds.y) {
-					trans.location.y = minBounds.y;
-					phys.velocity.y *= -1;
-				}
-				else if (trans.location.y > maxBounds.y) {
-					trans.location.y = maxBounds.y;
-					phys.velocity.y *= -1;
-				}
-			});
-
-		//auto PhysEntityList = world.view<Sunset::TransformComponent, Sunset::PhysicComponent>();
-		//PhysEntityList.each([&](Sunset::TransformComponent& transform, Sunset::PhysicComponent& physComp){
-		//	physComp.ApplyPhysic(Deltatime, transform);
-		//});
-
-		auto entitys = world.group<Sunset::TransformComponent>();
-		for (const Sunset::Entity& entity : entitys)
+		auto entitys = world.view<Sunset::TransformComponent>();
+		entitys.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp)
 		{
 			TestWorldCollision(entity, world,
 				[&](const Sunset::Entity& A, const Sunset::Entity& B) {
-
-					Sunset::TransformComponent& transA = world.get<Sunset::TransformComponent>(A);
-					Sunset::TransformComponent& transB = world.get<Sunset::TransformComponent>(B);
+					auto [transA, colliA] = world.get<Sunset::TransformComponent, Sunset::CollisionComponent>(A);
+					auto [transB, colliB] = world.get<Sunset::TransformComponent, Sunset::CollisionComponent>(B);
 
 					Sunset::CollisionTest::ResolveCollision(transA, transB, Deltatime);
+
+					world.destroy(entity);
+					world.destroy(B);
 				});
-		}
+		});
 
 		cam->Update(Deltatime);
 
 		// Render
 		window.Begin(cam);
+#ifndef __EMSCRIPTEN__
+		layerContainer.Render();
+#endif
 
 		auto rendables = world.view<Sunset::TransformComponent, Sunset::RenderObjectComponent>();
-		rendables.each([&](Sunset::TransformComponent& transform, Sunset::RenderObjectComponent& RenderObj) {
+		rendables.each([&](Sunset::TransformComponent& transform, Sunset::RenderObjectComponent& RenderObj)
+		{
 			window.RenderObj(transform, *(RenderObj.data));
-			});
+		});
 
 		window.End();
 	};

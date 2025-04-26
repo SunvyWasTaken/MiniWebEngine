@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/imgui-x64-windows-1.91.9-d302fd65-47eb-4408-9b4e-c34de9b741e2",
-  "name": "imgui:x64-windows@1.91.9 b9da11b576bd0e84317fc33b282e740d2019864fd77091e92b8a3d2ec129cf98",
+  "documentNamespace": "https://spdx.org/spdxdocs/imgui-x64-windows-1.91.9-f6b3bc8a-4879-43ab-b76a-dec883f5c1cf",
+  "name": "imgui:x64-windows@1.91.9 0efc6d4ea1a9786cb04403d1ec0dcbed3510425cf2b803f5206820459d463f8b",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2025-04-16-f9b6c6917b23c1ccf16c1a9f015ebabf8f615045"
     ],
-    "created": "2025-04-19T07:24:15Z"
+    "created": "2025-04-24T17:01:59Z"
   },
   "relationships": [
     {
@@ -84,7 +84,7 @@
     {
       "name": "imgui:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "b9da11b576bd0e84317fc33b282e740d2019864fd77091e92b8a3d2ec129cf98",
+      "versionInfo": "0efc6d4ea1a9786cb04403d1ec0dcbed3510425cf2b803f5206820459d463f8b",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
