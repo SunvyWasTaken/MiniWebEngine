@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Components.h"
 #include "Object.h"
 #include "Render.h"
 
@@ -59,7 +60,7 @@ namespace Sunset
 #endif //__EMSCRIPTEN__
 
 		glViewport(0, 0, m_WindowSize.x, m_WindowSize.y);
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

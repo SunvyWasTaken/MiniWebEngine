@@ -1,10 +1,12 @@
 
 #include "Camera.h"
+#include "Components.h"
 #include "Inputs.h"
 #ifndef __EMSCRIPTEN__
 #include "Layer.h"
 #endif
 #include "Object.h"
+#include "Quadtree.h"
 #include "Render.h"
 #include "RenderObject.h"
 
@@ -31,19 +33,24 @@ struct MovementPipe
 	double lifetime = 0;
 };
 
-void SpawnPipe(Sunset::World& world)
+void SpawnPipe(std::shared_ptr<Sunset::World>& world, Sunset::Quadtree& quad)
 {
-	Sunset::Entity UpperPipe = world.create();
-	auto& UpperTransComp = world.emplace<Sunset::TransformComponent>(UpperPipe, glm::vec2{2, 0.5});
+	Sunset::Entity UpperPipe = world->create();
+	auto& UpperTransComp = world->emplace<Sunset::TransformComponent>(UpperPipe, glm::vec2{2, 0.5});
+	UpperTransComp.bStatic = true;
 	UpperTransComp.size = {0.2, 0.5};
-	world.emplace<Sunset::RenderObjectComponent>(UpperPipe, new Sunset::Square({1, 2}));
-	world.emplace<MovementPipe>(UpperPipe);
+	world->emplace<Sunset::RenderObjectComponent>(UpperPipe, new Sunset::Square({1, 2}));
+	world->emplace<MovementPipe>(UpperPipe);
+	//quad.Add(UpperPipe);
 
-	Sunset::Entity UnderPipe = world.create();
-	auto& UnderTransComp = world.emplace<Sunset::TransformComponent>(UnderPipe, glm::vec2{2, -0.5 });
+
+	Sunset::Entity UnderPipe = world->create();
+	auto& UnderTransComp = world->emplace<Sunset::TransformComponent>(UnderPipe, glm::vec2{2, -0.5 });
+	UnderTransComp.bStatic = true;
 	UnderTransComp.size = {0.2, 0.5};
-	world.emplace<Sunset::RenderObjectComponent>(UnderPipe, new Sunset::Square({1, 2}));
-	world.emplace<MovementPipe>(UnderPipe);
+	world->emplace<Sunset::RenderObjectComponent>(UnderPipe, new Sunset::Square({1, 2}));
+	world->emplace<MovementPipe>(UnderPipe);
+	//quad.Add(UnderPipe);
 }
 
 
@@ -57,14 +64,18 @@ int main()
 	layerContainer(gameLayer);
 #endif
 
-	Sunset::World world;
+	std::shared_ptr<Sunset::World> world = std::make_shared<Sunset::World>();
+
+	Sunset::Quadtree quad{world, {0.f, 0.f}, {3.f, 2.f}};
 
 	std::shared_ptr<Sunset::Camera> cam = std::make_shared<Sunset::Camera>();
 
-	Sunset::Entity player = world.create();
-	Sunset::TransformComponent& playerTransComp = world.emplace<Sunset::TransformComponent>(player, glm::vec2{-1, 0});
-	Sunset::PhysicComponent& playerPhysComp = world.emplace<Sunset::PhysicComponent>(player);
-	world.emplace<Sunset::RenderObjectComponent>(player, new Sunset::Square({0, 2}));
+	Sunset::Entity player = world->create();
+	Sunset::TransformComponent& playerTransComp = world->emplace<Sunset::TransformComponent>(player, glm::vec2{-1, 0});
+	Sunset::PhysicComponent& playerPhysComp = world->emplace<Sunset::PhysicComponent>(player);
+	world->emplace<Sunset::RenderObjectComponent>(player, new Sunset::Square({0, 2}));
+
+	//quad.Add(player);
 
 	bool IsKeyPress = false;
 
@@ -90,6 +101,11 @@ int main()
 
 		frameRate = 1/Deltatime;
 
+		if (Sunset::Inputs::IsKeyPressed(256))
+		{
+			window.Close(true);
+		}
+
 		if (Sunset::Inputs::IsKeyPressed(32) && !IsKeyPress)
 		{
 			IsKeyPress = true;
@@ -105,39 +121,50 @@ int main()
 		else
 		{
 			SpawnRate = 0;
-			SpawnPipe(world);
+			SpawnPipe(world, quad);
 		}
 
-		auto entitys = world.view<Sunset::TransformComponent, Sunset::PhysicComponent>();
+		auto entitys = world->view<Sunset::TransformComponent, Sunset::PhysicComponent>();
 		entitys.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp, Sunset::PhysicComponent& physComp)
-			{
-				physComp.ApplyPhysic(Deltatime, transComp);
-				float alpha = physComp.velocity.y;
-				if(alpha > 0)
-					alpha = 0;
-				else if (alpha < -1)
-					alpha = -1;
-				transComp.rot = Sunset::Math::lerp(0.f, 45.f, alpha);
-			});
+		{
+			physComp.ApplyPhysic(Deltatime, transComp);
+			float alpha = physComp.velocity.y;
+			if (alpha > 0)
+				alpha = 0;
+			else if (alpha < -1)
+				alpha = -1;
+			transComp.rot = Sunset::Math::lerp(0.f, 45.f, alpha);
+		});
 
-		auto pipes = world.view<Sunset::TransformComponent, MovementPipe>();
+		auto pipes = world->view<Sunset::TransformComponent, MovementPipe>();
 		pipes.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp, MovementPipe& movePipe)
+		{
+			if (!movePipe.IsAlive(Deltatime))
 			{
-				if (!movePipe.IsAlive(Deltatime))
-				{
-					world.destroy(entity);
-					return;
-				}
+				world->destroy(entity);
+				return;
+			}
 
-				transComp.location.x += movePipe.dir.x * Deltatime;
-				transComp.location.y += movePipe.dir.y * Deltatime;
-			});
+			transComp.location.x += movePipe.dir.x * Deltatime;
+			transComp.location.y += movePipe.dir.y * Deltatime;
+		});
 
-		auto transComps = world.view<Sunset::TransformComponent>();
-		transComps.each([&](Sunset::TransformComponent& transComp)
-			{
-				
-			});
+		auto transComps = world->view<Sunset::TransformComponent>();
+		//transComps.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp)
+		//{
+		//	quad.Update(entity);
+		//});
+
+		//transComps.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp)
+		//{
+		//	std::vector<Sunset::Entity> founds;
+		//	quad.CollideWith(entity, founds);
+
+		//	for (auto& entt : founds)
+		//	{
+		//		Sunset::CollisionTest::ResolveCollision(entity, entt, *(world.get()), Deltatime);
+		//	}
+		//});
 
 		cam->Update(Deltatime);
 
@@ -147,7 +174,7 @@ int main()
 		layerContainer.Render();
 #endif
 
-		auto rendables = world.view<Sunset::TransformComponent, Sunset::RenderObjectComponent>();
+		auto rendables = world->view<Sunset::TransformComponent, Sunset::RenderObjectComponent>();
 		rendables.each([&](Sunset::TransformComponent& transform, Sunset::RenderObjectComponent& RenderObj)
 		{
 			window.RenderObj(transform, *(RenderObj.data));

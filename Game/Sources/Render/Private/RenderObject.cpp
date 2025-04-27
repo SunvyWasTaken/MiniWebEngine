@@ -1,5 +1,6 @@
 #include "RenderObject.h"
 #include "Camera.h"
+#include "Components.h"
 
 #ifdef __EMSCRIPTEN__
 #include <GLES3/gl3.h>
