@@ -1,0 +1,153 @@
+#include "Camera.h"
+#include "Object.h"
+#include "Render.h"
+
+#ifdef __EMSCRIPTEN__
+#include "emscripten.h"
+#include <GLES3/gl3.h>
+#else
+#include <glad/glad.h>
+#endif
+
+#include <glfw/glfw3.h>
+
+namespace Sunset
+{
+	GLFWwindow* m_Window;
+
+	glm::i32vec2 m_WindowSize{1280, 720};
+
+	uint32_t VAO = 0;
+	uint32_t VBO = 0;
+
+	std::shared_ptr<Camera> camera;
+
+	// Function call at the resize of the window
+	void FrameBufferSizeCallback(GLFWwindow* window, int width, int height)
+	{
+		m_WindowSize = glm::vec2(width, height);
+		glViewport(0, 0, width, height);
+	}
+
+	void InitWindow()
+	{
+		glfwInit();
+#ifdef __EMSCRIPTEN__
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+#endif // __EMSCRIPTEN__
+
+		m_Window = glfwCreateWindow(m_WindowSize.x, m_WindowSize.y, "Game", NULL, NULL);
+		if (m_Window == NULL)
+		{
+			glfwTerminate();
+			assert(false);
+		}
+		glfwMakeContextCurrent(m_Window);
+
+		glfwSetFramebufferSizeCallback(m_Window, &FrameBufferSizeCallback);
+		glfwSwapInterval(1);
+
+#ifdef __EMSCRIPTEN__
+#else
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		{
+			glfwTerminate();
+			assert(false);
+		}
+#endif //__EMSCRIPTEN__
+
+		glViewport(0, 0, m_WindowSize.x, m_WindowSize.y);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+#ifndef __EMSCRIPTEN__
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImGui::StyleColorsDark();
+
+		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
+		ImGui_ImplOpenGL3_Init("#version 330");
+#endif // __EMSCRIPTEN__
+	}
+
+	Render::Render()
+	{
+		InitWindow();
+	}
+
+	Render::~Render()
+	{
+#ifndef __EMSCRIPTEN__
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
+#endif
+		glfwDestroyWindow(m_Window);
+		glfwTerminate();
+	}
+
+	Render::operator bool()
+	{
+		return glfwWindowShouldClose(m_Window);
+	}
+
+	GLFWwindow* Render::Get()
+	{
+		return m_Window;
+	}
+
+	void Render::Begin(const std::shared_ptr<Camera>& cam)
+	{
+#ifndef __EMSCRIPTEN__
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+#endif
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		camera = cam;
+	}
+
+	void Render::End()
+	{
+#ifndef __EMSCRIPTEN__
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
+		glUseProgram(0);
+		glfwSwapBuffers(m_Window);
+		glfwPollEvents();
+	}
+
+	void Render::RenderObj(TransformComponent& transform, RenderObject& object)
+	{
+		object(transform, camera);
+	}
+
+	void Render::Close(const bool bShouldClose)
+	{
+		glfwSetWindowShouldClose(m_Window, bShouldClose);
+	}
+
+	int Render::GetWidth()
+	{
+		return m_WindowSize.x;
+	}
+
+	int Render::GetHeight()
+	{
+		return m_WindowSize.y;
+	}
+
+	double Render::GetTime()
+	{
+		return glfwGetTime();
+	}
+
+}
+

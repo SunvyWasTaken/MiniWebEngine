@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/stb-wasm32-emscripten-2024-07-29#1-e2364cb7-c5b2-4c31-8d4d-298c11fbdaaf",
-  "name": "stb:wasm32-emscripten@2024-07-29#1 e2fbb50077147092526075577552de8331847b4696f9c18d692c919489d3a1f1",
+  "documentNamespace": "https://spdx.org/spdxdocs/stb-wasm32-emscripten-2024-07-29#1-50d9314f-7c2e-4a7f-88b8-d014778f5f2b",
+  "name": "stb:wasm32-emscripten@2024-07-29#1 98d63c5c5554aadb054b28ea00cf91bac34cf943ef0e910c40365d1e97efa854",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2025-04-16-f9b6c6917b23c1ccf16c1a9f015ebabf8f615045"
     ],
-    "created": "2025-04-23T15:55:14Z"
+    "created": "2025-04-27T07:27:04Z"
   },
   "relationships": [
     {
@@ -94,7 +94,7 @@
     {
       "name": "stb:wasm32-emscripten",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "e2fbb50077147092526075577552de8331847b4696f9c18d692c919489d3a1f1",
+      "versionInfo": "98d63c5c5554aadb054b28ea00cf91bac34cf943ef0e910c40365d1e97efa854",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT OR CC-PDDC",
       "licenseDeclared": "NOASSERTION",

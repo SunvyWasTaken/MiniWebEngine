@@ -1,69 +1,129 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="D:\source\Truc\Game\Private\Camera.cpp">
+    <ClCompile Include="D:\source\Truc\build\Game\CMakeFiles\Game.dir\cmake_pch.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\source\Truc\Game\Private\Inputs.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Core\Private\DefinesTools.cpp">
+      <Filter>Sources\Core\Private</Filter>
     </ClCompile>
-    <ClCompile Include="D:\source\Truc\Game\Private\Layer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Core\Public\main.cpp">
+      <Filter>Sources\Core\Public</Filter>
     </ClCompile>
-    <ClCompile Include="D:\source\Truc\Game\Private\Object.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D:\source\Truc\Game\Sources\ECS\Private\Object.cpp">
+      <Filter>Sources\ECS\Private</Filter>
     </ClCompile>
-    <ClCompile Include="D:\source\Truc\Game\Private\Render.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Inputs\Private\Inputs.cpp">
+      <Filter>Sources\Inputs\Private</Filter>
     </ClCompile>
-    <ClCompile Include="D:\source\Truc\Game\Private\RenderObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Render\Private\Camera.cpp">
+      <Filter>Sources\Render\Private</Filter>
     </ClCompile>
-    <ClCompile Include="D:\source\Truc\Game\Private\Shader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Render\Private\Layer.cpp">
+      <Filter>Sources\Render\Private</Filter>
     </ClCompile>
-    <ClCompile Include="D:\source\Truc\Game\Private\Texture.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Render\Private\Render.cpp">
+      <Filter>Sources\Render\Private</Filter>
     </ClCompile>
-    <ClCompile Include="D:\source\Truc\Game\Public\main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Render\Private\RenderObject.cpp">
+      <Filter>Sources\Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Render\Private\Shader.cpp">
+      <Filter>Sources\Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Render\Private\Texture.cpp">
+      <Filter>Sources\Render\Private</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="D:\source\Truc\Game\Public\Camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Core\Public\DefinesTools.h">
+      <Filter>Sources\Core\Public</Filter>
     </ClInclude>
-    <ClInclude Include="D:\source\Truc\Game\Public\Inputs.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Core\Public\gpch.h">
+      <Filter>Sources\Core\Public</Filter>
     </ClInclude>
-    <ClInclude Include="D:\source\Truc\Game\Public\Layer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D:\source\Truc\Game\Sources\ECS\Public\Object.h">
+      <Filter>Sources\ECS\Public</Filter>
     </ClInclude>
-    <ClInclude Include="D:\source\Truc\Game\Public\Object.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Inputs\Public\Inputs.h">
+      <Filter>Sources\Inputs\Public</Filter>
     </ClInclude>
-    <ClInclude Include="D:\source\Truc\Game\Public\Render.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Render\Public\Camera.h">
+      <Filter>Sources\Render\Public</Filter>
     </ClInclude>
-    <ClInclude Include="D:\source\Truc\Game\Public\RenderObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Render\Public\Layer.h">
+      <Filter>Sources\Render\Public</Filter>
     </ClInclude>
-    <ClInclude Include="D:\source\Truc\Game\Public\Shader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Render\Public\Render.h">
+      <Filter>Sources\Render\Public</Filter>
     </ClInclude>
-    <ClInclude Include="D:\source\Truc\Game\Public\Texture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Render\Public\RenderObject.h">
+      <Filter>Sources\Render\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Render\Public\Shader.h">
+      <Filter>Sources\Render\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Render\Public\Texture.h">
+      <Filter>Sources\Render\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\build\Game\CMakeFiles\Game.dir\Debug\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\build\Game\CMakeFiles\Game.dir\Release\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\build\Game\CMakeFiles\Game.dir\RelWithDebInfo\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\source\Truc\Game\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{1E05F5F6-5382-3239-836C-19B64B7BC1C1}</UniqueIdentifier>
+    <Filter Include="Precompile Header File">
+      <UniqueIdentifier>{6F9C75E1-827F-3208-82B6-4A7D6713AFA6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{A9E5FDB9-C43F-3C35-AB8D-8526F3F1CB6E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{524E0538-9968-3485-B1FB-356A6F3434AC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Core">
+      <UniqueIdentifier>{EC435E82-B9A4-3BC7-AB24-29FAF77745B0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Core\Private">
+      <UniqueIdentifier>{7B6D0DD2-9605-337A-B583-6015A214C3CA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Core\Public">
+      <UniqueIdentifier>{A55F955E-3313-3636-820F-E889B77C8BB6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\ECS">
+      <UniqueIdentifier>{48253EB4-7B30-332D-A9B0-E4C8F58B5CA8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\ECS\Private">
+      <UniqueIdentifier>{BCEE7CA5-3594-3978-8C04-036D60B3332F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\ECS\Public">
+      <UniqueIdentifier>{4090386A-7CB4-3AAE-8F74-5E87DB47F483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Inputs">
+      <UniqueIdentifier>{A1EB9744-97DD-3820-9AC3-DB0A678F2B61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Inputs\Private">
+      <UniqueIdentifier>{EF9F9E05-932C-3FBB-999F-94B5D8EF45DB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Inputs\Public">
+      <UniqueIdentifier>{6E341CEB-FE54-30FD-984F-DCA5C98A08A4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Render">
+      <UniqueIdentifier>{09BD2E20-C50C-3BAF-8E6D-8214BEC1FEB5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Render\Private">
+      <UniqueIdentifier>{E6670A95-0739-3FFB-96CB-22DFE6FC30EB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Render\Public">
+      <UniqueIdentifier>{CEA3B03B-E78C-3FD2-AB8A-5A400D0B1443}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/glfw3-wasm32-emscripten-3.4#1-d6a48130-6fe2-4507-b3bf-e108bfdbb421",
-  "name": "glfw3:wasm32-emscripten@3.4#1 60164b7b8375b2db95f227e4b4a89ed6c5622f5537813628575fc022527ec801",
+  "documentNamespace": "https://spdx.org/spdxdocs/glfw3-wasm32-emscripten-3.4#1-48951d54-2098-4faf-9274-58fc3c761663",
+  "name": "glfw3:wasm32-emscripten@3.4#1 00a5e644ebd5838f035edddeca1e01cb555e029c0814ad848633df99fe717c70",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2025-04-16-f9b6c6917b23c1ccf16c1a9f015ebabf8f615045"
     ],
-    "created": "2025-04-23T15:54:41Z"
+    "created": "2025-04-27T07:26:36Z"
   },
   "relationships": [
     {
@@ -74,7 +74,7 @@
     {
       "name": "glfw3:wasm32-emscripten",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "60164b7b8375b2db95f227e4b4a89ed6c5622f5537813628575fc022527ec801",
+      "versionInfo": "00a5e644ebd5838f035edddeca1e01cb555e029c0814ad848633df99fe717c70",
       "downloadLocation": "NONE",
       "licenseConcluded": "Zlib",
       "licenseDeclared": "NOASSERTION",

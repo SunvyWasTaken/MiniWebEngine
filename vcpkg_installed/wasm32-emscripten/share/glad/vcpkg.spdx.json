@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/glad-wasm32-emscripten-0.1.36-5a2e0426-87fe-4384-a5b6-29e793da2266",
-  "name": "glad:wasm32-emscripten@0.1.36 ef879bbff4cff600f685711a2e2c3df9fe5cc45fc181e8ad9035c8af5aeaf2e6",
+  "documentNamespace": "https://spdx.org/spdxdocs/glad-wasm32-emscripten-0.1.36-94af4472-ca4f-4214-bf65-3edfd43225e7",
+  "name": "glad:wasm32-emscripten@0.1.36 a5433cf037fc4c27a04c347577e9e9361642748403219555e636d7d54668b8c9",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2025-04-16-f9b6c6917b23c1ccf16c1a9f015ebabf8f615045"
     ],
-    "created": "2025-04-23T15:54:41Z"
+    "created": "2025-04-27T07:26:36Z"
   },
   "relationships": [
     {
@@ -84,7 +84,7 @@
     {
       "name": "glad:wasm32-emscripten",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "ef879bbff4cff600f685711a2e2c3df9fe5cc45fc181e8ad9035c8af5aeaf2e6",
+      "versionInfo": "a5433cf037fc4c27a04c347577e9e9361642748403219555e636d7d54668b8c9",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
