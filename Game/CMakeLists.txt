@@ -65,9 +65,9 @@ if(NOT EMSCRIPTEN)
     foreach(DIR ${PUBLIC_DIRS})
         target_include_directories(${PROJECT_NAME} PRIVATE ${DIR})
     endforeach()
-else()
-    target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Public")
 endif()
+
+target_precompile_headers(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Core/Public/gpch.h")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     MiniMotor_compiler_flags
@@ -80,6 +80,10 @@ if(EMSCRIPTEN)
 
     target_include_directories(${PROJECT_NAME} PRIVATE
         "${CMAKE_SOURCE_DIR}/vcpkg_installed/wasm32-emscripten/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Core/Public"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Sources/ECS/Public"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Inputs/Public"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Render/Public"
     )
 
     set_target_properties(${PROJECT_NAME} PROPERTIES

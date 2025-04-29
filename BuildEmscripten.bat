@@ -1,3 +1,12 @@
 @echo on
-cmake -DCMAKE_TOOLCHAIN_FILE=D:/source/truc/vcpkg/scripts/buildsystems/vcpkg.cmake -S D:/source/truc/ -B D:/source/truc/Web -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=D:/Emscripten/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DVCPKG_TARGET_TRIPLET=wasm32-emscripten
-cmd
+set currentPath=%cd%
+cd D:/Emscripten/emsdk
+git pull
+call emsdk.bat activate latest
+call emsdk_env.bat
+cd %currentPath%/vcpkg
+call bootstrap-vcpkg.bat -disableMetrics"
+vcpkg install --triplet wasm32-emscripten
+cd %currentPath%
+emcmake cmake -B %currentPath%/Web -S %currentPath%
+Pause

@@ -16,9 +16,9 @@ Package: egl-registry
 Version: 2024-01-25
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 9bab747cc08d0a79302ec2bb8e19b347f787509d3d23b10728bdd35f34a28409
+Abi: 124af5f59cce3006ecd6f600879010410381480f0497938583479c4cd9f1a80f
 Description: EGL API and Extension Registry
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: opengl-registry
 Version: 2024-02-10
@@ -26,26 +26,26 @@ Port-Version: 1
 Depends: egl-registry
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 77abe4ed8bf76589d539e9b70783a5cc7e2bb8c9a8738c82add5df649c262c4f
+Abi: b4202cfe7757a25cb3464b00aa4738b59e40a0556df7f6e103fd4b7876261ba2
 Description: OpenGL, OpenGL ES, and OpenGL ES-SC API and Extension Registry
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: glad
 Version: 0.1.36
 Depends: egl-registry, opengl-registry, vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: fbf47da39d20c6fdfd01f06b0104afddd52f233c9bf8d21ba89b55c7d4832366
+Abi: 0708fd9826b93811d57b4a9a24f72f376fcfb71b09178feafe7cc5388d3e47a7
 Description: Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs.
 Default-Features: loader
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: glad
 Feature: loader
 Architecture: x64-windows
 Multi-Arch: same
 Description: Generate loader logic.
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: glfw3
 Version: 3.4
@@ -53,9 +53,9 @@ Port-Version: 1
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 8ca0c9f2f205d8cf0cdb6ef5c148d9ab4f031411db85c8f639298ab921f50234
+Abi: fc84638586a91a1159f9108e854926547fd79f72c3f558e4fffab49badfc0862
 Description: GLFW is a free, Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan application development. It provides a simple, platform-independent API for creating windows, contexts and surfaces, reading input, handling events, etc.
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: glm
 Version: 1.0.1
@@ -63,18 +63,18 @@ Port-Version: 3
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 637fa9e2321de70b70af248df099f0580a4356904ff14b52b1fb82c6915a14fc
+Abi: d025c9335f8b0663c40bf80ee1c8210deb5083afc55201a96786d4ebba8c7d66
 Description: OpenGL Mathematics (GLM)
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: imgui
 Version: 1.91.9
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 0efc6d4ea1a9786cb04403d1ec0dcbed3510425cf2b803f5206820459d463f8b
+Abi: d213d30e4819d2394249328e50ae56fc8a1e244a870ae3b3d4e17a502016a663
 Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: imgui
 Feature: glfw-binding
@@ -82,42 +82,42 @@ Depends: glfw3
 Architecture: x64-windows
 Multi-Arch: same
 Description: Make available GLFW binding
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: stb
 Version: 2024-07-29
 Port-Version: 1
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 5277c9f5535a8fbd86488ffbfdd41f17f5924914ea4f90a4b69dd9f3526177b0
+Abi: 4f75456ddaadf6b606f6b53ceb80c3edacd884be275847a60a6aab9719bd9e1c
 Description: public domain header-only libraries
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: entt
 Version: 3.15.0
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 748dfcc8d2e38d1e70b0fe434e1ed2958c2a345b484f28fd323e6d60442e9854
+Abi: 08da9b08670d73187e17da66a0dc517ce8a2464f863f1e8a01ccf888455ea531
 Description: Gaming meets modern C++ - a fast and reliable entity-component system and much more
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: entt
 Version: 3.15.0
 Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: fbcbc9a2d90672488f7aeb0050c8b83cea78db4f70b537a82301e46073678221
+Abi: 7e6a73b266c051158aa3edd9542a594a98d569096caa02fb1c3210941941881e
 Description: Gaming meets modern C++ - a fast and reliable entity-component system and much more
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: egl-registry
 Version: 2024-01-25
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: e2fac81664f2f9521841bd4ac82641009d63d464281e89900ae2dc345f74fcd6
+Abi: 3bc6a99d3bd9b8754a269274a3de30b3203857228091ee40326cd6a0f4c1a0ab
 Description: EGL API and Extension Registry
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: opengl-registry
 Version: 2024-02-10
@@ -125,26 +125,26 @@ Port-Version: 1
 Depends: egl-registry
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: ac52ab15d71ae0fdbdf0f4110b407c70eed5ea1bb65792d26dddd0020d3c5eed
+Abi: cef95829152912a1a262dbc3d166b18384c25fc2a44451041cf6b998fed529b6
 Description: OpenGL, OpenGL ES, and OpenGL ES-SC API and Extension Registry
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: glad
 Version: 0.1.36
 Depends: egl-registry, opengl-registry, vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: ef879bbff4cff600f685711a2e2c3df9fe5cc45fc181e8ad9035c8af5aeaf2e6
+Abi: a5433cf037fc4c27a04c347577e9e9361642748403219555e636d7d54668b8c9
 Description: Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs.
 Default-Features: loader
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: glad
 Feature: loader
 Architecture: wasm32-emscripten
 Multi-Arch: same
 Description: Generate loader logic.
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: glfw3
 Version: 3.4
@@ -152,9 +152,9 @@ Port-Version: 1
 Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: 60164b7b8375b2db95f227e4b4a89ed6c5622f5537813628575fc022527ec801
+Abi: 00a5e644ebd5838f035edddeca1e01cb555e029c0814ad848633df99fe717c70
 Description: GLFW is a free, Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan application development. It provides a simple, platform-independent API for creating windows, contexts and surfaces, reading input, handling events, etc.
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: glm
 Version: 1.0.1
@@ -162,46 +162,46 @@ Port-Version: 3
 Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: 1d79e9877a77bf14e3c8c6cc56c00392c896db539a07a64dc9a6b927226e7957
+Abi: 8a201131b545a3cf09ca5918bc7c74e94ea80918bd8909739d1b366bd20bbf2e
 Description: OpenGL Mathematics (GLM)
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: imgui
 Version: 1.91.9
 Depends: vcpkg-cmake:x64-windows, vcpkg-cmake-config:x64-windows
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: 3859e2a79fbd4e9c8aadbbaa353eb1cf9df2a1110c23eb2042868d2d284df8af
+Abi: 39fc720c36a8e908a0bbf395aa78d44c2d8912db1c54bf17e5f85d2ec07c57d8
 Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: imgui
 Feature: glfw-binding
 Architecture: wasm32-emscripten
 Multi-Arch: same
 Description: Make available GLFW binding
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: stb
 Version: 2024-07-29
 Port-Version: 1
 Architecture: wasm32-emscripten
 Multi-Arch: same
-Abi: e2fbb50077147092526075577552de8331847b4696f9c18d692c919489d3a1f1
+Abi: 98d63c5c5554aadb054b28ea00cf91bac34cf943ef0e910c40365d1e97efa854
 Description: public domain header-only libraries
-Status: install ok installed
+Status: purge ok not-installed
 
 Package: imgui
 Feature: opengl3-binding
 Architecture: x64-windows
 Multi-Arch: same
 Description: Make available OpenGL3/ES/ES2 (modern) binding
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: imgui
 Feature: opengl3-binding
 Architecture: wasm32-emscripten
 Multi-Arch: same
 Description: Make available OpenGL3/ES/ES2 (modern) binding
-Status: install ok installed
+Status: purge ok not-installed
 
