@@ -33,7 +33,7 @@ struct MovementPipe
 	double lifetime = 0;
 };
 
-void SpawnPipe(std::shared_ptr<Sunset::World>& world, Sunset::Quadtree& quad)
+void SpawnPipe(std::shared_ptr<Sunset::World>& world)
 {
 	Sunset::Entity UpperPipe = world->create();
 	auto& UpperTransComp = world->emplace<Sunset::TransformComponent>(UpperPipe, glm::vec2{2, 0.5});
@@ -41,7 +41,6 @@ void SpawnPipe(std::shared_ptr<Sunset::World>& world, Sunset::Quadtree& quad)
 	UpperTransComp.size = {0.2, 0.5};
 	world->emplace<Sunset::RenderObjectComponent>(UpperPipe, new Sunset::Square({1, 2}));
 	world->emplace<MovementPipe>(UpperPipe);
-	//quad.Add(UpperPipe);
 
 
 	Sunset::Entity UnderPipe = world->create();
@@ -50,7 +49,6 @@ void SpawnPipe(std::shared_ptr<Sunset::World>& world, Sunset::Quadtree& quad)
 	UnderTransComp.size = {0.2, 0.5};
 	world->emplace<Sunset::RenderObjectComponent>(UnderPipe, new Sunset::Square({1, 2}));
 	world->emplace<MovementPipe>(UnderPipe);
-	//quad.Add(UnderPipe);
 }
 
 
@@ -66,8 +64,6 @@ int main()
 
 	std::shared_ptr<Sunset::World> world = std::make_shared<Sunset::World>();
 
-	Sunset::Quadtree quad{world, {0.f, 0.f}, {3.f, 2.f}};
-
 	std::shared_ptr<Sunset::Camera> cam = std::make_shared<Sunset::Camera>();
 
 	Sunset::Entity player = world->create();
@@ -75,7 +71,6 @@ int main()
 	Sunset::PhysicComponent& playerPhysComp = world->emplace<Sunset::PhysicComponent>(player);
 	world->emplace<Sunset::RenderObjectComponent>(player, new Sunset::Square({0, 2}));
 
-	//quad.Add(player);
 
 	bool IsKeyPress = false;
 
@@ -121,7 +116,7 @@ int main()
 		else
 		{
 			SpawnRate = 0;
-			SpawnPipe(world, quad);
+			SpawnPipe(world);
 		}
 
 		auto entitys = world->view<Sunset::TransformComponent, Sunset::PhysicComponent>();
@@ -148,23 +143,6 @@ int main()
 			transComp.location.x += movePipe.dir.x * Deltatime;
 			transComp.location.y += movePipe.dir.y * Deltatime;
 		});
-
-		auto transComps = world->view<Sunset::TransformComponent>();
-		//transComps.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp)
-		//{
-		//	quad.Update(entity);
-		//});
-
-		//transComps.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp)
-		//{
-		//	std::vector<Sunset::Entity> founds;
-		//	quad.CollideWith(entity, founds);
-
-		//	for (auto& entt : founds)
-		//	{
-		//		Sunset::CollisionTest::ResolveCollision(entity, entt, *(world.get()), Deltatime);
-		//	}
-		//});
 
 		cam->Update(Deltatime);
 

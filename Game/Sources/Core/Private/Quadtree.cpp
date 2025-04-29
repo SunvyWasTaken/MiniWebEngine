@@ -17,7 +17,7 @@ namespace Sunset
 		, size(_size)
 		, world(_world)
 	{
-		//if (std::shared_ptr<World> tmpWorld = world.lock())
+ 		//if (std::shared_ptr<World> tmpWorld = world.lock())
 		//{
 		//	Entity quad = tmpWorld->create();
 		//	TransformComponent& transComp = tmpWorld->emplace<TransformComponent>(quad, loc);
