@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Object.h"
 #include "RenderObject.h"
+#include "Components.h"
 
 #ifndef __EMSCRIPTEN__
 #include "imgui.h"
@@ -32,7 +32,7 @@ namespace Sunset
 
 		void End();
 
-		void RenderObj(TransformComponent& transform, RenderObject& object);
+		void RenderObj(const TransformComponent& transform, const RenderObject& object);
 		// End Render sys
 
 		void Close(const bool bShouldClose);

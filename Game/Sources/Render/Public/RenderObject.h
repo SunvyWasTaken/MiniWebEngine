@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Components.h"
-#include "Object.h"
 #include "Shader.h"
 #include "Texture.h"
 
@@ -20,10 +19,15 @@ namespace Sunset
 	{
 	public:
 		RenderObject();
+
 		virtual ~RenderObject();
+
 		void PostInit(const std::vector<Vertice>& vertices, const std::vector<uint32_t>& index = std::vector<uint32_t>());
-		virtual void PostRender();
-		void operator()(const TransformComponent& transform, const std::shared_ptr<Camera>& cam);
+
+		virtual void PostRender() const;
+
+		void operator()(const Sunset::TransformComponent& transform, const std::shared_ptr<Camera>& cam) const;
+
 	protected:
 
 		Shader shader;
@@ -38,7 +42,7 @@ namespace Sunset
 	{
 	public:
 		explicit Square(const glm::vec2& coord);
-		virtual void PostRender() override;
+		virtual void PostRender() const override;
 		glm::vec2 SpriteCoord;
 	};
 

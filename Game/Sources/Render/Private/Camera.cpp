@@ -27,23 +27,6 @@ namespace Sunset
 	void Camera::Update(const double deltatime)
 	{
 		return;
-
-		if (Inputs::IsKeyPressed(87))
-		{
-			AddPosition({ 0.f, CameraMovementSpeed * deltatime });
-		}
-		if (Inputs::IsKeyPressed(83))
-		{
-			AddPosition({ 0.f, -CameraMovementSpeed * deltatime });
-		}
-		if (Inputs::IsKeyPressed(65))
-		{
-			AddPosition({ -CameraMovementSpeed * deltatime, 0.f });
-		}
-		if (Inputs::IsKeyPressed(68))
-		{
-			AddPosition({ CameraMovementSpeed * deltatime, 0.f });
-		}
 	}
 
 	glm::mat4 Camera::GetProjection() const

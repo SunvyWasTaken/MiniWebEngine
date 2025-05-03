@@ -3,12 +3,32 @@
 
 #include <glfw/glfw3.h>
 
+namespace
+{
+	std::unordered_map<int, bool> keyPressed;
+}
+
 namespace Sunset
 {
-	bool Inputs::IsKeyPressed(const int keyValue)
+	bool Inputs::IsKey(const int keyValue, const State::Type& type)
 	{
 		int state = glfwGetKey(Render::Get(), keyValue);
-		return state == GLFW_PRESS;
+
+		return std::visit(overload{
+		[&](const State::Hold&)
+		{
+			return state == GLFW_PRESS;
+		},
+		[&](const State::Pressed&)
+		{
+			if (!keyPressed.contains(keyValue))
+				keyPressed.insert({keyValue, false});
+
+			bool wasPressed = keyPressed.at(keyValue);
+			keyPressed.at(keyValue) = (state == GLFW_PRESS);
+
+			return (state == GLFW_PRESS && !wasPressed);
+		} }, type);
 	}
 
 	bool Inputs::IsKeyReleased(const int keyValue)
@@ -35,6 +55,5 @@ namespace Sunset
 		glfwGetCursorPos(Render::Get(), &x, &y);
 		return glm::vec2{ x, y };
 	}
-
 }
 

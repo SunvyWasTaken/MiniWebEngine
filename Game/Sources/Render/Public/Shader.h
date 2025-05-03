@@ -10,11 +10,11 @@ namespace Sunset
 		Shader(const char* vertShader = "../../Game/Shaders/vShader.glsl", const char* fragShader = "../../Game/Shaders/fShader.glsl");
 		~Shader();
 
-		void operator()();
+		void operator()() const;
 
-		void SetMatrice4f(const std::string_view& name, const glm::mat4& value);
+		void SetMatrice4f(const std::string_view& name, const glm::mat4& value) const;
 
-		void SetVec2f(const std::string_view& name, const glm::vec2& value);
+		void SetVec2f(const std::string_view& name, const glm::vec2& value) const;
 
 	private:
 		uint32_t ID;

@@ -10,6 +10,9 @@
     <ClCompile Include="D:\source\Truc\Game\Sources\Core\Private\Quadtree.cpp">
       <Filter>Sources\Core\Private</Filter>
     </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Core\Private\WorldManager.cpp">
+      <Filter>Sources\Core\Private</Filter>
+    </ClCompile>
     <ClCompile Include="D:\source\Truc\Game\Sources\Core\Public\main.cpp">
       <Filter>Sources\Core\Public</Filter>
     </ClCompile>
@@ -46,6 +49,9 @@
       <Filter>Sources\Core\Public</Filter>
     </ClInclude>
     <ClInclude Include="D:\source\Truc\Game\Sources\Core\Public\Quadtree.h">
+      <Filter>Sources\Core\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Core\Public\WorldManager.h">
       <Filter>Sources\Core\Public</Filter>
     </ClInclude>
     <ClInclude Include="D:\source\Truc\Game\Sources\Core\Public\gpch.h">

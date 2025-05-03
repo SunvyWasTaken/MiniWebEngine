@@ -4,7 +4,6 @@
 
 namespace Sunset
 {
-
 	struct BaseComponent
 	{
 		BaseComponent() = default;
@@ -30,7 +29,6 @@ namespace Sunset
 	struct CollisionComponent : public BaseComponent
 	{
 		CollisionShape::Type type;
-		std::vector<Entity> IgnoreActor;
 		void Collision();
 		std::function<void()> OnCollision;
 	};

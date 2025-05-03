@@ -12,7 +12,7 @@ namespace Sunset
 	{
 	}
 
-	Quadtree::Quadtree(const std::weak_ptr<World>& _world, const glm::vec2& _loc, const glm::vec2& _size)
+	Quadtree::Quadtree(World* _world, const glm::vec2& _loc, const glm::vec2& _size)
 		: loc(_loc)
 		, size(_size)
 		, world(_world)
@@ -89,7 +89,7 @@ namespace Sunset
 		{
 			if (tmp == entity)
 				continue;
-			if (CollisionTest::Intersect(entity, tmp, *(world.lock().get())))
+			if (CollisionTest::Intersect(entity, tmp, *world))
 			{
 				founds.emplace_back(tmp);
 			}
@@ -107,9 +107,9 @@ namespace Sunset
 
 	bool Quadtree::Contain(const Entity& entity)
 	{
-		if (std::shared_ptr<World> _world = world.lock())
+		if (world)
 		{
-			TransformComponent& transComp = _world->get<TransformComponent>(entity);
+			TransformComponent& transComp = (*(*world)).get<TransformComponent>(entity);
 			return CollisionTest::Intersect(loc, size, transComp.location, transComp.size);
 		}
 		return false;

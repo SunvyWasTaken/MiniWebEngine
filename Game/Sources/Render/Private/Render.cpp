@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include "Components.h"
 #include "Object.h"
 #include "Render.h"
 
@@ -125,7 +124,7 @@ namespace Sunset
 		glfwPollEvents();
 	}
 
-	void Render::RenderObj(TransformComponent& transform, RenderObject& object)
+	void Render::RenderObj(const TransformComponent& transform, const RenderObject& object)
 	{
 		object(transform, camera);
 	}

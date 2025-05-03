@@ -1,12 +1,64 @@
 #include "Object.h"
 #include "Components.h"
+#include "Render.h"
 
 namespace Sunset
 {
+	World::World()
+	{
+	}
+
+	World::~World()
+	{
+	}
+
+	void World::Update(double deltatime)
+	{
+		for (auto& tmp : entitys)
+		{
+			tmp->Update(deltatime);
+		}
+	}
+
+	void World::RenderObjs(Render& window)
+	{
+		auto rendables = id.view<Sunset::TransformComponent, Sunset::RenderObjectComponent>();
+		rendables.each([&](Sunset::TransformComponent& transform, Sunset::RenderObjectComponent& RenderObj)
+			{
+				window.RenderObj(transform, *(RenderObj.data));
+			});
+	}
+
+	Entity::Entity(World* _world)
+		: world(_world)
+		, id(entt::null)
+	{
+		if (world)
+			id = world->id.create();
+	}
+
+	Entity::~Entity()
+	{
+		Destroy();
+	}
+
+	void Entity::Begin()
+	{
+	}
+
+	void Entity::Update(double deltatime)
+	{
+	}
+
+	void Entity::Destroy()
+	{
+		world->id.destroy(id);
+	}
+
 	bool CollisionTest::Intersect(const Entity& A, const Entity& B, World& world)
 	{
-		auto [transCompA, colliCompA] = world.try_get<TransformComponent, CollisionComponent>(A);
-		auto [transCompB, colliCompB] = world.try_get<TransformComponent, CollisionComponent>(B);
+		auto [transCompA, colliCompA] = world->try_get<TransformComponent, CollisionComponent>(A);
+		auto [transCompB, colliCompB] = world->try_get<TransformComponent, CollisionComponent>(B);
 		if (!transCompA || !colliCompA || !transCompB || !colliCompB)
 			return false;
 
@@ -55,8 +107,8 @@ namespace Sunset
 
 	void CollisionTest::ResolveCollision(Entity& A, Entity& B, World& world, float deltatime)
 	{
-		TransformComponent& transCompA = world.get<TransformComponent>(A);
-		TransformComponent& transCompB = world.get<TransformComponent>(B);
+		TransformComponent& transCompA = (*world).get<TransformComponent>(A);
+		TransformComponent& transCompB = (*world).get<TransformComponent>(B);
 		glm::vec2 delta = transCompB.location - transCompA.location;
 		glm::vec2 overlap = (transCompA.size + transCompB.size) * 0.5f - glm::abs(delta);
 
@@ -85,5 +137,4 @@ namespace Sunset
 			OnCollision();
 		}
 	}
-
 }

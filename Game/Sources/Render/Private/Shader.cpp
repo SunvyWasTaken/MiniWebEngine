@@ -66,17 +66,17 @@ namespace Sunset
 		glDeleteProgram(ID);
 	}
 
-	void Shader::operator()()
+	void Shader::operator()() const
 	{
 		glUseProgram(ID);
 	}
 
-	void Shader::SetMatrice4f(const std::string_view& name, const glm::mat4& value)
+	void Shader::SetMatrice4f(const std::string_view& name, const glm::mat4& value) const
 	{
 		glUniformMatrix4fv(glGetUniformLocation(ID, name.data()), 1, GL_FALSE, glm::value_ptr(value));
 	}
 
-	void Shader::SetVec2f(const std::string_view& name, const glm::vec2& value)
+	void Shader::SetVec2f(const std::string_view& name, const glm::vec2& value) const
 	{
 		glUniform2fv(glGetUniformLocation(ID, name.data()), 1, glm::value_ptr(value));
 	}

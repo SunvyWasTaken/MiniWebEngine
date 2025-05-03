@@ -8,7 +8,7 @@ namespace Sunset
 		explicit Texture(const std::string& path);
 		virtual ~Texture();
 
-		void operator()();
+		void operator()() const;
 
 		void SetSubUv(const glm::vec2& uv);
 

@@ -33,7 +33,7 @@ namespace Sunset
 		glDeleteTextures(1, &texture);
 	}
 
-	void Texture::operator()()
+	void Texture::operator()() const
 	{
 		glBindTexture(GL_TEXTURE_2D, texture);
 	}

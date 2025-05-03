@@ -9,6 +9,7 @@
 #include "Quadtree.h"
 #include "Render.h"
 #include "RenderObject.h"
+#include "WorldManager.h"
 
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
@@ -22,34 +23,67 @@ void Mainloop(void* func)
 }
 #endif // __EMSCRIPTEN__
 
-struct MovementPipe
+class MainMenu : public Sunset::World
 {
-	glm::vec2 dir{-0.5, 0};
-	bool IsAlive(const double deltatime)
+public:
+	MainMenu() : Sunset::World()
 	{
-		lifetime += deltatime;
-		return lifetime <= 8.0f;
+		LOG("Main Menu create");
 	}
-	double lifetime = 0;
 };
 
-void SpawnPipe(std::shared_ptr<Sunset::World>& world)
+class Player : public Sunset::Entity
 {
-	Sunset::Entity UpperPipe = world->create();
-	auto& UpperTransComp = world->emplace<Sunset::TransformComponent>(UpperPipe, glm::vec2{2, 0.5});
-	UpperTransComp.bStatic = true;
-	UpperTransComp.size = {0.2, 0.5};
-	world->emplace<Sunset::RenderObjectComponent>(UpperPipe, new Sunset::Square({1, 2}));
-	world->emplace<MovementPipe>(UpperPipe);
+public:
 
+	BODY(Player)
 
-	Sunset::Entity UnderPipe = world->create();
-	auto& UnderTransComp = world->emplace<Sunset::TransformComponent>(UnderPipe, glm::vec2{2, -0.5 });
-	UnderTransComp.bStatic = true;
-	UnderTransComp.size = {0.2, 0.5};
-	world->emplace<Sunset::RenderObjectComponent>(UnderPipe, new Sunset::Square({1, 2}));
-	world->emplace<MovementPipe>(UnderPipe);
-}
+	virtual void Begin() override
+	{
+		transComp = &AddComponent<Sunset::TransformComponent>(glm::vec2{0, 0});
+		AddComponent<Sunset::RenderObjectComponent>(new Sunset::Square({0, 3}));
+	}
+
+	virtual void Update(double deltatime)
+	{
+		if (Sunset::Inputs::IsKey(87, Sunset::Inputs::State::Hold{}))
+		{
+			AddPosition({ 0.f, PlayerSpeed * deltatime });
+		}
+		if (Sunset::Inputs::IsKey(83, Sunset::Inputs::State::Hold{}))
+		{
+			AddPosition({ 0.f, -PlayerSpeed * deltatime });
+		}
+		if (Sunset::Inputs::IsKey(65, Sunset::Inputs::State::Hold{}))
+		{
+			AddPosition({ -PlayerSpeed * deltatime, 0.f });
+		}
+		if (Sunset::Inputs::IsKey(68, Sunset::Inputs::State::Hold{}))
+		{
+			AddPosition({ PlayerSpeed * deltatime, 0.f });
+		}
+	}
+
+	void AddPosition(const glm::vec2& pos)
+	{
+		transComp->location += pos;
+	}
+
+	Sunset::TransformComponent* transComp;
+	float PlayerSpeed = 0.5f;
+};
+
+class GameWorld : public Sunset::World
+{
+public:
+	GameWorld() : Sunset::World()
+	{
+		LOG("game World create");
+		playerRef = CreateEntity<Player>();
+	}
+
+	Player* playerRef;
+};
 
 
 int main()
@@ -62,14 +96,9 @@ int main()
 	layerContainer(gameLayer);
 #endif
 
-	std::shared_ptr<Sunset::World> world = std::make_shared<Sunset::World>();
+	Sunset::WorldManager<MainMenu, GameWorld> worldManager;
 
 	std::shared_ptr<Sunset::Camera> cam = std::make_shared<Sunset::Camera>();
-
-	Sunset::Entity player = world->create();
-	Sunset::TransformComponent& playerTransComp = world->emplace<Sunset::TransformComponent>(player, glm::vec2{-1, 0});
-	Sunset::PhysicComponent& playerPhysComp = world->emplace<Sunset::PhysicComponent>(player);
-	world->emplace<Sunset::RenderObjectComponent>(player, new Sunset::Square({0, 2}));
 
 
 	bool IsKeyPress = false;
@@ -82,10 +111,8 @@ int main()
 
 	float SpawnRate = 0.f;
 #ifndef __EMSCRIPTEN__
-	gameLayer->Add({ "Localisation", Sunset::GameDataType::Vec2{}, &playerTransComp.location });
-	gameLayer->Add({ "Velocity", Sunset::GameDataType::Vec2{}, &playerPhysComp.velocity });
-	gameLayer->Add({ "FrameRate", Sunset::GameDataType::Int32{}, &frameRate });
 	gameLayer->Add({ "Deltatime", Sunset::GameDataType::Double{}, &Deltatime });
+	gameLayer->Add({ "FrameRate", Sunset::GameDataType::Int32{}, &frameRate });
 #endif // !__EMSCRIPTEN__
 
 	// Main boucle out for emscripten
@@ -94,55 +121,18 @@ int main()
 		Deltatime = CurrentTime - PreviousTime;
 		PreviousTime = CurrentTime;
 
-		frameRate = 1/Deltatime;
+		frameRate = 1 / Deltatime;
 
-		if (Sunset::Inputs::IsKeyPressed(256))
+		if (Sunset::Inputs::IsKey(70))
 		{
-			window.Close(true);
+			worldManager.LoadWorld<GameWorld>();
+		}
+		else if (Sunset::Inputs::IsKey(71))
+		{
+			worldManager.LoadWorld<MainMenu>();
 		}
 
-		if (Sunset::Inputs::IsKeyPressed(32) && !IsKeyPress)
-		{
-			IsKeyPress = true;
-			playerPhysComp.AddImpulse({0, 1}, 9.81f);
-		}
-		else if (Sunset::Inputs::IsKeyReleased(32))
-		{
-			IsKeyPress = false;
-		}
-
-		if (SpawnRate < 1.f)
-			SpawnRate += Deltatime;
-		else
-		{
-			SpawnRate = 0;
-			SpawnPipe(world);
-		}
-
-		auto entitys = world->view<Sunset::TransformComponent, Sunset::PhysicComponent>();
-		entitys.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp, Sunset::PhysicComponent& physComp)
-		{
-			physComp.ApplyPhysic(Deltatime, transComp);
-			float alpha = physComp.velocity.y;
-			if (alpha > 0)
-				alpha = 0;
-			else if (alpha < -1)
-				alpha = -1;
-			transComp.rot = Sunset::Math::lerp(0.f, 45.f, alpha);
-		});
-
-		auto pipes = world->view<Sunset::TransformComponent, MovementPipe>();
-		pipes.each([&](Sunset::Entity entity, Sunset::TransformComponent& transComp, MovementPipe& movePipe)
-		{
-			if (!movePipe.IsAlive(Deltatime))
-			{
-				world->destroy(entity);
-				return;
-			}
-
-			transComp.location.x += movePipe.dir.x * Deltatime;
-			transComp.location.y += movePipe.dir.y * Deltatime;
-		});
+		worldManager.Update(Deltatime);
 
 		cam->Update(Deltatime);
 
@@ -151,12 +141,8 @@ int main()
 #ifndef __EMSCRIPTEN__
 		layerContainer.Render();
 #endif
-
-		auto rendables = world->view<Sunset::TransformComponent, Sunset::RenderObjectComponent>();
-		rendables.each([&](Sunset::TransformComponent& transform, Sunset::RenderObjectComponent& RenderObj)
-		{
-			window.RenderObj(transform, *(RenderObj.data));
-		});
+	
+		worldManager.RenderObj(&window);
 
 		window.End();
 	};

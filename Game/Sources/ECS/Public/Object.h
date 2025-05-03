@@ -4,9 +4,86 @@
 
 namespace Sunset
 {
-	using World = entt::registry;
+	class Render;
 
-	using Entity = entt::entity;
+	class World
+	{
+		friend class Entity;
+		using Id = entt::registry;
+	public:
+		World();
+		virtual ~World();
+
+		void Update(double deltatime);
+
+		Id* operator->()
+		{
+			return &id;
+		}
+
+		Id& operator*()
+		{
+			return id;
+		}
+
+		template <typename T>
+		T* CreateEntity();
+
+		void RenderObjs(Render& window);
+
+	private:
+		Id id;
+		std::vector<std::unique_ptr<Entity>> entitys;
+	};
+
+	class Entity
+	{
+		friend World;
+		using Id = entt::entity;
+	public:
+		Entity() = delete;
+		explicit Entity(World* _world = nullptr);
+
+		virtual ~Entity();
+
+		operator Id() const
+		{
+			return id;
+		}
+
+		virtual void Begin();
+
+		virtual void Update(double deltatime);
+
+		template <typename T, typename ...Args>
+		T& AddComponent(Args&&... args)
+		{
+			return world->id.emplace<T>(id, std::forward<Args>(args)...);
+		}
+
+		template <typename T>
+		T& GetComponent()
+		{
+			return world->id.get<T>(id);
+		}
+
+		void Destroy();
+
+	private:
+		World* world;
+		Id id;
+	};
+
+	template <typename T>
+	T* World::CreateEntity()
+	{
+		static_assert(std::is_base_of_v<Entity, T>, "Create entity doit hériter de entity");
+		T* tmp = new T(this);
+		tmp->Begin();
+		entitys.emplace_back(std::unique_ptr<Entity>(tmp));
+		return tmp;
+	};
+
 
 	struct CollisionTest
 	{

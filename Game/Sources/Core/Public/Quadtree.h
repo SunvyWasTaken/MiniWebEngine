@@ -11,7 +11,7 @@ namespace Sunset
 
 	public:
 		Quadtree();
-		Quadtree(const std::weak_ptr<World>& _world, const glm::vec2& _loc, const glm::vec2& _size);
+		Quadtree(World* _world, const glm::vec2& _loc, const glm::vec2& _size);
 		~Quadtree();
 
 		void Update(const Entity& entity);
@@ -30,7 +30,7 @@ namespace Sunset
 		glm::vec2 loc, size;
 		EntityList entitys;
 		ChildList childs;
-		std::weak_ptr<World> world;
+		World* world;
 	};
 }
 

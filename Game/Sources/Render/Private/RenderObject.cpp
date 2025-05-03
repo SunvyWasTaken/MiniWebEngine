@@ -112,11 +112,11 @@ namespace Sunset
 		}
 	}
 
-	void RenderObject::PostRender()
+	void RenderObject::PostRender() const
 	{
 	}
 
-	void RenderObject::operator()(const TransformComponent& transform, const std::shared_ptr<Camera>& cam)
+	void RenderObject::operator()(const TransformComponent& transform, const std::shared_ptr<Camera>& cam) const
 	{
 		shader();
 
@@ -151,7 +151,7 @@ namespace Sunset
 		PostInit(vertices, indexBuffer);
 	}
 
-	void Square::PostRender()
+	void Square::PostRender() const
 	{
 		shader.SetVec2f("index", SpriteCoord);
 	}
