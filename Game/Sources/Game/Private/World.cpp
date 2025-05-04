@@ -13,6 +13,7 @@ namespace
 MainMenu::MainMenu()
 	: Sunset::World()
 {
+	// Ici faudra que je fasse en sorte que le jeux écrive du texte pour que je puisse mettre un presse to start.
 }
 
 
