@@ -37,6 +37,49 @@ void Bee::Update(double deltatime)
 {
 	Super::Update(deltatime);
 
+	float dt = deltatime;
+
+	if (isAttacking)
+	{
+		BeeSpeed = 4.f;
+
+		glm::vec2 dir = targetLocation - GetLocation();
+		float dist = glm::length(dir);
+		glm::vec2 normDir = glm::normalize(dir);
+		if (dist >= 0.05f)
+			AddPosition(normDir * BeeSpeed * dt);
+		else
+			isAttacking = false;
+	}
+	else if (IsInCooldown)
+	{
+		BeeSpeed = 1.f;
+
+		glm::vec2 dir = initPosition - GetLocation();
+		float dist = glm::length(dir);
+		glm::vec2 normDir = glm::normalize(dir);
+		if (dist >= 0.01f)
+			AddPosition(normDir * BeeSpeed * dt);
+		else
+			IsInCooldown = false;
+	}
+
+}
+
+void Bee::Attack(const std::vector<Ennemy>& targets)
+{
+	if (IsInCooldown)
+		return;
+
+	IsInCooldown = true;
+
+	if (targets.empty())
+	{
+		initPosition = GetLocation();
+		isAttacking = true;
+		targetLocation = glm::vec2{0, 1};
+		return;
+	}
 }
 
 void Bee::AddPosition(const glm::vec2& pos)

@@ -14,6 +14,7 @@ namespace ShapeModel
 		float radius;
 	};
 	using Type = std::variant<std::monostate, Triangle, Square, Cercle>;
+	constexpr size_t Size = std::variant_size<Type>::value - 1;
 };
 
 struct ShapeDetection
