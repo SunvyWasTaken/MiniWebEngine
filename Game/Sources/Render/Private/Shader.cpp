@@ -68,6 +68,11 @@ namespace Sunset
 
 	void Shader::operator()() const
 	{
+		Use();
+	}
+
+	void Shader::Use() const
+	{
 		glUseProgram(ID);
 	}
 

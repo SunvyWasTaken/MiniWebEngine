@@ -4,14 +4,26 @@ namespace Sunset
 {
 	namespace GameDataType
 	{
-		struct Bool {};
+		struct Bool
+		{
+			bool value;
+		};
 		struct Int32 {};
 		struct Float {};
 		struct Double {};
 		struct Vec2 {};
 		struct Vec3 {};
+		struct Button
+		{
+			std::function<void()> func;
+		};
 
-		using Type = std::variant<Bool, Int32, Float, Double, Vec2, Vec3>;
+		struct GraphLine
+		{
+			std::vector<float>* points;
+		};
+
+		using Type = std::variant<Bool, Int32, Float, Double, Vec2, Vec3, Button, GraphLine>;
 	};
 
 	struct GameData
@@ -24,7 +36,7 @@ namespace Sunset
 	class Layer
 	{
 	public:
-		Layer(const std::string& name);
+		explicit Layer(const std::string& name);
 
 		virtual ~Layer();
 
@@ -44,10 +56,13 @@ namespace Sunset
 	class LayerContainer
 	{
 	public:
-		void Render();
+		
+		static LayerContainer& Get();
+		
+		static void Render();
 
-		void operator()(const std::shared_ptr<Layer>& layer);
+		void Add(const std::shared_ptr<Layer>& layer);
 
-		std::vector<std::shared_ptr<Layer>> layers;
+		std::vector<std::weak_ptr<Layer>> layers;
 	};
 }

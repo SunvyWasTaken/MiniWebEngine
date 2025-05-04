@@ -6,10 +6,12 @@ namespace Sunset
 {
 	World::World()
 	{
+
 	}
 
 	World::~World()
 	{
+		id.clear();
 	}
 
 	void World::Update(double deltatime)
@@ -29,6 +31,23 @@ namespace Sunset
 			});
 	}
 
+	void World::PostRenderObjs()
+	{
+	}
+
+	void World::DestroyEntity(Entity* entity)
+	{
+		id.destroy(entity->id);
+
+		auto it = std::find_if(entitys.begin(), entitys.end(),
+			[&entity](const std::unique_ptr<Entity>& e) {
+				return e->id == entity->id;
+			});
+		if (it != entitys.end()) {
+			entitys.erase(it);
+		}
+	}
+
 	Entity::Entity(World* _world)
 		: world(_world)
 		, id(entt::null)
@@ -39,7 +58,6 @@ namespace Sunset
 
 	Entity::~Entity()
 	{
-		Destroy();
 	}
 
 	void Entity::Begin()
@@ -48,11 +66,19 @@ namespace Sunset
 
 	void Entity::Update(double deltatime)
 	{
+		//if (lifetime != 0.f)
+		//{
+		//	currentLifetime += deltatime;
+		//	if (currentLifetime >= lifetime)
+		//	{
+		//		Destroy();
+		//	}
+		//}
 	}
 
 	void Entity::Destroy()
 	{
-		world->id.destroy(id);
+		world->DestroyEntity(this);
 	}
 
 	bool CollisionTest::Intersect(const Entity& A, const Entity& B, World& world)

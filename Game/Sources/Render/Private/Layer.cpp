@@ -2,6 +2,11 @@
 
 #include "imgui.h"
 
+namespace
+{
+	Sunset::LayerContainer layerContainer;
+}
+
 namespace Sunset
 {
 	Layer::Layer(const std::string& name)
@@ -48,6 +53,17 @@ namespace Sunset
 			{
 				oss << data.dataName << ":" << *(static_cast<glm::vec3*>(data.value));
 				ImGui::Text("%s", oss.str().c_str());
+			},
+			[&](GameDataType::Button& tmp)
+			{
+				if (ImGui::Button(data.dataName.c_str()))
+				{
+					tmp.func();
+				}
+			},
+			[&](GameDataType::GraphLine& tmp)
+			{
+				ImGui::PlotLines(data.dataName.c_str(), tmp.points->data(), tmp.points->size(), 0, data.dataName.c_str());
 			}
 			}, data.dataType);
 		}
@@ -58,17 +74,35 @@ namespace Sunset
 		datas.emplace_back(data);
 	}
 
+	LayerContainer& LayerContainer::Get()
+	{
+		return layerContainer;
+	}
+
 	void LayerContainer::Render()
 	{
-		for (auto& layer : layers)
+		layerContainer.layers.erase(
+			std::remove_if(
+				layerContainer.layers.begin(),
+				layerContainer.layers.end(),
+				[](const std::weak_ptr<Layer>& layer) {
+					return layer.expired();
+				}),
+			layerContainer.layers.end()
+		);
+
+		for (auto& layer : layerContainer.layers)
 		{
-			ImGui::Begin(layer->LayerName.c_str());
-			layer->Render();
-			ImGui::End();
+			if (std::shared_ptr<Layer> lay = layer.lock())
+			{
+				ImGui::Begin(lay->LayerName.c_str());
+				lay->Render();
+				ImGui::End();
+			}
 		}
 	}
 
-	void LayerContainer::operator()(const std::shared_ptr<Layer>& layer)
+	void LayerContainer::Add(const std::shared_ptr<Layer>& layer)
 	{
 		layers.emplace_back(layer);
 	}

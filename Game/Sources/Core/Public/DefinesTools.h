@@ -57,4 +57,6 @@ namespace Sunset
 }
 
 #define SCOPE_PERF(_name) Sunset::ScopePerfMeasure _scopPerfMesure_{_name};
-#define BODY(_name) explicit _name(Sunset::World* world = nullptr) : Sunset::Entity(world) {};
+#define BODY(_name) \
+explicit _name(Sunset::World* world = nullptr) : Sunset::Entity(world) {}; \
+using Super = Sunset::Entity;

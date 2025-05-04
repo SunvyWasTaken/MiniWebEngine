@@ -6,6 +6,7 @@
 namespace
 {
 	std::unordered_map<int, bool> keyPressed;
+	std::unordered_map<int, bool> mousePressed;
 }
 
 namespace Sunset
@@ -37,10 +38,25 @@ namespace Sunset
 		return state == GLFW_RELEASE;
 	}
 
-	bool Inputs::IsMouseButtonPressed(const int keyValue)
+	bool Inputs::IsMouseButton(const int keyValue, const State::Type& type)
 	{
 		int state = glfwGetMouseButton(Render::Get(), keyValue);
-		return state == GLFW_PRESS;
+
+		return std::visit(overload{
+		[&](const State::Hold&)
+		{
+			return state == GLFW_PRESS;
+		},
+		[&](const State::Pressed&)
+		{
+			if (!mousePressed.contains(keyValue))
+				mousePressed.insert({keyValue, false});
+
+			bool wasPressed = mousePressed.at(keyValue);
+			mousePressed.at(keyValue) = (state == GLFW_PRESS);
+
+			return (state == GLFW_PRESS && !wasPressed);
+		} }, type);
 	}
 
 	bool Inputs::IsMouseButtonReleased(const int keyValue)

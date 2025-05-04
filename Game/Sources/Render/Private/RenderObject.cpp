@@ -37,7 +37,7 @@ namespace
 			glBindVertexArray(VAO);
 
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Sunset::Vertice), vertices.data(), GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Sunset::Vertice), vertices.data(), GL_STATIC_DRAW);
 			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Sunset::Vertice), (void*)0);
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Sunset::Vertice), (void*)(sizeof(glm::vec2)));
@@ -49,7 +49,7 @@ namespace
 			{
 				glGenBuffers(1, &EBO);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.size() * sizeof(uint32_t), indexBuffer.data(), GL_DYNAMIC_DRAW);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.size() * sizeof(uint32_t), indexBuffer.data(), GL_STATIC_DRAW);
 			}
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindVertexArray(0);

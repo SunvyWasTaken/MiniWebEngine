@@ -8,6 +8,7 @@ namespace Sunset
 		{
 			struct Pressed{};
 			struct Hold{};
+			struct Release{};
 			using Type = std::variant<Pressed, Hold>;
 		};
 
@@ -15,7 +16,7 @@ namespace Sunset
 
 		static bool IsKeyReleased(const int keyValue);
 
-		static bool IsMouseButtonPressed(const int keyValue);
+		static bool IsMouseButton(const int keyValue, const State::Type& type = State::Pressed{});
 
 		static bool IsMouseButtonReleased(const int keyValue);
 

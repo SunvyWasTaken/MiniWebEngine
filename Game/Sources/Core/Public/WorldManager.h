@@ -27,13 +27,13 @@ namespace Sunset
 		{
 			Render* rw = nullptr;
 			template<typename Wo>
-			void operator()(Wo& w) const {
+			void operator()(Wo& w) const
+			{
 				w.RenderObjs(*rw);
+				w.PostRenderObjs();
 			}
 
-			void operator()(std::monostate&) const {
-				// Rien à faire
-			}
+			void operator()(std::monostate&) const {}
 		};
 
 	public:

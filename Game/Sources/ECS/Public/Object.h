@@ -14,7 +14,7 @@ namespace Sunset
 		World();
 		virtual ~World();
 
-		void Update(double deltatime);
+		virtual void Update(double deltatime);
 
 		Id* operator->()
 		{
@@ -30,6 +30,10 @@ namespace Sunset
 		T* CreateEntity();
 
 		void RenderObjs(Render& window);
+
+		virtual void PostRenderObjs();
+
+		void DestroyEntity(Entity* entity);
 
 	private:
 		Id id;
@@ -69,9 +73,14 @@ namespace Sunset
 
 		void Destroy();
 
+	protected:
+		
+		float lifetime = 0.f;
+
 	private:
 		World* world;
 		Id id;
+		float currentLifetime = 0.f;
 	};
 
 	template <typename T>

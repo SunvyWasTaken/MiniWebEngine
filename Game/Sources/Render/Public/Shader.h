@@ -12,6 +12,8 @@ namespace Sunset
 
 		void operator()() const;
 
+		void Use() const;
+
 		void SetMatrice4f(const std::string_view& name, const glm::mat4& value) const;
 
 		void SetVec2f(const std::string_view& name, const glm::vec2& value) const;

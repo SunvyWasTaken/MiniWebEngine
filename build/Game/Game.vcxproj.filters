@@ -22,6 +22,18 @@
     <ClCompile Include="D:\source\Truc\Game\Sources\ECS\Private\Object.cpp">
       <Filter>Sources\ECS\Private</Filter>
     </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Game\Private\Entitys.cpp">
+      <Filter>Sources\Game\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Game\Private\Ransac.cpp">
+      <Filter>Sources\Game\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Game\Private\ShapeDetection.cpp">
+      <Filter>Sources\Game\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Game\Private\World.cpp">
+      <Filter>Sources\Game\Private</Filter>
+    </ClCompile>
     <ClCompile Include="D:\source\Truc\Game\Sources\Inputs\Private\Inputs.cpp">
       <Filter>Sources\Inputs\Private</Filter>
     </ClCompile>
@@ -41,6 +53,9 @@
       <Filter>Sources\Render\Private</Filter>
     </ClCompile>
     <ClCompile Include="D:\source\Truc\Game\Sources\Render\Private\Texture.cpp">
+      <Filter>Sources\Render\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\source\Truc\Game\Sources\Render\Private\TraceObject.cpp">
       <Filter>Sources\Render\Private</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,6 +78,18 @@
     <ClInclude Include="D:\source\Truc\Game\Sources\ECS\Public\Object.h">
       <Filter>Sources\ECS\Public</Filter>
     </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Game\Public\Entitys.h">
+      <Filter>Sources\Game\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Game\Public\Ransac.h">
+      <Filter>Sources\Game\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Game\Public\ShapeDetection.h">
+      <Filter>Sources\Game\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Game\Public\World.h">
+      <Filter>Sources\Game\Public</Filter>
+    </ClInclude>
     <ClInclude Include="D:\source\Truc\Game\Sources\Inputs\Public\Inputs.h">
       <Filter>Sources\Inputs\Public</Filter>
     </ClInclude>
@@ -82,6 +109,9 @@
       <Filter>Sources\Render\Public</Filter>
     </ClInclude>
     <ClInclude Include="D:\source\Truc\Game\Sources\Render\Public\Texture.h">
+      <Filter>Sources\Render\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\source\Truc\Game\Sources\Render\Public\TraceObject.h">
       <Filter>Sources\Render\Public</Filter>
     </ClInclude>
     <ClInclude Include="D:\source\Truc\build\Game\CMakeFiles\Game.dir\Debug\cmake_pch.hxx">
@@ -124,6 +154,15 @@
     </Filter>
     <Filter Include="Sources\ECS\Public">
       <UniqueIdentifier>{4090386A-7CB4-3AAE-8F74-5E87DB47F483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Game">
+      <UniqueIdentifier>{390D9884-56BD-36C8-B481-8D21BC1B23A7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Game\Private">
+      <UniqueIdentifier>{159FA3B0-29CB-3F3D-BEAD-D228FD64281B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Game\Public">
+      <UniqueIdentifier>{B6901A09-6DD6-32AF-81A5-C957AD525750}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Inputs">
       <UniqueIdentifier>{A1EB9744-97DD-3820-9AC3-DB0A678F2B61}</UniqueIdentifier>
