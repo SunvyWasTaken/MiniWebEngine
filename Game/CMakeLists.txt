@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(Game VERSION 1.0)
 
-file(GLOB_RECURSE Sources "*.h" "*.cpp" ".txt")
+file(GLOB_RECURSE Sources "*.h" "*.cpp" ".txt" ".glsl")
 
 if (NOT EMSCRIPTEN)
     macro(GroupSources curdir)
@@ -32,6 +32,7 @@ if(NOT EMSCRIPTEN)
     find_package(imgui CONFIG REQUIRED)
     find_package(glfw3 CONFIG)
     find_package(glad CONFIG REQUIRED)
+    find_package(spdlog CONFIG REQUIRED)
 endif()
 
 add_executable(${PROJECT_NAME} ${Sources})
@@ -98,6 +99,7 @@ else()
         glfw
         glad::glad
         imgui::imgui
+	spdlog::spdlog_header_only
     )
 endif()
 
