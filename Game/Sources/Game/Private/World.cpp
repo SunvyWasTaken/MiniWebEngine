@@ -10,16 +10,20 @@ namespace
 	std::shared_ptr<Sunset::Layer> GameLayer = nullptr;
 }
 
+Sunset::WorldManager<MainMenu, GameWorld> worlds;
+
 MainMenu::MainMenu()
 	: Sunset::World()
 {
 	// Ici faudra que je fasse en sorte que le jeux écrive du texte pour que je puisse mettre un presse to start.
+	LOG("Main menu loaded")
 }
 
 
 GameWorld::GameWorld()
 	: Sunset::World()
 {
+	LOG("Game World load")
 	if (!GameLayer)
 	{
 		GameLayer = std::make_shared<Sunset::Layer>("Game world");
@@ -27,11 +31,13 @@ GameWorld::GameWorld()
 		GameLayer->Add({"LifePoints", Sunset::GameDataType::Int32{}, &NbrLife});
 	}
 
-	Bees = create_bee_array(std::make_index_sequence<ShapeModel::Size>{});
+	bees = create_bee_array(std::make_index_sequence<ShapeModel::Size>{});
+	ennemys = CreateEnnemys(std::make_index_sequence<NbrEnnemy>{});
 }
 
 GameWorld::~GameWorld()
 {
+	LOG("Destroy game world")
 	GameLayer.reset();
 }
 
@@ -42,7 +48,14 @@ void GameWorld::Update(double deltatime)
 	spawnTime += deltatime;
 	if (spawnTime >= 2.f)
 	{
-		//CreateEntity<Ennemy>();
+		for (Ennemy* curr : ennemys)
+		{
+			if (curr && !curr->isAttacking)
+			{
+				curr->Attack();
+				break;
+			}
+		}
 		spawnTime = 0;
 	}
 
@@ -67,17 +80,17 @@ void GameWorld::Update(double deltatime)
 			[&](ShapeModel::Triangle&)
 			{
 				LOG("Triangle")
-				Bees[0]->Attack(std::vector<Ennemy>());
+				bees[0]->Attack(std::vector<Ennemy>());
 			},
 			[&](ShapeModel::Square&)
 			{
 				LOG("Square")
-				Bees[1]->Attack(std::vector<Ennemy>());
+				bees[1]->Attack(std::vector<Ennemy>());
 			},
 			[&](ShapeModel::Cercle&)
 			{
 				LOG("Cercle");
-				Bees[2]->Attack(std::vector<Ennemy>());
+				bees[2]->Attack(std::vector<Ennemy>());
 			}
 		}, shape);
 		draw.Clear();
@@ -87,4 +100,11 @@ void GameWorld::Update(double deltatime)
 void GameWorld::PostRenderObjs()
 {
 	draw.Draw();
+}
+
+void GameWorld::LostLife()
+{
+	--NbrLife;
+	if (NbrLife <= 0)
+		worlds.LoadWorld<MainMenu>();
 }

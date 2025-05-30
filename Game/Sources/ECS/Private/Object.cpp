@@ -81,6 +81,11 @@ namespace Sunset
 		world->DestroyEntity(this);
 	}
 
+	World* Entity::GetWorld() const
+	{
+		return world;
+	}
+
 	bool CollisionTest::Intersect(const Entity& A, const Entity& B, World& world)
 	{
 		auto [transCompA, colliCompA] = world->try_get<TransformComponent, CollisionComponent>(A);

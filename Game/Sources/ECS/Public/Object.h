@@ -73,6 +73,8 @@ namespace Sunset
 
 		void Destroy();
 
+		World* GetWorld() const;
+
 	protected:
 		
 		float lifetime = 0.f;

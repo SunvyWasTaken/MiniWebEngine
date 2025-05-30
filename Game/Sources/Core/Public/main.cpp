@@ -6,7 +6,6 @@
 #endif
 #include "Ransac.h"
 #include "Render.h"
-#include "WorldManager.h"
 #include "World.h"
 
 #ifdef __EMSCRIPTEN__
@@ -30,8 +29,6 @@ int main()
 	Sunset::LayerContainer::Get().Add(gameLayer);
 #endif
 
-	Sunset::WorldManager<MainMenu, GameWorld> worldManager;
-
 	std::shared_ptr<Sunset::Camera> cam = std::make_shared<Sunset::Camera>();
 
 	double Deltatime = 0.0;
@@ -46,11 +43,11 @@ int main()
 	gameLayer->Add({ "FrameRate", Sunset::GameDataType::Int32{}, &frameRate });
 	gameLayer->Add({ "Main Menu", Sunset::GameDataType::Button{[&]()
 	{
-		worldManager.LoadWorld<MainMenu>();
+		worlds.LoadWorld<MainMenu>();
 	}}});
 	gameLayer->Add({ "Game World", Sunset::GameDataType::Button{[&]()
 	{
-		worldManager.LoadWorld<GameWorld>();
+		worlds.LoadWorld<GameWorld>();
 	}} });
 #endif // !__EMSCRIPTEN__
 
@@ -62,7 +59,7 @@ int main()
 
 		frameRate = 1 / Deltatime;
 
-		worldManager.Update(Deltatime);
+		worlds.Update(Deltatime);
 
 		cam->Update(Deltatime);
 
@@ -71,7 +68,7 @@ int main()
 #ifndef __EMSCRIPTEN__
 		Sunset::LayerContainer::Render();
 #endif
-		worldManager.RenderObj(&window);
+		worlds.RenderObj(&window);
 
 		window.End();
 	};

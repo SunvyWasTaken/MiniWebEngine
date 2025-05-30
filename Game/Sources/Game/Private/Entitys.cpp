@@ -1,6 +1,14 @@
 #include "Entitys.h"
 #include "Components.h"
 #include "RenderObject.h"
+#include "World.h"
+
+namespace
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(-10, 10);
+}
 
 void Ennemy::Begin()
 {
@@ -13,7 +21,20 @@ void Ennemy::Begin()
 void Ennemy::Update(double deltatime)
 {
 	Super::Update(deltatime);
-	AddPosition({ 0, -1 * deltatime });
+	if (isAttacking && !isStun)
+	{
+		AddPosition({ 0, -1 * deltatime });
+		glm::vec2 targetLoc{GetLocation().x, -1};
+		float dist = glm::length(targetLoc - GetLocation());
+		if (dist <= 0.05f)
+		{
+			isAttacking = false;
+			if (GameWorld* w = static_cast<GameWorld*>(GetWorld()))
+			{
+				w->LostLife();
+			}
+		}
+	}
 }
 
 void Ennemy::AddPosition(const glm::vec2& pos)
@@ -21,9 +42,23 @@ void Ennemy::AddPosition(const glm::vec2& pos)
 	transComp->location += pos;
 }
 
+void Ennemy::SetLocation(const glm::vec2& pos)
+{
+	transComp->location = pos;
+}
+
 glm::vec2 Ennemy::GetLocation() const
 {
 	return transComp->location;
+}
+
+void Ennemy::Attack()
+{
+	isAttacking = true;
+	int loc = dis(gen);
+	float targetLoc = 1.f/loc;
+
+	SetLocation({targetLoc, 1});
 }
 
 void Bee::Begin()

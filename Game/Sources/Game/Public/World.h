@@ -2,6 +2,9 @@
 
 #include "Object.h"
 #include "TraceObject.h"
+#include "WorldManager.h"
+
+constexpr size_t NbrEnnemy = 10;
 
 class MainMenu : public Sunset::World
 {
@@ -11,6 +14,7 @@ public:
 
 class GameWorld : public Sunset::World
 {
+	using EnnemyList = std::array<Ennemy*, NbrEnnemy>; 
 public:
 	GameWorld();
 	virtual ~GameWorld();
@@ -18,6 +22,8 @@ public:
 	virtual void Update(double deltatime) override;
 
 	virtual void PostRenderObjs() override;
+
+	void LostLife();
 
 private:
 
@@ -34,10 +40,25 @@ private:
 		}())... };
 	}
 
+	template <size_t... Is>
+	EnnemyList CreateEnnemys(std::index_sequence<Is...>)
+	{
+		return { ([&]()
+		{
+			Ennemy* curr = CreateEntity<Ennemy>();
+			curr->AddPosition({0, 1});
+			Is;
+			return curr;
+		}())... };
+	}
+
 public:
 	Sunset::TraceObject draw;
 	float spawnTime = 0.f;
 	int NbrLife = 3;
 private:
-	std::array<Bee*, ShapeModel::Size> Bees;
+	std::array<Bee*, ShapeModel::Size> bees;
+	EnnemyList ennemys;
 };
+
+extern Sunset::WorldManager<MainMenu, GameWorld> worlds;

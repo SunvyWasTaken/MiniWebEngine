@@ -20,11 +20,19 @@ public:
 
 	void AddPosition(const glm::vec2& pos);
 
+	void SetLocation(const glm::vec2& pos);
+
 	glm::vec2 GetLocation() const;
+
+	void Attack();
+
+	bool isAttacking = false;
 
 private:
 
 	Sunset::TransformComponent* transComp = nullptr;
+
+	bool isStun = false;
 };
 
 class Bee : public Sunset::Entity
