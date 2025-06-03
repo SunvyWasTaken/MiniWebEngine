@@ -1,6 +1,12 @@
 // Sunset inc.
 
-#include "spdlog/spdlog.h"
+#pragma once
 
-#include <iostream>
+#include "glm/glm.hpp"
+
+#include <chrono>
 #include <memory>
+#include <variant>
+
+#include "Log.h"
+#include "Variant.h"

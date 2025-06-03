@@ -6,8 +6,13 @@ namespace Sunset
 {
 	class Engine
 	{
-		// SceneManager
-		// EntityManager
+	public:
+		Engine();
+
+		~Engine();
+
+		void Run();
+
 		// Renderer
 		// PhysicsSys
 		// InputSys
