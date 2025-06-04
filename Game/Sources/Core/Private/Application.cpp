@@ -1,13 +1,13 @@
 // Sunset inc.
 
 #include "Application.h"
-#include "BasicRender.h"
-#include "Log.h"
-#include "SceneManager.h"
-#include "Scene.h"
 #include "Camera.h"
+#include "Inputs.h"
+#include "Log.h"
+#include "OpenGLWindow.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
-#include "OpenGL/OpenGLWindow.h"
 
 struct Menu : public Sunset::Scene
 {
@@ -42,9 +42,11 @@ struct Game : public Sunset::Scene
 
 namespace
 {
-	std::unique_ptr<Sunset::BasicRender> m_Render = nullptr;
+	Sunset::Engine* m_Engine = nullptr;
 
 	bool bIsAppOpen = false;
+
+	std::unique_ptr<Sunset::OpenGLRender> m_Render = nullptr;
 
 	std::unique_ptr<Sunset::SceneManager<Menu, Game>> m_SceneManager = nullptr;
 }
@@ -68,6 +70,19 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Engine Destroyed")
 	}
 
+	Engine* Engine::Get()
+	{
+		if (!m_Engine)
+				m_Engine = new Sunset::Engine();
+
+		return m_Engine;
+	}
+
+	void Engine::Destroy()
+	{
+		delete m_Engine;
+	}
+
 	void Engine::Run()
 	{
 		ENGINE_LOG_TRACE("Start Run")
@@ -81,12 +96,12 @@ namespace Sunset
 			_past = _now;
 			float Deltatime = delta.count();
 
-			if (static_cast<OpenGLRender*>(m_Render.get())->IsKeyPressed(70))
+			if (Inputs::IsKey(70))
 			{
 				bIsAppOpen = false;
 			}
 
-			if (static_cast<OpenGLRender*>(m_Render.get())->IsKeyPressed(87))
+			if (Inputs::IsKey(68))
 			{
 				glm::vec3 dir = Deltatime * cam.GetCameraForwardVector();
 				cam.AddPosition(dir);
@@ -100,5 +115,10 @@ namespace Sunset
 
 			m_Render->End();
 		}
+	}
+
+	OpenGLRender* Engine::GetWindow() const
+	{
+		return m_Render.get();
 	}
 }

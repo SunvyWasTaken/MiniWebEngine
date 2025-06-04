@@ -1,6 +1,6 @@
 // Sunset inc.
 
-#include "OpenGL/OpenGLWindow.h"
+#include "OpenGLWindow.h"
 #include "Camera.h"
 
 #include "glad/glad.h"
@@ -12,7 +12,7 @@ namespace Sunset
 	{
 		glfwInit();
 		m_Window = glfwCreateWindow(1280, 720, "TinyEngine", nullptr, nullptr);
-		glfwMakeContextCurrent(Window());
+		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -28,15 +28,10 @@ namespace Sunset
 
 	OpenGLRender::~OpenGLRender()
 	{
-		glfwDestroyWindow(Window());
+		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 
 		ENGINE_LOG_TRACE("Window Destroy")
-	}
-
-	bool OpenGLRender::IsKeyPressed(int key)
-	{
-		return glfwGetKey(Window(), key) == GLFW_PRESS;
 	}
 
 	void OpenGLRender::Begin(const Camera& camera)
@@ -47,12 +42,7 @@ namespace Sunset
 
 	void OpenGLRender::End()
 	{
-		glfwSwapBuffers(Window());
+		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
-	}
-
-	GLFWwindow* OpenGLRender::Window()
-	{
-		return static_cast<GLFWwindow*>(m_Window);
 	}
 }

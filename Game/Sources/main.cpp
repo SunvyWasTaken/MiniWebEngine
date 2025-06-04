@@ -4,6 +4,6 @@
 
 int main()
 {
-	std::unique_ptr<Sunset::Engine> app = std::make_unique<Sunset::Engine>();
-	app->Run();
+	Sunset::Engine::Get()->Run();
+	Sunset::Engine::Destroy();
 }

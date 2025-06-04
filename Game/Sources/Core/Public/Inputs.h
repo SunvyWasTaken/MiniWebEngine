@@ -4,8 +4,9 @@
 
 namespace Sunset
 {
-	class Inputs
+	struct Inputs
 	{
 		static bool IsKey(int key);
+		static glm::f64vec2 GetMouseScreenPosition();
 	};
 }
