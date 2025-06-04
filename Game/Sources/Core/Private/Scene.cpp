@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Components/RenderComponent.h"
+#include "Components/TransformComponent.h"
 #include "Entity.h"
 #include "Scene.h"
 
@@ -18,6 +20,15 @@ namespace Sunset
 
 	void Scene::Update(const float deltatime)
 	{
+	}
+
+	void Scene::Render(Shader* shader)
+	{
+		auto rendable = m_Entitys.view<TransformComponent, RenderComponent>();
+		for (auto&& [entity, transComp, rendComp] : rendable.each())
+		{
+			rendComp(shader, transComp.GetModel());
+		}
 	}
 
 	void Scene::DestroyEntity(const entt::entity& entity)

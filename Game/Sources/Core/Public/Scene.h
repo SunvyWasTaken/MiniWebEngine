@@ -7,6 +7,7 @@
 namespace Sunset
 {
 	class Entity;
+	class Shader;
 
 	class Scene
 	{
@@ -20,6 +21,8 @@ namespace Sunset
 		virtual ~Scene();
 
 		virtual void Update(const float deltatime);
+
+		void Render(Shader* shader);
 		
 		void DestroyEntity(const entt::entity& entity);
 
