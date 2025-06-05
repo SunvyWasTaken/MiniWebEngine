@@ -4,12 +4,18 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoord;
 
-uniform mat4 viewProj;
+layout (std140) uniform Matrices
+{
+	mat4 projection;
+	mat4 view;
+};
+
 uniform mat4 model;
-uniform vec2 SubUv;
-uniform vec2 index;
+
+out vec4 color;
 
 void main()
 {
-	gl_Position = model * vec4(aPos, 1.0);
+	gl_Position = projection * view * model * vec4(aPos, 1.0);
+	color = vec4(aNormal, 1.0);
 }

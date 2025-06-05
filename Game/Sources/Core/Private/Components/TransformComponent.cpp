@@ -2,41 +2,75 @@
 
 #include "Components/TransformComponent.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 namespace Sunset
 {
 	TransformComponent::TransformComponent(const glm::vec3& position)
 		: m_Position(position)
+		, m_Size(1.f)
+		, m_Rotation(0.f)
 		, m_Model(1.f)
+		, bDirty(true)
 	{
 		ProcessModel();
-		ENGINE_LOG_TRACE("Transcomp create")
 	}
 
 	TransformComponent::~TransformComponent()
 	{
 	}
 
-	glm::vec3 TransformComponent::GetPosition() const
-	{
-		return m_Position;
-	}
-
 	void TransformComponent::SetPosition(const glm::vec3& newPosition)
 	{
 		m_Position = newPosition;
-		ProcessModel();
+		bDirty = true;
 	}
 
 	void TransformComponent::AddPosition(const glm::vec3& direction)
 	{
 		m_Position += direction;
-		ProcessModel();
+		bDirty = true;
+	}
+
+	void TransformComponent::AddPitch(float value)
+	{
+		m_Rotation.x += value;
+		bDirty = true;
+	}
+
+	void TransformComponent::AddYaw(float value)
+	{
+		m_Rotation.y += value;
+		bDirty = true;
+	}
+
+	void TransformComponent::AddRoll(float value)
+	{
+		m_Rotation.z += value;
+		bDirty = true;
+	}
+
+	void TransformComponent::SetRotation(const glm::vec3& rotation)
+	{
+		m_Rotation = rotation;
+		bDirty = true;
+	}
+
+	void TransformComponent::SetSize(const glm::vec3& newSize)
+	{
+		m_Size = newSize;
+		bDirty = true;
 	}
 
 	void TransformComponent::ProcessModel()
 	{
-		m_Model = glm::mat4(1.f);
-		m_Model = glm::translate(m_Model, m_Position);
+		glm::quat rotationQuat = glm::quat(glm::radians(m_Rotation));
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Position);
+		glm::mat4 rotation = glm::mat4_cast(rotationQuat);
+		glm::mat4 scaling = glm::scale(glm::mat4(1.0f), m_Size);
+
+		m_Model = translation * rotation * scaling;
+
+		bDirty = false;
 	}
 }

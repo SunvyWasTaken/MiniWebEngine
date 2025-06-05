@@ -99,7 +99,7 @@ else()
         glfw
         glad::glad
         imgui::imgui
-	spdlog::spdlog_header_only
+	    spdlog::spdlog_header_only
     )
 endif()
 

@@ -9,7 +9,6 @@ namespace Sunset
 	RenderComponent::RenderComponent(VertexObject* mesh)
 		: m_Mesh(mesh)
 	{
-		ENGINE_LOG_TRACE("Render comp create")
 	}
 
 	RenderComponent::~RenderComponent()

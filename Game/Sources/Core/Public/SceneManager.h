@@ -15,6 +15,8 @@ namespace Sunset
 
 		SceneManager()
 		{
+			ENGINE_LOG_TRACE("Scene manager init")
+			m_Scenes.emplace<std::variant_alternative_t<0, Scenes>>();
 			m_CurrentScene = std::get_if<std::variant_alternative_t<0, Scenes>>(&m_Scenes);
 		}
 
@@ -40,8 +42,14 @@ namespace Sunset
 		template <typename S>
 		void LoadScene()
 		{
-			static_assert((std::is_same_v<S, TScenes>, ...), "The scene isn't valid");
-			Impl_LoadScene = [this](){ m_Scenes.emplace<S>(); m_CurrentScene = std::get_if<S>(&m_Scenes); };
+			static_assert((std::is_same_v<S, TScenes> || ...), "The scene isn't valid");
+			Impl_LoadScene = [this]()
+			{
+				ENGINE_LOG_TRACE("Start Loading scene : {}.", typeid(S).name())
+				m_Scenes.emplace<S>();
+				m_CurrentScene = std::get_if<S>(&m_Scenes);
+				m_CurrentScene->Begin();
+			};
 		}
 
 		Scene* GetScene()
@@ -54,9 +62,8 @@ namespace Sunset
 		void PostUpdate()
 		{
 			if (Impl_LoadScene)
-			{
 				Impl_LoadScene();
-			}
+
 			Impl_LoadScene = nullptr;
 		}
 

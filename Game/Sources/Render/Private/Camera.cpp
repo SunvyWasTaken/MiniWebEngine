@@ -18,15 +18,14 @@ namespace Sunset
 	void Camera::AddPosition(const glm::vec3& position)
 	{
 		m_Position += position;
-		ENGINE_LOG_TRACE(std::format("x:{}, y:{}, z:{}", m_Position.x, m_Position.y, m_Position.z));
 	}
 
-	glm::mat4 Camera::GetView()
+	glm::mat4 Camera::GetView() const
 	{
 		return glm::lookAt(m_Position + m_Forward, m_Position, m_UpVector);
 	}
 
-	glm::mat4 Camera::GetProjection()
+	glm::mat4 Camera::GetProjection() const
 	{
 		return glm::perspective(glm::radians(m_Fov), m_Resolution.x / m_Resolution.y, 0.1f, m_RenderDistance);
 	}

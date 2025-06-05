@@ -17,8 +17,6 @@ namespace Sunset
 
 		m_ClientLogger = spdlog::stdout_color_mt("Game");
 		m_ClientLogger->set_level(spdlog::level::trace);
-
-		GetCoreLogger()->trace("Log initialize");
 	}
 
 }

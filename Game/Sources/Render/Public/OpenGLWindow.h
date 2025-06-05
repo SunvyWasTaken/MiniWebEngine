@@ -17,10 +17,16 @@ namespace Sunset
 
 		virtual void End();
 
-		GLFWwindow* operator()() { return m_Window; }
+		GLFWwindow* operator()() const { return m_Window; }
+
+	private:
+
+		void CreateUniformBufferObject();
 
 	private:
 
 		GLFWwindow* m_Window;
+
+		uint32_t m_Ubo;
 	};
 }

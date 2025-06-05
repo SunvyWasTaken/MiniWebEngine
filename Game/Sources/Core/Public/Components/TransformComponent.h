@@ -11,13 +11,25 @@ namespace Sunset
 
 		~TransformComponent();
 
-		glm::vec3 GetPosition() const;
+		const glm::vec3& GetPosition() const { return m_Position; }
 
 		void SetPosition(const glm::vec3& newPosition);
 
 		void AddPosition(const glm::vec3& direction);
 
-		glm::mat4 GetModel() const { return m_Model; }
+		void AddPitch(float value);
+
+		void AddYaw(float value);
+
+		void AddRoll(float value);
+
+		void SetRotation(const glm::vec3& rotation);
+
+		const glm::vec3& GetSize() const { return m_Size; }
+
+		void SetSize(const glm::vec3& newSize);
+
+		const glm::mat4& GetModel() { if(bDirty) { ProcessModel(); } return m_Model; }
 
 	private:
 
@@ -25,7 +37,12 @@ namespace Sunset
 
 	private:
 		glm::vec3 m_Position;
+		glm::vec3 m_Size;
+		// Rotation in degree
+		glm::vec3 m_Rotation;
 
 		glm::mat4 m_Model;
+
+		bool bDirty;
 	};
 }

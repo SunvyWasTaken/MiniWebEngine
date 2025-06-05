@@ -11,13 +11,14 @@ namespace Sunset
 
 		void AddPosition(const glm::vec3& position);
 
-		glm::mat4 GetView();
+		glm::mat4 GetView() const;
 
-		glm::mat4 GetProjection();
+		glm::mat4 GetProjection() const;
 
-		const glm::vec3& GetCameraForwardVector() const { return m_Forward; }
 		const glm::vec3& GetCameraPosition() const { return m_Position; }
+		const glm::vec3& GetCameraForwardVector() const { return m_Forward; }
 		const glm::vec3& GetCameraUpVector() const { return m_UpVector; }
+		const glm::vec3 GetCameraRightVector() const { return glm::cross(m_Forward, m_UpVector); }
 
 	private:
 		glm::vec3 m_Position;

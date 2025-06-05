@@ -16,9 +16,11 @@ namespace Sunset
 
 	public:
 
-		Scene();
+		Scene() = default;
 
 		virtual ~Scene();
+
+		virtual void Begin() {};
 
 		virtual void Update(const float deltatime);
 
