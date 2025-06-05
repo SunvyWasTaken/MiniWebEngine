@@ -2,14 +2,13 @@
 
 #include "Application.h"
 #include "Camera.h"
-#include "Components/CollisionComponent.h"
 #include "Components/RenderComponent.h"
-#include "Components/ScriptComponent.h"
 #include "Components/TransformComponent.h"
 #include "Entity.h"
 #include "Inputs.h"
 #include "Log.h"
 #include "OpenGLWindow.h"
+#include "PlaneGen.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Shaders.h"
@@ -17,7 +16,8 @@
 
 struct Menu : public Sunset::Scene
 {
-	Menu() = default;
+	Menu()
+	{ }
 
 	~Menu()
 	{
@@ -27,8 +27,6 @@ struct Menu : public Sunset::Scene
 	{
 		Scene::Update(deltatime);
 	}
-
-	Sunset::VertexObject cube;
 };
 
 Sunset::Engine* Sunset::Engine::m_Engine = nullptr;
@@ -84,6 +82,13 @@ namespace Sunset
 
 		Shader shade{"../../Game/Sources/Shaders/vShader.glsl", "../../Game/Sources/Shaders/fShader.glsl"};
 
+		Entity Ground = GetWorld()->CreateEntity();
+		Ground.AddComponent<TransformComponent>();
+		Object dt;
+		PlaneGen::Gen(dt, 10.f, 10.f, 100.f, 100.f);
+		VertexObject vd{dt};
+		Ground.AddComponent<RenderComponent>(&vd);
+
 		while (bIsAppOpen)
 		{
 			std::chrono::steady_clock::time_point _now = std::chrono::steady_clock::now();
@@ -95,6 +100,41 @@ namespace Sunset
 			{
 				bIsAppOpen = false;
 			}
+
+			if (Inputs::IsKey(68))
+			{
+				glm::vec3 dir = cam.GetCameraRightVector();
+				cam.AddPosition(-dir * Deltatime);
+			}
+			if (Inputs::IsKey(65))
+			{
+				glm::vec3 dir = cam.GetCameraRightVector();
+				cam.AddPosition(dir * Deltatime);
+			}
+			if (Inputs::IsKey(83))
+			{
+				glm::vec3 dir = cam.GetCameraForwardVector();
+				cam.AddPosition(dir * Deltatime);
+			}
+			if (Inputs::IsKey(87))
+			{
+				glm::vec3 dir = cam.GetCameraForwardVector();
+				cam.AddPosition(-dir * Deltatime);
+			}
+			if (Inputs::IsKey(69))
+			{
+				glm::vec3 dir = cam.GetCameraUpVector();
+				cam.AddPosition(dir * Deltatime);
+			}
+			if (Inputs::IsKey(81))
+			{
+				glm::vec3 dir = cam.GetCameraUpVector();
+				cam.AddPosition(-dir * Deltatime);
+			}
+
+			glm::vec3 rot = cam.GetRotation();
+			glm::vec2 mosM = Inputs::MouseMovement() * 0.1f;
+			cam.SetRotation({rot.x - mosM.x, rot.y + mosM.y, 0.f});
 
 			m_SceneManager->Update(Deltatime);
 

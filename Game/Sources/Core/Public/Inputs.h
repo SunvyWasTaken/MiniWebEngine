@@ -8,5 +8,6 @@ namespace Sunset
 	{
 		static bool IsKey(int key);
 		static glm::f64vec2 GetMouseScreenPosition();
+		static glm::vec2 MouseMovement();
 	};
 }

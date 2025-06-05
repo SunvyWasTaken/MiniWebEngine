@@ -14,6 +14,8 @@ namespace Sunset
 		: m_Window(nullptr)
 		, m_Ubo(0)
 	{
+		ENGINE_LOG_TRACE("Window init")
+
 		glfwInit();
 		m_Window = glfwCreateWindow(1280, 720, "TinyEngine", nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
@@ -25,9 +27,8 @@ namespace Sunset
 			ENGINE_LOG_ERROR("Glad loader failed!")
 			assert(false);
 		}
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		glViewport(0, 0,1280, 720);
-
-		ENGINE_LOG_TRACE("Window init")
 
 		CreateUniformBufferObject();
 	}
