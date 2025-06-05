@@ -16,6 +16,11 @@ namespace Sunset
 	{
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
+
+		void PushVertice(const Vertex& vertex) { vertices.emplace_back(vertex); }
+		void PushIndice(const uint32_t indice) { indices.emplace_back(indice); }
+
+		void Clear() { vertices.clear(); indices.clear(); }
 	};
 
 	class VertexObject
