@@ -6,7 +6,7 @@
 
 namespace Sunset
 {
-	RenderComponent::RenderComponent(VertexObject* mesh)
+	RenderComponent::RenderComponent(std::shared_ptr<VertexObject>& mesh)
 		: m_Mesh(mesh)
 	{
 	}

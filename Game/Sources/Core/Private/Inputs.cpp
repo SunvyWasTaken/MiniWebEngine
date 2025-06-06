@@ -23,7 +23,7 @@ namespace Sunset
 	glm::vec2 Inputs::MouseMovement()
 	{
 		static glm::f64vec2 mPos(0.f);
-		glm::vec2 delta = mPos - GetMouseScreenPosition();
+		glm::vec2 delta = GetMouseScreenPosition() - mPos;
 		mPos = GetMouseScreenPosition();
 		return delta;
 	}

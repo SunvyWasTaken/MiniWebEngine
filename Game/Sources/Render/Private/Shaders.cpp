@@ -75,4 +75,9 @@ namespace Sunset
 		glUniformMatrix4fv(glGetUniformLocation(id, target.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 	}
 
+	void Shader::SetUniformVec3(const std::string& target, const glm::vec3& value)
+	{
+		glUniform3fv(glGetUniformLocation(id, target.c_str()), 1, glm::value_ptr(value));
+	}
+
 }

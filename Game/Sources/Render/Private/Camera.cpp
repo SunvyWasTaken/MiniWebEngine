@@ -14,7 +14,6 @@ namespace Sunset
 		, m_Fov(45.f)
 		, m_RenderDistance(2e7)
 		, m_Projection(Projection::Perspective)
-		, bDirtyVector(true)
 	{
 		ProcessVector();
 	}
@@ -27,7 +26,7 @@ namespace Sunset
 
 	glm::mat4 Camera::GetView() const
 	{
-		return glm::lookAt(m_Position + m_Forward, m_Position, m_UpVector);
+		return glm::lookAt(m_Position, m_Position + m_Forward, m_UpVector);
 	}
 
 	glm::mat4 Camera::GetProjection() const
@@ -53,12 +52,12 @@ namespace Sunset
 
 	void Camera::ProcessVector()
 	{
-		if (!bDirtyVector)
-			return;
+		float yaw = glm::radians(m_Rotation.x);
+		float pitch = glm::radians(m_Rotation.y);
 
-		m_Forward.x = cos(glm::radians(m_Rotation.x)) * cos(glm::radians(m_Rotation.y));
-		m_Forward.y = sin(glm::radians(m_Rotation.y));
-		m_Forward.z = sin(glm::radians(m_Rotation.x)) * cos(glm::radians(m_Rotation.y));
+		m_Forward.x = cos(yaw) * cos(pitch);
+		m_Forward.y = sin(pitch);
+		m_Forward.z = sin(yaw) * cos(pitch);
 		m_Forward = glm::normalize(m_Forward);
 
 		glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);

@@ -1,12 +1,12 @@
 // Sunset inc.
 
+#include "AlgoProcedural.h"
 #include "Application.h"
 #include "Camera.h"
 #include "Components/RenderComponent.h"
 #include "Components/TransformComponent.h"
 #include "Entity.h"
 #include "Inputs.h"
-#include "Log.h"
 #include "OpenGLWindow.h"
 #include "PlaneGen.h"
 #include "Scene.h"
@@ -20,20 +20,17 @@ struct Menu : public Sunset::Scene
 	{ }
 
 	~Menu()
-	{
-	}
+	{ }
 
-	virtual void Update(const float deltatime) override
-	{
-		Scene::Update(deltatime);
-	}
+	virtual void Begin() override;
+
+	virtual void Update(const float deltatime) override;
 };
 
 Sunset::Engine* Sunset::Engine::m_Engine = nullptr;
 
 namespace
 {
-
 	bool bIsAppOpen = false;
 
 	Sunset::Camera cam;
@@ -41,11 +38,65 @@ namespace
 	std::unique_ptr<Sunset::OpenGLRender> m_Render = nullptr;
 
 	std::unique_ptr<Sunset::SceneManager<Menu>> m_SceneManager = nullptr;
+}
 
-	Sunset::Object data = { {Sunset::Vertex	{{ 0.0,  0.5, 0.0}, {1.0, 0.0, 0.0}, {0.0, 0.0} },
-											{{-0.5, -0.5, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0} },
-											{{ 0.5, -0.5, 0.0}, {0.0, 0.0, 1.0}, {0.0, 0.0} }}
-											, {0, 1, 2}};
+void Menu::Begin()
+{
+	Sunset::Scene::Begin();
+
+	Sunset::Entity Ground = Sunset::Engine::GetWorld()->CreateEntity();
+	Ground.AddComponent<Sunset::TransformComponent>();
+	Sunset::Object dt;
+	Sunset::PlaneGen::Gen(dt, 10.f, 10.f, 100.f, 100.f);
+	Sunset::AlgoProcedural::PerlinNoise(dt, 0.5f, 5.f);
+	Sunset::AlgoProcedural::Erosion(dt, 100.f, 100.f);
+	//Sunset::PlaneGen::ApplyWaveToTerrain(dt);
+	Sunset::PlaneGen::ProcessNormal(dt);
+	std::shared_ptr<Sunset::VertexObject> vd = std::make_shared<Sunset::VertexObject>(dt);
+	Ground.AddComponent<Sunset::RenderComponent>(vd);
+}
+
+void Menu::Update(const float deltatime)
+{
+	Scene::Update(deltatime);
+
+	if (Sunset::Inputs::IsKey(68))
+	{
+		glm::vec3 dir = cam.GetCameraRightVector();
+		cam.AddPosition(dir * deltatime);
+	}
+	if (Sunset::Inputs::IsKey(65))
+	{
+		glm::vec3 dir = cam.GetCameraRightVector();
+		cam.AddPosition(-dir * deltatime);
+	}
+	if (Sunset::Inputs::IsKey(83))
+	{
+		glm::vec3 dir = cam.GetCameraForwardVector();
+		cam.AddPosition(-dir * deltatime);
+	}
+	if (Sunset::Inputs::IsKey(87))
+	{
+		glm::vec3 dir = cam.GetCameraForwardVector();
+		cam.AddPosition(dir * deltatime);
+	}
+	if (Sunset::Inputs::IsKey(69))
+	{
+		glm::vec3 dir = cam.GetCameraUpVector();
+		cam.AddPosition(dir * deltatime);
+	}
+	if (Sunset::Inputs::IsKey(81))
+	{
+		glm::vec3 dir = cam.GetCameraUpVector();
+		cam.AddPosition(-dir * deltatime);
+	}
+
+	glm::vec3 rot = cam.GetRotation();
+	glm::vec2 mosM = Sunset::Inputs::MouseMovement() * 0.1f;
+	rot.x += mosM.x;
+	rot.y -= mosM.y;
+	rot.y = glm::clamp(rot.y, -89.0f, 89.0f);
+	cam.SetRotation({ rot.x, rot.y, 0.f });
 }
 
 namespace Sunset
@@ -78,16 +129,7 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Start Run")
 		std::chrono::steady_clock::time_point _past = std::chrono::steady_clock::now();
 
-		Sunset::VertexObject cube{ data };
-
 		Shader shade{"../../Game/Sources/Shaders/vShader.glsl", "../../Game/Sources/Shaders/fShader.glsl"};
-
-		Entity Ground = GetWorld()->CreateEntity();
-		Ground.AddComponent<TransformComponent>();
-		Object dt;
-		PlaneGen::Gen(dt, 10.f, 10.f, 100.f, 100.f);
-		VertexObject vd{dt};
-		Ground.AddComponent<RenderComponent>(&vd);
 
 		while (bIsAppOpen)
 		{
@@ -96,45 +138,10 @@ namespace Sunset
 			_past = _now;
 			float Deltatime = delta.count();
 
-			if (Inputs::IsKey(70))
+			if (Inputs::IsKey(256))
 			{
 				bIsAppOpen = false;
 			}
-
-			if (Inputs::IsKey(68))
-			{
-				glm::vec3 dir = cam.GetCameraRightVector();
-				cam.AddPosition(-dir * Deltatime);
-			}
-			if (Inputs::IsKey(65))
-			{
-				glm::vec3 dir = cam.GetCameraRightVector();
-				cam.AddPosition(dir * Deltatime);
-			}
-			if (Inputs::IsKey(83))
-			{
-				glm::vec3 dir = cam.GetCameraForwardVector();
-				cam.AddPosition(dir * Deltatime);
-			}
-			if (Inputs::IsKey(87))
-			{
-				glm::vec3 dir = cam.GetCameraForwardVector();
-				cam.AddPosition(-dir * Deltatime);
-			}
-			if (Inputs::IsKey(69))
-			{
-				glm::vec3 dir = cam.GetCameraUpVector();
-				cam.AddPosition(dir * Deltatime);
-			}
-			if (Inputs::IsKey(81))
-			{
-				glm::vec3 dir = cam.GetCameraUpVector();
-				cam.AddPosition(-dir * Deltatime);
-			}
-
-			glm::vec3 rot = cam.GetRotation();
-			glm::vec2 mosM = Inputs::MouseMovement() * 0.1f;
-			cam.SetRotation({rot.x - mosM.x, rot.y + mosM.y, 0.f});
 
 			m_SceneManager->Update(Deltatime);
 

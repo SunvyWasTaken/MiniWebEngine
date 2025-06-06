@@ -15,6 +15,8 @@ namespace Sunset
 
 		void SetUniformMat4(const std::string& target, const glm::mat4& value);
 
+		void SetUniformVec3(const std::string& target, const glm::vec3& value);
+
 	private:
 		uint32_t id;
 	};

@@ -46,7 +46,5 @@ namespace Sunset
 		float m_RenderDistance;
 
 		Projection m_Projection;
-
-		bool bDirtyVector;
 	};
 }

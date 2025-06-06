@@ -18,8 +18,11 @@ namespace Sunset
 
 		glfwInit();
 		m_Window = glfwCreateWindow(1280, 720, "TinyEngine", nullptr, nullptr);
+
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);
+		glfwSetCursorPos(m_Window, 0, 0);
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
@@ -27,8 +30,10 @@ namespace Sunset
 			ENGINE_LOG_ERROR("Glad loader failed!")
 			assert(false);
 		}
-		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 		glViewport(0, 0,1280, 720);
+		glEnable(GL_DEPTH_TEST);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		CreateUniformBufferObject();
 	}
@@ -44,6 +49,7 @@ namespace Sunset
 	void OpenGLRender::Begin(const Camera& camera)
 	{
 		glClearColor(0.1f, 0.1f, 0.1f, 1.f);
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);

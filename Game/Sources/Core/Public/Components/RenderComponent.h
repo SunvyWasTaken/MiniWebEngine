@@ -10,12 +10,12 @@ namespace Sunset
 	class RenderComponent
 	{
 	public:
-		explicit RenderComponent(VertexObject* mesh);
+		explicit RenderComponent(std::shared_ptr<VertexObject>& mesh);
 		~RenderComponent();
 
 		void operator()(Shader* shader, const glm::mat4& model) const;
 
 	private:
-		VertexObject* m_Mesh;
+		std::shared_ptr<VertexObject> m_Mesh;
 	};
 }

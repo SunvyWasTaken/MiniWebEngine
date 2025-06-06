@@ -32,6 +32,7 @@ if(NOT EMSCRIPTEN)
     find_package(imgui CONFIG REQUIRED)
     find_package(glfw3 CONFIG)
     find_package(glad CONFIG REQUIRED)
+    find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
     find_package(spdlog CONFIG REQUIRED)
 endif()
 
@@ -100,6 +101,7 @@ else()
         glad::glad
         imgui::imgui
 	    spdlog::spdlog_header_only
+        unofficial::omniverse-physx-sdk::sdk
     )
 endif()
 

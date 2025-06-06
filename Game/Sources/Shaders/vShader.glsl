@@ -12,10 +12,14 @@ layout (std140) uniform Matrices
 
 uniform mat4 model;
 
-out vec4 color;
+out vec3 color;
+out vec3 FragPos;
+out vec3 Normal;
 
 void main()
 {
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
-	color = vec4(aNormal, 1.0);
+	color = aNormal;
+	FragPos = vec3(model * vec4(aPos, 1.0));
+	Normal = mat3(transpose(inverse(model))) * aNormal;
 }

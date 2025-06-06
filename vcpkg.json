@@ -1,5 +1,7 @@
 {
   "name": "game",
+  "version-string": "0.1.0",
+  "builtin-baseline": "5a2324f6667233aeb903d3117f6fd259a2be6f8b",
   "dependencies": [
     "entt",
     "glfw3",
@@ -9,6 +11,10 @@
       "features": [ "glfw-binding", "opengl3-binding" ]
     },
     "glad",
+    {
+      "name": "physx",
+      "version>=": "4.1.2#6"
+    },
     "stb",
     "spdlog"
   ]
