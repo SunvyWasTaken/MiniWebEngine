@@ -29,7 +29,7 @@ namespace Sunset
 		explicit VertexObject(const Object& data);
 		~VertexObject();
 
-		void Draw();
+		void Draw() const;
 	private:
 		uint32_t VAO;
 		uint32_t VBO;

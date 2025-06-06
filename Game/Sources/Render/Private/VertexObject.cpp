@@ -42,7 +42,7 @@ namespace Sunset
 		glDeleteVertexArrays(1, &VAO);
 	}
 
-	void VertexObject::Draw()
+	void VertexObject::Draw() const
 	{
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, m_IndicesSize, GL_UNSIGNED_INT, 0);
