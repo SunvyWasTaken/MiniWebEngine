@@ -12,10 +12,10 @@ namespace Sunset
 		virtual ~TextureBase() = default;
 
 		template <typename ...Args>
-		bool Load(Args... args)
+		bool Load(Args&&... args)
 		{
 			Derived* derived = static_cast<Derived*>(this);
-			return derived->Load(std::forward<Args>(args...));
+			return derived->Load(std::forward<Args>(args)...);
 		}
 
 		void Use() const

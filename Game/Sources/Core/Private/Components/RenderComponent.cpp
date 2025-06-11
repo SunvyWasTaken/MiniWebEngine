@@ -2,11 +2,11 @@
 
 #include "Components/RenderComponent.h"
 #include "Shaders.h"
-#include "VertexObject.h"
+#include "Drawable.h"
 
 namespace Sunset
 {
-	RenderComponent::RenderComponent(std::shared_ptr<VertexObject>& mesh)
+	RenderComponent::RenderComponent(std::shared_ptr<Drawable>& mesh)
 		: m_Mesh(mesh)
 	{
 	}

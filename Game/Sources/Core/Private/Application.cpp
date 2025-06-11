@@ -14,6 +14,8 @@
 #include "Shaders.h"
 #include "VertexObject.h"
 
+#include "Drawable.h"
+
 struct Menu : public Sunset::Scene
 {
 	Menu()

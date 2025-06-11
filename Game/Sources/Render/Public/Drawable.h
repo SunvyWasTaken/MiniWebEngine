@@ -23,7 +23,8 @@ namespace Sunset
 	public:
 		CubeMap();
 		~CubeMap();
-		void Draw();
+		void Draw() const;
+		void Load(const std::vector<std::string>& textures);
 	private:
 		std::shared_ptr<CubeMapTexture> m_Texture;
 	};
