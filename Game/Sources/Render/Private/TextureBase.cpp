@@ -1,7 +1,8 @@
 // Sunset inc.
 
-#pragma once
+#include "TextureBase.h"
 
 namespace Sunset
 {
+	
 }

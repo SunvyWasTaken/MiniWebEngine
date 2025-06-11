@@ -1,4 +1,0 @@
-D:/source/Truc/CMakeFiles/ALL_BUILD.dir
-D:/source/Truc/CMakeFiles/ZERO_CHECK.dir
-D:/source/Truc/Game/CMakeFiles/Game.dir
-D:/source/Truc/Game/CMakeFiles/ALL_BUILD.dir

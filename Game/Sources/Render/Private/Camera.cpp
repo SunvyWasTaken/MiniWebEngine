@@ -1,89 +1,69 @@
-#include "Camera.h"
-#include "Inputs.h"
-#include "Render.h"
+// Sunset inc.
 
-#ifdef __EMSCRIPTEN__
-#include <GLES3/gl3.h>
-#else
-#include <glad/glad.h>
-#endif
+#include "Camera.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace Sunset
 {
-	Camera::Camera() 
-		: CameraMovementSpeed(1.f)
-		, pos(0.f, 0.f, -1.f)
-		, res(1280.f, 720.f)
-		, roll(0.f)
-		, pitch(0.f)
-		, yaw(0.f)
+	Camera::Camera()
+		: m_Position(0)
+		, m_Forward(0)
+		, m_UpVector(0)
+		, m_Resolution(1280, 720)
+		, m_Rotation(-90.f, 0.f, 0.f)
+		, m_Fov(45.f)
+		, m_RenderDistance(2e7)
+		, m_Projection(Projection::Perspective)
 	{
+		ProcessVector();
 	}
 
-	Camera::~Camera()
+	void Camera::AddPosition(const glm::vec3& position)
 	{
-	}
-
-	void Camera::Update(const double deltatime)
-	{
-		return;
-
-		if (Inputs::IsKeyPressed(87))
-		{
-			AddPosition({ 0.f, CameraMovementSpeed * deltatime });
-		}
-		if (Inputs::IsKeyPressed(83))
-		{
-			AddPosition({ 0.f, -CameraMovementSpeed * deltatime });
-		}
-		if (Inputs::IsKeyPressed(65))
-		{
-			AddPosition({ -CameraMovementSpeed * deltatime, 0.f });
-		}
-		if (Inputs::IsKeyPressed(68))
-		{
-			AddPosition({ CameraMovementSpeed * deltatime, 0.f });
-		}
-	}
-
-	glm::mat4 Camera::GetProjection() const
-	{
-		float halfHeight = 1;
-		float aspect = float(res.x) / float(res.y);
-		float halfWidth = halfHeight * aspect;
-
-		return glm::ortho(
-			-halfWidth, +halfWidth,
-			-halfHeight, +halfHeight,
-			-1.f, +100.f
-		);
+		m_Position += position;
+		ProcessVector();
 	}
 
 	glm::mat4 Camera::GetView() const
 	{
-		glm::mat4 t = glm::translate(glm::mat4(1.f), pos);
-		glm::mat4 r = glm::rotate(glm::mat4(1.f), glm::radians(roll), glm::vec3(0, 0, 1));
-		return glm::inverse(r * t);
+		return glm::lookAt(m_Position, m_Position + m_Forward, m_UpVector);
 	}
 
-	glm::mat4 Camera::GetProjectionView() const
+	glm::mat4 Camera::GetProjection() const
 	{
-		return GetProjection() * GetView();
+		glm::mat4 pro(1.f);
+		switch (m_Projection)
+		{
+		case Projection::Perspective:
+			pro = glm::perspective(glm::radians(m_Fov), m_Resolution.x / m_Resolution.y, 0.1f, m_RenderDistance);
+			break;
+		case Projection::Orthographique:
+			pro = glm::ortho(720.f, 0.f, 1280.f, 0.f, 0.1f, m_RenderDistance);
+			break;
+		}
+		return pro;
 	}
 
-	void Camera::AddPosition(const glm::vec2& _pos)
+	void Camera::SetRotation(const glm::vec3& rotation)
 	{
-		pos.x += _pos.x;
-		pos.y += _pos.y;
+		m_Rotation = rotation;
+		ProcessVector();
 	}
 
-	glm::vec3 Camera::GetCurseurWorldPosition()
+	void Camera::ProcessVector()
 	{
-		glm::vec2 screenPos = Inputs::GetMouseScreenPosition();
-		glm::vec4 viewport(0, 0, (float)Render::GetWidth(), (float)Render::GetHeight());
-		screenPos.y = res.y - screenPos.y;
-		return glm::unProject(glm::vec3(screenPos.x, screenPos.y, 0.0f), GetView(), GetProjection(), viewport);
+		float yaw = glm::radians(m_Rotation.x);
+		float pitch = glm::radians(m_Rotation.y);
+
+		m_Forward.x = cos(yaw) * cos(pitch);
+		m_Forward.y = sin(pitch);
+		m_Forward.z = sin(yaw) * cos(pitch);
+		m_Forward = glm::normalize(m_Forward);
+
+		glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+		m_RightVector = glm::normalize(glm::cross(m_Forward, worldUp));
+		m_UpVector = glm::normalize(glm::cross(m_RightVector, m_Forward));
 	}
 
 }
-

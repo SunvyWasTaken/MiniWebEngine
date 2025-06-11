@@ -1,51 +1,57 @@
+// Sunset inc.
+
 #include "Texture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "glad/glad.h"
 
-#ifdef __EMSCRIPTEN__
-#include <GLES3/gl3.h>
-#else
-#include <glad/glad.h>
-#endif
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 namespace Sunset
 {
-	Texture::Texture(const std::string& path)
-		: m_SubUv(glm::vec2{1, 1})
+
+	Texture::Texture()
 	{
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
 
-		stbi_set_flip_vertically_on_load(true);
-
-		int width, height, nrChannels;
-		unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		stbi_image_free(data);
 	}
 
 	Texture::~Texture()
 	{
-		glDeleteTextures(1, &texture);
+		glDeleteTextures(GL_TEXTURE_2D, &m_Id);
 	}
 
-	void Texture::operator()()
+	bool Texture::LoadFromFile(const std::string& file)
 	{
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glGenTextures(1, &m_Id);
+		glBindTexture(GL_TEXTURE_2D, m_Id);
+
+		int width, height, channels;
+		stbi_set_flip_vertically_on_load(true);
+		unsigned char* data = stbi_load(file.c_str(), &width, &height, &channels, 0);
+
+		if (data)
+		{
+			GLenum format = (channels == 3) ? GL_RGB : GL_RGBA;
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+			stbi_image_free(data);
+			return true;
+		}
+
+		ENGINE_LOG_ERROR("Erreur de chargement de l'image");
+		stbi_image_free(data);
+		return false;
 	}
 
-	void Texture::SetSubUv(const glm::vec2& uv)
+	void Texture::Use() const
 	{
-		m_SubUv = uv;
-	}
-
-	glm::vec2 Texture::GetSubUv() const
-	{
-		return {1.f / m_SubUv.x, 1.f / m_SubUv.y} ;
+		glBindTexture(GL_TEXTURE_2D, m_Id);
 	}
 
 }

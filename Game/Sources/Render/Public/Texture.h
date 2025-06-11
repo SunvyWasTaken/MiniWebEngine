@@ -1,22 +1,17 @@
+// Sunset inc.
+
 #pragma once
+
+#include "TextureBase.h"
 
 namespace Sunset
 {
-	class Texture
+	class Texture : public TextureBase<Texture>
 	{
 	public:
-		explicit Texture(const std::string& path);
+		Texture();
 		virtual ~Texture();
-
-		void operator()();
-
-		void SetSubUv(const glm::vec2& uv);
-
-		glm::vec2 GetSubUv() const;
-
-	private:
-
-		uint32_t texture;
-		glm::vec2 m_SubUv;
+		bool LoadFromFile(const std::string& file);
+		void Use() const;
 	};
 }

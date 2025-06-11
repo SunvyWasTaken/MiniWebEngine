@@ -1,39 +1,50 @@
+// Sunset inc.
+
 #pragma once
 
 namespace Sunset
 {
+	enum class Projection
+	{
+		Perspective,
+		Orthographique
+	};
+
 	class Camera final
 	{
 	public:
-
 		Camera();
-		~Camera();
 
-		void Update(const double deltatime);
-
-		void AddPosition(const glm::vec2& _pos);
-
-		glm::vec3 GetCurseurWorldPosition();
-
-		glm::mat4 GetProjectionView() const;
-
-	protected:
-
-		glm::mat4 GetProjection() const;
+		void AddPosition(const glm::vec3& position);
 
 		glm::mat4 GetView() const;
 
-	public:
+		glm::mat4 GetProjection() const;
 
-		float CameraMovementSpeed;
+		const glm::vec3& GetRotation() const { return m_Rotation; }
+
+		void SetRotation(const glm::vec3& rotation);
+
+		const glm::vec3& GetCameraPosition() const { return m_Position; }
+		const glm::vec3& GetCameraForwardVector() const { return m_Forward; }
+		const glm::vec3& GetCameraUpVector() const { return m_UpVector; }
+		const glm::vec3& GetCameraRightVector() const { return m_RightVector; }
 
 	private:
 
-		glm::vec3 pos;
-		glm::vec2 res;
+		void ProcessVector();
 
-		float roll;
-		float pitch;
-		float yaw;
+	private:
+		glm::vec3 m_Position;
+		glm::vec3 m_Forward;
+		glm::vec3 m_RightVector;
+		glm::vec3 m_UpVector;
+		glm::vec2 m_Resolution;
+		glm::vec3 m_Rotation;
+
+		float m_Fov;
+		float m_RenderDistance;
+
+		Projection m_Projection;
 	};
 }
