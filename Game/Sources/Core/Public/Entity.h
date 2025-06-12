@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "Components/BaseComponent.h"
 
 namespace Sunset
 {
@@ -22,6 +23,7 @@ namespace Sunset
 		template <typename T, typename ...Args>
 		void AddComponent(Args&&... args)
 		{
+			static_assert(std::is_base_of_v<BaseComponent, T>, "The class should be a child of BaseComponent");
 			if (m_Scene)
 				m_Scene->GetEntitys().emplace<T>(m_Id, std::forward<Args>(args)...);
 		}

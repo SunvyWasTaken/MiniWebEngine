@@ -4,8 +4,18 @@
 
 namespace Sunset
 {
+	struct AnyTexture
+	{
+		std::function<void()> Use;
+		std::shared_ptr<void> keeper;
+		explicit operator bool() const noexcept
+		{
+			return Use.operator bool();
+		}
+	};
+
 	template <typename Derived>
-	class TextureBase
+	class TextureBase : public std::enable_shared_from_this<TextureBase<Derived>>
 	{
 	public:
 		TextureBase() = default;
@@ -23,6 +33,13 @@ namespace Sunset
 			const Derived* derived = static_cast<const Derived*>(this);
 			derived->Use();
 		}
+
+		operator AnyTexture()
+		{
+			auto shared = this->shared_from_this();
+			return { [this](){ Use(); }, std::static_pointer_cast<void>(shared) };
+		}
+
 	protected:
 		uint32_t m_Id = 0;
 	};

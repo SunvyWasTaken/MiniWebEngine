@@ -24,7 +24,7 @@ namespace Sunset
 
 		virtual void Update(const float deltatime);
 
-		void Render(Shader* shader);
+		void Render();
 		
 		void DestroyEntity(const entt::entity& entity);
 

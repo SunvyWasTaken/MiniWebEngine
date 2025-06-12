@@ -22,6 +22,7 @@ namespace Sunset
 #define ENGINE_LOG_INFO(...)	::Sunset::Log::GetCoreLogger()->info(__VA_ARGS__);
 #define ENGINE_LOG_WARN(...)	::Sunset::Log::GetCoreLogger()->warn(__VA_ARGS__);
 #define ENGINE_LOG_ERROR(...)	::Sunset::Log::GetCoreLogger()->error(__VA_ARGS__);
+#define ENGINE_LOG_FATAL(...)	::Sunset::Log::GetCoreLogger()->error(__VA_ARGS__); std::abort();
 
 #define LOG_TRACE(...)	::Sunset::Log::GetLogger()->trace(__VA_ARGS__);
 #define LOG_INFO(...)	::Sunset::Log::GetLogger()->info(__VA_ARGS__);

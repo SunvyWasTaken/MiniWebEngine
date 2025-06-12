@@ -12,7 +12,7 @@ namespace Sunset
 		CubeTexture() = default;
 		virtual ~CubeTexture();
 
-		bool Load(const std::vector<std::string>& files);
+		bool Load(const std::array<std::string_view, 6>& files);
 
 		void Use() const;
 	};

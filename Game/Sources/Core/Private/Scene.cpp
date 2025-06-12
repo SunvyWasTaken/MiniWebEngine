@@ -32,12 +32,12 @@ namespace Sunset
 		collisionSys.Update(m_Entitys, deltatime);
 	}
 
-	void Scene::Render(Shader* shader)
+	void Scene::Render()
 	{
 		auto rendable = m_Entitys.view<TransformComponent, RenderComponent>();
 		for (auto&& [entity, transComp, rendComp] : rendable.each())
 		{
-			rendComp(shader, transComp.GetModel());
+			rendComp(transComp.GetModel());
 		}
 	}
 

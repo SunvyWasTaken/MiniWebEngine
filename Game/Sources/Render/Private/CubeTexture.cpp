@@ -14,7 +14,7 @@ namespace Sunset
 		glDeleteTextures(GL_TEXTURE_CUBE_MAP, &m_Id);
 	}
 
-	bool CubeTexture::Load(const std::vector<std::string>& files)
+	bool CubeTexture::Load(const std::array<std::string_view, 6>& files)
 	{
 		glGenTextures(1, &m_Id);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_Id);
@@ -22,7 +22,7 @@ namespace Sunset
 		int width, height, nrChannels;
 		for (unsigned int i = 0; i < files.size(); i++)
 		{
-			unsigned char* data = stbi_load(files[i].c_str(), &width, &height, &nrChannels, 0);
+			unsigned char* data = stbi_load(files[i].data(), &width, &height, &nrChannels, 0);
 			if (data)
 			{
 				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,

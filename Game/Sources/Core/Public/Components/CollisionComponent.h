@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "BaseComponent.h"
+
 namespace Sunset
 {
 	namespace Shape
@@ -12,7 +14,8 @@ namespace Sunset
 		};
 		using Type = std::variant<Cercle>;
 	}
-	class CollisionComponent
+
+	class CollisionComponent : public BaseComponent
 	{
 		friend class CollisionSystem;
 	public:
