@@ -113,8 +113,12 @@ void Menu::Begin()
 
 	std::shared_ptr<Sunset::Shader> shader = Sunset::ShaderLoader::Load("Base", "../../Game/Sources/Shaders/vShader.glsl", "../../Game/Sources/Shaders/fShader.glsl");
 
-	Sunset::AnyTexture groundTexture;
+	Sunset::AnyTexture groundTexture = Sunset::TextureLoader::Load("../../Ressources/Gravel.jpg");
+	Sunset::AnyTexture grassTexture = Sunset::TextureLoader::Load("../../Ressources/Grass.jpg");
+	Sunset::AnyTexture snowTexture = Sunset::TextureLoader::Load("../../Ressources/Snow.jpg");
 	std::shared_ptr<Sunset::Material> mat = std::make_shared<Sunset::Material>(shader, groundTexture);
+	mat->AddTexture(grassTexture);
+	mat->AddTexture(snowTexture);
 	std::shared_ptr<Sunset::Drawable> drawableGround = std::make_shared<Sunset::Drawable>(vd, mat);
 	Ground.AddComponent<Sunset::RenderComponent>(drawableGround);
 
