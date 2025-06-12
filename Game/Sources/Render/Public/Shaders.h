@@ -4,7 +4,7 @@
 
 namespace Sunset
 {
-	class Shader
+	class Shader final
 	{
 	public:
 		Shader(const char* vertShader, const char* fragShader);

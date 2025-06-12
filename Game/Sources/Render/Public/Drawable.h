@@ -3,29 +3,21 @@
 #pragma once
 
 #include "TextureManager.h"
-#include "VertexObject.h"
 
 namespace Sunset
 {
+	class VertexObject;
+	class Material;
+
 	class Drawable
 	{
 	public:
-		Drawable();
+		Drawable(const std::shared_ptr<VertexObject>& mesh = nullptr, const std::shared_ptr<Material>& material = nullptr);
 		~Drawable();
 		void Draw() const;
+		void Bind(const glm::mat4& model);
 	private:
 		std::shared_ptr<VertexObject> m_Mesh;
-		std::shared_ptr<Texture2D> m_Texture;
-	};
-
-	class CubeMap final
-	{
-	public:
-		CubeMap();
-		~CubeMap();
-		void Draw() const;
-		void Load(const std::vector<std::string>& textures);
-	private:
-		std::shared_ptr<CubeMapTexture> m_Texture;
+		std::shared_ptr<Material> m_Material;
 	};
 }

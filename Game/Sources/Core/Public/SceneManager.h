@@ -31,11 +31,11 @@ namespace Sunset
 			PostUpdate();
 		}
 
-		void Render(Shader* shader)
+		void Render()
 		{
 			std::visit([&](auto&& scene)
 				{
-					scene.Render(shader);
+					scene.Render();
 				}, m_Scenes);
 		}
 

@@ -2,18 +2,20 @@
 
 #pragma once
 
+#include "Components/BaseComponent.h"
+
 namespace Sunset
 {
 	class Drawable;
 	class Shader;
 
-	class RenderComponent
+	class RenderComponent : public BaseComponent
 	{
 	public:
 		explicit RenderComponent(std::shared_ptr<Drawable>& mesh);
-		~RenderComponent();
+		virtual ~RenderComponent();
 
-		void operator()(Shader* shader, const glm::mat4& model) const;
+		void operator()(const glm::mat4& model) const;
 
 	private:
 		std::shared_ptr<Drawable> m_Mesh;

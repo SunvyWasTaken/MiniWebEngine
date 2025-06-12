@@ -7,7 +7,8 @@
 namespace Sunset
 {
 	RenderComponent::RenderComponent(std::shared_ptr<Drawable>& mesh)
-		: m_Mesh(mesh)
+		: BaseComponent()
+		, m_Mesh(mesh)
 	{
 	}
 
@@ -15,9 +16,9 @@ namespace Sunset
 	{
 	}
 
-	void RenderComponent::operator()(Shader* shader, const glm::mat4& model) const
+	void RenderComponent::operator()(const glm::mat4& model) const
 	{
-		shader->SetUniformMat4("model", model);
+		m_Mesh->Bind(model);
 		m_Mesh->Draw();
 	}
 }

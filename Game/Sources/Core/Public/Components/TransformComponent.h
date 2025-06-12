@@ -2,9 +2,11 @@
 
 #pragma once
 
+#include "BaseComponent.h"
+
 namespace Sunset
 {
-	class TransformComponent
+	class TransformComponent : public BaseComponent
 	{
 	public:
 		explicit TransformComponent(const glm::vec3& position = {0, 0, 0});

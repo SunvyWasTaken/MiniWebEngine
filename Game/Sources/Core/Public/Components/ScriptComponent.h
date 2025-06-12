@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "BaseComponent.h"
+
 namespace entt
 {
 	enum class entity : uint32_t;
@@ -9,7 +11,7 @@ namespace entt
 
 namespace Sunset
 {
-	struct ScriptState
+	struct ScriptState : public BaseComponent
 	{
 		virtual ~ScriptState() = default;
 	};
