@@ -86,20 +86,18 @@ namespace
 	};
 
 	std::array<std::string_view, 6> TextureList{
-												  "../../Ressources/skybox/right.jpg"
-												, "../../Ressources/skybox/left.jpg"
-												, "../../Ressources/skybox/top.jpg"
-												, "../../Ressources/skybox/bottom.jpg"
-												, "../../Ressources/skybox/front.jpg"
-												, "../../Ressources/skybox/back.jpg"
+												  "Ressources/skybox/right.jpg"
+												, "Ressources/skybox/left.jpg"
+												, "Ressources/skybox/top.jpg"
+												, "Ressources/skybox/bottom.jpg"
+												, "Ressources/skybox/front.jpg"
+												, "Ressources/skybox/back.jpg"
 	};
 }
 
 void Menu::Begin()
 {
 	Sunset::Scene::Begin();
-
-	//Sunset::VertexObject vo = Sunset::VertexObject(data);
 
 	Sunset::Entity Ground = Sunset::Engine::GetWorld()->CreateEntity();
 	Ground.AddComponent<Sunset::TransformComponent>();
@@ -111,11 +109,11 @@ void Menu::Begin()
 	Sunset::PlaneGen::ProcessNormal(dt);
 	std::shared_ptr<Sunset::VertexObject> vd = std::make_shared<Sunset::VertexObject>(dt);
 
-	std::shared_ptr<Sunset::Shader> shader = Sunset::ShaderLoader::Load("Base", "../../Game/Sources/Shaders/vShader.glsl", "../../Game/Sources/Shaders/fShader.glsl");
+	std::shared_ptr<Sunset::Shader> shader = Sunset::ShaderLoader::Load("Base", "Ressources/Shaders/vShader.glsl", "Ressources/Shaders/fShader.glsl");
 
-	Sunset::AnyTexture groundTexture = Sunset::TextureLoader::Load("../../Ressources/Gravel.jpg");
-	Sunset::AnyTexture grassTexture = Sunset::TextureLoader::Load("../../Ressources/Grass.jpg");
-	Sunset::AnyTexture snowTexture = Sunset::TextureLoader::Load("../../Ressources/Snow.jpg");
+	Sunset::AnyTexture groundTexture = Sunset::TextureLoader::Load("Ressources/Gravel.jpg");
+	Sunset::AnyTexture grassTexture = Sunset::TextureLoader::Load("Ressources/Grass.jpg");
+	Sunset::AnyTexture snowTexture = Sunset::TextureLoader::Load("Ressources/Snow.jpg");
 	std::shared_ptr<Sunset::Material> mat = std::make_shared<Sunset::Material>(shader, groundTexture);
 	mat->AddTexture(grassTexture);
 	mat->AddTexture(snowTexture);
@@ -123,7 +121,7 @@ void Menu::Begin()
 	Ground.AddComponent<Sunset::RenderComponent>(drawableGround);
 
 
-	std::shared_ptr<Sunset::Shader> SkyBoxshader = Sunset::ShaderLoader::Load("Skybox", "../../Game/Sources/Shaders/vShaderSkyBox.glsl", "../../Game/Sources/Shaders/fShaderSkyBox.glsl");
+	std::shared_ptr<Sunset::Shader> SkyBoxshader = Sunset::ShaderLoader::Load("Skybox", "Ressources/Shaders/vShaderSkyBox.glsl", "Ressources/Shaders/fShaderSkyBox.glsl");
 	Sunset::AnyTexture CubeTexture = Sunset::TextureLoader::Load("skybox", TextureList);
 	std::shared_ptr<Sunset::Material> matSkyBox = std::make_shared<Sunset::Material>(SkyBoxshader, CubeTexture);
 	Sunset::Entity SkyBox = Sunset::Engine::GetWorld()->CreateEntity();
@@ -208,7 +206,7 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Start Run")
 		std::chrono::steady_clock::time_point _past = std::chrono::steady_clock::now();
 
-		while (bIsAppOpen)
+		while (bIsAppOpen && m_Render->IsOpen())
 		{
 			std::chrono::steady_clock::time_point _now = std::chrono::steady_clock::now();
 			std::chrono::duration<float> delta = _now - _past;

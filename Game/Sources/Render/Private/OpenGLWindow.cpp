@@ -64,6 +64,11 @@ namespace Sunset
 		glfwPollEvents();
 	}
 
+	bool OpenGLRender::IsOpen() const
+	{
+		return !glfwWindowShouldClose(m_Window);
+	}
+
 	void OpenGLRender::CreateUniformBufferObject()
 	{
 		ENGINE_LOG_TRACE("Create uniform buffer for the camera.")
