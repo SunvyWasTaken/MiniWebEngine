@@ -26,7 +26,7 @@ namespace Sunset
 		glBindTexture(GL_TEXTURE_2D, m_Id);
 
 		int width, height, channels;
-		stbi_set_flip_vertically_on_load(true);
+		stbi_set_flip_vertically_on_load(false);
 		unsigned char* data = stbi_load(file.c_str(), &width, &height, &channels, 0);
 
 		if (data)
@@ -44,8 +44,8 @@ namespace Sunset
 			return true;
 		}
 
-		ENGINE_LOG_ERROR("Erreur de chargement de l'image");
 		stbi_image_free(data);
+		ENGINE_LOG_FATAL("Erreur de chargement de l'image");
 		return false;
 	}
 

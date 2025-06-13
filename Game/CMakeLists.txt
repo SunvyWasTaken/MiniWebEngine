@@ -25,7 +25,6 @@ if (NOT EMSCRIPTEN)
     GroupSources(Sources)
 endif()
 
-
 if(NOT EMSCRIPTEN)
     find_package(glm CONFIG REQUIRED)
     find_package(EnTT CONFIG REQUIRED)
@@ -35,6 +34,8 @@ if(NOT EMSCRIPTEN)
     find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
     find_package(spdlog CONFIG REQUIRED)
 endif()
+
+set(TEXTURES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Ressources/")
 
 add_executable(${PROJECT_NAME} ${Sources})
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
@@ -105,3 +106,13 @@ else()
     )
 endif()
 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${TEXTURES_DIR}"
+    "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Ressources"
+)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${TEXTURES_DIR}"
+    "${PROJECT_BINARY_DIR}/Ressources"
+)

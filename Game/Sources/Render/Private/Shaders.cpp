@@ -80,4 +80,9 @@ namespace Sunset
 		glUniform3fv(glGetUniformLocation(id, target.c_str()), 1, glm::value_ptr(value));
 	}
 
+	void Shader::SetUniformInt1v(const std::string& target, int count, const int* value)
+	{
+		glUniform1iv(glGetUniformLocation(id, target.c_str()), count, value);
+	}
+
 }

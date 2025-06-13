@@ -4,13 +4,14 @@
 #include "Shaders.h"
 #include "TextureBase.h"
 
+#include "glad/glad.h"
+
 namespace Sunset
 {
 	Material::Material(const std::shared_ptr<Shader>& shader, const AnyTexture& texture)
 		: m_Shader(shader)
-		, m_Texture(texture)
 	{
-
+		AddTexture(texture);
 	}
 
 	Material::~Material()
@@ -24,9 +25,16 @@ namespace Sunset
 		{
 			m_Shader->Use();
 		}
-		if (m_Texture)
+		int units[3] = { 0, 1, 2 };
+		for (int slot = 0; auto& texture : m_Textures)
 		{
-			m_Texture.Use();
+			if (texture)
+			{
+				glActiveTexture(GL_TEXTURE0 + slot);
+				m_Shader->SetUniformInt1v("textures", m_Textures.size(), units);
+				texture.Use();
+				++slot;
+			}
 		}
 	}
 
@@ -37,6 +45,11 @@ namespace Sunset
 
 		m_Shader->Use();
 		m_Shader->SetUniformMat4("model", model);
+	}
+
+	void Material::AddTexture(const AnyTexture& texture)
+	{
+		m_Textures.emplace_back(texture);
 	}
 
 }

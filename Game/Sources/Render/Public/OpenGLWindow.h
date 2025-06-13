@@ -19,6 +19,8 @@ namespace Sunset
 
 		GLFWwindow* operator()() const { return m_Window; }
 
+		bool IsOpen() const;
+
 	private:
 
 		void CreateUniformBufferObject();

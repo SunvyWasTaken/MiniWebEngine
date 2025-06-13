@@ -15,8 +15,9 @@ namespace Sunset
 		~Material();
 		void Use() const;
 		void Bind(const glm::mat4& model);
+		void AddTexture(const AnyTexture& texture);
 	private:
 		std::shared_ptr<Shader> m_Shader;
-		AnyTexture m_Texture;
+		std::vector<AnyTexture> m_Textures;
 	};
 }
