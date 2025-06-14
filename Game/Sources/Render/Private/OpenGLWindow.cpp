@@ -31,9 +31,13 @@ namespace Sunset
 			assert(false);
 		}
 
-		glViewport(0, 0,1280, 720);
+		glViewport(0, 0, 1280, 720);
 		glEnable(GL_DEPTH_TEST);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 		CreateUniformBufferObject();
 	}

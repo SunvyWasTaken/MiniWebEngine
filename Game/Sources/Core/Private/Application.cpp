@@ -13,18 +13,35 @@
 #include "SceneManager.h"
 #include "Shaders.h"
 #include "VertexObject.h"
-
 #include "Material.h"
 #include "Drawable.h"
 #include "ShaderLoader.h"
+#include "Texts/FontLoader.h"
 
 struct Menu : public Sunset::Scene
 {
 	Menu()
 	{ }
 
-	~Menu()
+	virtual ~Menu()
 	{ }
+
+	virtual void Begin() override;
+
+	void Render();
+
+	virtual void Update(const float deltatime) override;
+
+	std::shared_ptr<Sunset::Shader> shaderText = nullptr;
+};
+
+struct Terrain : public Sunset::Scene
+{
+	Terrain()
+	{}
+
+	virtual ~Terrain()
+	{}
 
 	virtual void Begin() override;
 
@@ -41,7 +58,7 @@ namespace
 
 	std::unique_ptr<Sunset::OpenGLRender> m_Render = nullptr;
 
-	std::unique_ptr<Sunset::SceneManager<Menu>> m_SceneManager = nullptr;
+	std::unique_ptr<Sunset::SceneManager<Menu, Terrain>> m_SceneManager = nullptr;
 
 	Sunset::Object data = {
 	{
@@ -97,6 +114,31 @@ namespace
 
 void Menu::Begin()
 {
+	Scene::Begin();
+
+	Sunset::FontLoader::LoadFont("Ressources/Delius-Regular.ttf");
+
+	shaderText = Sunset::ShaderLoader::Load("textShader", "Ressources/Shaders/vShaderText.glsl", "Ressources/Shaders/fShaderText.glsl");
+}
+
+void Menu::Render()
+{
+	Scene::Render();
+
+	Sunset::FontLoader::RenderText(shaderText, "Press Space", 1280.f/2.f - 180.f, 720.f/2.f, 1.f, {1.f, 1.f, 1.f});
+}
+
+void Menu::Update(const float deltatime)
+{
+	Scene::Update(deltatime);
+	if (Sunset::Inputs::IsKey(32))
+	{
+		m_SceneManager->LoadScene<Terrain>();
+	}
+}
+
+void Terrain::Begin()
+{
 	Sunset::Scene::Begin();
 
 	Sunset::Entity Ground = Sunset::Engine::GetWorld()->CreateEntity();
@@ -133,7 +175,7 @@ void Menu::Begin()
 	SkyBox.AddComponent<Sunset::RenderComponent>(drawableSky);
 }
 
-void Menu::Update(const float deltatime)
+void Terrain::Update(const float deltatime)
 {
 	Scene::Update(deltatime);
 
@@ -185,7 +227,7 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Welcome to the engine create by Neo")
 
 		m_Render = std::make_unique<OpenGLRender>();
-		m_SceneManager = std::make_unique<Sunset::SceneManager<Menu>>();
+		m_SceneManager = std::make_unique<Sunset::SceneManager<Menu, Terrain>>();
 		m_SceneManager->GetScene()->Begin();
 	}
 
