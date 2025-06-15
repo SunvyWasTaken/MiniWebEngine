@@ -24,6 +24,12 @@ namespace Sunset
 		glfwSetCursorPos(m_Window, 0, 0);
 		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+		glfwSetFramebufferSizeCallback(m_Window,
+			[](GLFWwindow* window, int width, int height)
+			{
+				glViewport(0, 0, width, height);
+			});
+
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
 			glfwTerminate();

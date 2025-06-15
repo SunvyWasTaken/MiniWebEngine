@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CollisionSystem.h"
+#include "Physics/PhysicSystem.h"
 #include "Components/RenderComponent.h"
 #include "Components/ScriptComponent.h"
 #include "Components/TransformComponent.h"
@@ -11,14 +11,26 @@
 
 namespace
 {
-	Sunset::CollisionSystem collisionSys;
+	entt::registry m_Entitys;
+	std::vector<entt::entity> m_EntityToDestroy;
+	Sunset::PhysicSystem m_PhysicSystem;
 }
 
 namespace Sunset
 {
+	Scene::Scene()
+	{
+		m_PhysicSystem.Init();
+	}
+
 	Scene::~Scene()
 	{
 		m_Entitys.clear();
+		m_PhysicSystem.Shutdown();
+	}
+
+	void Scene::Begin()
+	{
 	}
 
 	void Scene::Update(const float deltatime)
@@ -28,8 +40,12 @@ namespace Sunset
 		{
 			script.m_FuncUpdate(entity, deltatime);
 		}
+	}
 
-		collisionSys.Update(m_Entitys, deltatime);
+	void Scene::UpdatePhysic(const float deltatime)
+	{
+		// Update physic after inputs and before render.
+		m_PhysicSystem.Update(deltatime);
 	}
 
 	void Scene::Render()
@@ -48,6 +64,11 @@ namespace Sunset
 		{
 			m_EntityToDestroy.emplace_back(entity);
 		}
+	}
+
+	entt::registry& Scene::GetEntitys()
+	{
+		return m_Entitys;
 	}
 
 	Entity Scene::CreateEntity()

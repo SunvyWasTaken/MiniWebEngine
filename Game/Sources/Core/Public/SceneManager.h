@@ -18,6 +18,7 @@ namespace Sunset
 			ENGINE_LOG_TRACE("Scene manager init")
 			m_Scenes.emplace<std::variant_alternative_t<0, Scenes>>();
 			m_CurrentScene = std::get_if<std::variant_alternative_t<0, Scenes>>(&m_Scenes);
+			m_CurrentScene->Begin();
 		}
 
 		void Update(const float deltatime)
@@ -29,6 +30,11 @@ namespace Sunset
 			}, m_Scenes);
 
 			PostUpdate();
+
+			std::visit([&](auto&& scene)
+			{
+				scene.UpdatePhysic(deltatime);
+			}, m_Scenes);
 		}
 
 		void Render()

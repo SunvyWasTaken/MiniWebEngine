@@ -21,16 +21,17 @@
 struct Menu : public Sunset::Scene
 {
 	Menu()
+		: Scene()
 	{ }
 
 	virtual ~Menu()
 	{ }
 
-	virtual void Begin() override;
+	void Begin();
 
 	void Render();
 
-	virtual void Update(const float deltatime) override;
+	void Update(const float deltatime);
 
 	std::shared_ptr<Sunset::Shader> shaderText = nullptr;
 };
@@ -38,14 +39,15 @@ struct Menu : public Sunset::Scene
 struct Terrain : public Sunset::Scene
 {
 	Terrain()
+		: Scene()
 	{}
 
 	virtual ~Terrain()
 	{}
 
-	virtual void Begin() override;
+	void Begin();
 
-	virtual void Update(const float deltatime) override;
+	void Update(const float deltatime);
 };
 
 Sunset::Engine* Sunset::Engine::m_Engine = nullptr;
@@ -141,18 +143,17 @@ void Terrain::Begin()
 {
 	Sunset::Scene::Begin();
 
+	/// Ground
 	Sunset::Entity Ground = Sunset::Engine::GetWorld()->CreateEntity();
 	Ground.AddComponent<Sunset::TransformComponent>();
 	Sunset::Object dt;
 	Sunset::PlaneGen::Gen(dt, 10.f, 10.f, 100.f, 100.f);
-	Sunset::AlgoProcedural::PerlinNoise(dt, 0.5f, 5.f);
+	Sunset::AlgoProcedural::PerlinNoise(dt, 0.5f, 2.f);
 	Sunset::AlgoProcedural::Erosion(dt, 100.f, 100.f);
-	//Sunset::PlaneGen::ApplyWaveToTerrain(dt);
 	Sunset::PlaneGen::ProcessNormal(dt);
 	std::shared_ptr<Sunset::VertexObject> vd = std::make_shared<Sunset::VertexObject>(dt);
 
 	std::shared_ptr<Sunset::Shader> shader = Sunset::ShaderLoader::Load("Base", "Ressources/Shaders/vShader.glsl", "Ressources/Shaders/fShader.glsl");
-
 	Sunset::AnyTexture groundTexture = Sunset::TextureLoader::Load("Ressources/Gravel.jpg");
 	Sunset::AnyTexture grassTexture = Sunset::TextureLoader::Load("Ressources/Grass.jpg");
 	Sunset::AnyTexture snowTexture = Sunset::TextureLoader::Load("Ressources/Snow.jpg");
@@ -228,7 +229,6 @@ namespace Sunset
 
 		m_Render = std::make_unique<OpenGLRender>();
 		m_SceneManager = std::make_unique<Sunset::SceneManager<Menu, Terrain>>();
-		m_SceneManager->GetScene()->Begin();
 	}
 
 	Engine::~Engine()
