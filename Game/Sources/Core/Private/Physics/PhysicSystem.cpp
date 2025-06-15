@@ -99,7 +99,7 @@ namespace Sunset
 			},
 			[&](const PhyscShape::Sphere& sphere) -> physx::PxRigidActor*
 			{
-				float radius = 1.5f;
+				float radius = sphere.radius;
 				physx::PxSphereGeometry sphereGeom(radius);
 
 				physx::PxRigidDynamic* sphereActor = PxCreateDynamic(
