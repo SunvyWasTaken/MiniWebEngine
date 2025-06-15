@@ -21,6 +21,6 @@ namespace Sunset
 		glm::quat GetRotation() const;
 	private:
 		PhyscShape::Type m_Shape;
-		physx::PxRigidActor* actor;
+		physx::PxRigidActor* m_Actor;
 	};
 }
