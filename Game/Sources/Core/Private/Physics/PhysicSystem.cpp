@@ -51,7 +51,7 @@ namespace Sunset
 	void PhysicSystem::Init()
 	{
 		physx::PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
-		sceneDesc.gravity = physx::PxVec3(0, -9.81f, 0);
+		sceneDesc.gravity = physx::PxVec3(0, -1.81f, 0);
 		sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(1);
 		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 		m_Scene = m_Physics->createScene(sceneDesc);
@@ -73,30 +73,31 @@ namespace Sunset
 		m_Scene->release();
 	}
 
-	void PhysicSystem::CreateShape(const PhyscShape::Type& shape)
+	physx::PxRigidActor* PhysicSystem::CreateStaticShape(const PhyscShape::Type& shape)
 	{
-		std::visit(overloads
-		{
-			[&](const std::monostate& state)
+		return std::visit(overloads{
+			[&](const std::monostate&) -> physx::PxRigidActor*
 			{
-				
+				return nullptr;
 			},
-			[&](const PhyscShape::Cube& cube)
+			[&](const PhyscShape::Cube& cube) -> physx::PxRigidActor*
 			{
-				glm::vec3 halfExtents = glm::vec3(1.0f, 2.0f, 0.5f);
+				glm::vec3 halfExtents = cube.halfExtents;
 				physx::PxBoxGeometry boxGeom(physx::PxVec3(halfExtents.x, halfExtents.y, halfExtents.z));
-				
-				// Create dynamic actor
+
+				glm::vec3 pos = cube.position;
+
 				physx::PxRigidDynamic* boxActor = PxCreateDynamic(
 					*m_Physics,
-					physx::PxTransform(physx::PxVec3(0,5,0)), // position
+					physx::PxTransform(physx::PxVec3(pos.x, pos.y, pos.z)),
 					boxGeom,
 					*m_DefaultMaterial,
-					10.0f // masse
+					10.0f
 				);
 				m_Scene->addActor(*boxActor);
+				return boxActor;
 			},
-			[&](const PhyscShape::Sphere& sphere)
+			[&](const PhyscShape::Sphere& sphere) -> physx::PxRigidActor*
 			{
 				float radius = 1.5f;
 				physx::PxSphereGeometry sphereGeom(radius);
@@ -109,10 +110,20 @@ namespace Sunset
 					5.0f
 				);
 				m_Scene->addActor(*sphereActor);
+				return sphereActor;
 			},
-			[&](const PhyscShape::Plane& plane)
-			{}
-		}, shape);
-	}
+			[&](const PhyscShape::Plane& plane) -> physx::PxRigidActor*
+			{
+				physx::PxTransform pose = physx::PxTransform(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
 
+				physx::PxRigidStatic* rigidPlane = m_Physics->createRigidStatic(pose);
+				physx::PxShape* shape = m_Physics->createShape(physx::PxPlaneGeometry(), *m_DefaultMaterial);
+				rigidPlane->attachShape(*shape);
+				shape->release();
+
+				m_Scene->addActor(*rigidPlane);
+				return rigidPlane;
+			}
+			}, shape);
+	}
 }

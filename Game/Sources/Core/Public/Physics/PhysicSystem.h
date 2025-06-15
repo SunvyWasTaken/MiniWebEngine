@@ -2,13 +2,30 @@
 
 #pragma once
 
+namespace physx
+{
+	class PxRigidActor;
+	class PxRigidDynamic;
+}
+
 namespace Sunset
 {
 	namespace PhyscShape
 	{
-		struct Cube{};
-		struct Sphere{};
-		struct Plane{};
+		struct Cube
+		{
+			glm::vec3 position;
+			glm::vec3 halfExtents;
+		};
+		struct Sphere
+		{
+			glm::vec3 position;
+			float radius;
+		};
+		struct Plane
+		{
+			glm::vec3 position;
+		};
 		using Type = std::variant<std::monostate, Cube, Sphere, Plane>;
 	}
 
@@ -22,6 +39,6 @@ namespace Sunset
 		void Update(float deltatime);
 		void Shutdown();
 
-		static void CreateShape(const PhyscShape::Type& shape);
+		static physx::PxRigidActor* CreateStaticShape(const PhyscShape::Type& shape);
 	};
 }
