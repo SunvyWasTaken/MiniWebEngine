@@ -1,6 +1,5 @@
 #version 330 core
 
-in vec3 color;
 in vec3 FragPos;
 in vec3 Normal;
 in vec2 texCoords;
@@ -11,29 +10,23 @@ out vec4 FragColor;
 
 void main()
 {
-    float ground = -1.0;
+    float ground = 0.5;
     float horizon = 1.0;
     float highGround = 2.0;
 
+    vec3 lightPos = vec3(0.0, 10.0, 5.0);
+    vec3 lightColor = vec3(1.0, 1.0, 1.0);
+
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(lightPos - FragPos);
+
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * lightColor;
+
     float y = FragPos.y;
 
-    vec4 rock = texture(textures[0], texCoords * 4.0);
-    vec4 grass = texture(textures[1], texCoords * 4.0);
-    vec4 snow = texture(textures[2], texCoords * 4.0);
+    vec4 color = texture(textures[1], texCoords * 4.0);
 
-    vec4 finalColor;
-
-    if (y < ground) {
-        finalColor = rock;
-    } else if (y < horizon) {
-        float t = (y - ground) / (horizon - ground);
-        finalColor = mix(grass, rock, t);
-    } else if (y < highGround) {
-        float t = (y - horizon) / (highGround - horizon);
-        finalColor = mix(rock, snow, t);
-    } else {
-        finalColor = snow;
-    }
-
-    FragColor = finalColor;
+    vec3 lighting = color.rgb * diffuse;
+    FragColor = vec4(lighting, color.a);
 }
