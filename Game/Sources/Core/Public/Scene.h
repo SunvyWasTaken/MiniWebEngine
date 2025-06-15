@@ -34,7 +34,14 @@ namespace Sunset
 
 		entt::registry& GetEntitys();
 
-		Entity CreateEntity();
+		template <typename T>
+		T CreateEntity()
+		{
+			static_assert(std::is_base_of_v<Entity, T>, "The class should be derived from Entity");
+			T entity{this, GetEntitys().create()};
+			entity.Init();
+			return entity;
+		}
 
 	private:
 

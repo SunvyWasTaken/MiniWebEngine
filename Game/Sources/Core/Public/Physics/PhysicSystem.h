@@ -12,6 +12,7 @@ namespace Sunset
 {
 	namespace PhyscShape
 	{
+		using None = std::monostate; 
 		struct Cube
 		{
 			glm::vec3 position;
@@ -26,7 +27,7 @@ namespace Sunset
 		{
 			glm::vec3 position;
 		};
-		using Type = std::variant<std::monostate, Cube, Sphere, Plane>;
+		using Type = std::variant<None, Cube, Sphere, Plane>;
 	}
 
 	class PhysicSystem final

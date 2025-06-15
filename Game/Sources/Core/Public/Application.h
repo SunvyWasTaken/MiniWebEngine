@@ -36,19 +36,10 @@ namespace Sunset
 
 		static class Scene* GetWorld();
 
-	protected:
-
-		virtual void LogicLoop(const float deltatime);
-
 		class Camera& GetCam() const;
 
 	private:
 
 		static Engine* m_Engine;
-
-		// Renderer
-		// PhysicsSys
-		// InputSys
-		// RessourceManager
 	};
 }

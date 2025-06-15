@@ -51,7 +51,7 @@ namespace Sunset
 	void PhysicSystem::Init()
 	{
 		physx::PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
-		sceneDesc.gravity = physx::PxVec3(0, -1.81f, 0);
+		sceneDesc.gravity = physx::PxVec3(0, -9.81f, 0);
 		sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(1);
 		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 		m_Scene = m_Physics->createScene(sceneDesc);
@@ -114,7 +114,7 @@ namespace Sunset
 			},
 			[&](const PhyscShape::Plane& plane) -> physx::PxRigidActor*
 			{
-				physx::PxTransform pose = physx::PxTransform(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
+				physx::PxTransform pose = physx::PxTransform(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 1, 0)));
 
 				physx::PxRigidStatic* rigidPlane = m_Physics->createRigidStatic(pose);
 				physx::PxShape* shape = m_Physics->createShape(physx::PxPlaneGeometry(), *m_DefaultMaterial);

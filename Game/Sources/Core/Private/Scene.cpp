@@ -66,6 +66,7 @@ namespace Sunset
 		for (auto&& [entity, transComp, physComp] : physcEntity.each())
 		{
 			transComp.SetPosition(physComp.GetPosition());
+			transComp.SetRotation(physComp.GetRotation());
 		}
 	}
 
@@ -90,12 +91,6 @@ namespace Sunset
 	entt::registry& Scene::GetEntitys()
 	{
 		return GetEntities();
-	}
-
-	Entity Scene::CreateEntity()
-	{
-		Entity entity{this, GetEntities().create()};
-		return entity;
 	}
 
 	void Scene::PostUpdate()

@@ -27,6 +27,8 @@ namespace Sunset
 
 		void SetRotation(const glm::vec3& rotation);
 
+		void SetRotation(const glm::quat& rotation);
+
 		const glm::vec3& GetSize() const { return m_Size; }
 
 		void SetSize(const glm::vec3& newSize);
@@ -41,7 +43,7 @@ namespace Sunset
 		glm::vec3 m_Position;
 		glm::vec3 m_Size;
 		// Rotation in degree
-		glm::vec3 m_Rotation;
+		glm::quat m_Rotation;
 
 		glm::mat4 m_Model;
 

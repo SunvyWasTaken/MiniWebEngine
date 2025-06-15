@@ -14,6 +14,8 @@ namespace Sunset
 
 		virtual ~Entity();
 
+		virtual void Init();
+
 		void Destroy();
 
 		operator const entt::entity& () const { return m_Id; }
