@@ -11,13 +11,13 @@ namespace Sunset
 
 		~Shader();
 
-		void Use();
+		void Use() const;
 
-		void SetUniformMat4(const std::string& target, const glm::mat4& value);
+		void SetUniformMat4(const std::string& target, const glm::mat4& value) const;
 
-		void SetUniformVec3(const std::string& target, const glm::vec3& value);
+		void SetUniformVec3(const std::string& target, const glm::vec3& value) const;
 
-		void SetUniformInt1v(const std::string& target, int count, const int* value);
+		void SetUniformInt1v(const std::string& target, int count, const int* value) const;
 
 	private:
 		uint32_t id;

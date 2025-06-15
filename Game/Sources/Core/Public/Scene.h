@@ -16,29 +16,28 @@ namespace Sunset
 
 	public:
 
-		Scene() = default;
+		Scene();
 
 		virtual ~Scene();
 
-		virtual void Begin() {};
+		virtual void Begin();
 
-		virtual void Update(const float deltatime);
+		// Update all logic like script and inputs.
+		void Update(const float deltatime);
+
+		// Update physic after inputs and before render.
+		void UpdatePhysic(const float deltatime);
 
 		void Render();
 		
 		void DestroyEntity(const entt::entity& entity);
 
-		entt::registry& GetEntitys() { return m_Entitys; }
+		entt::registry& GetEntitys();
 
 		Entity CreateEntity();
 
 	private:
 
 		void PostUpdate();
-
-	private:
-		entt::registry m_Entitys;
-
-		std::vector<entt::entity> m_EntityToDestroy;
 	};
 }

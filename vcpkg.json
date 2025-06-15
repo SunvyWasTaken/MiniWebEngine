@@ -15,6 +15,7 @@
       "name": "physx",
       "version>=": "4.1.2#6"
     },
+    "freetype",
     "stb",
     "spdlog"
   ]

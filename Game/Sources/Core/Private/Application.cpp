@@ -3,32 +3,52 @@
 #include "AlgoProcedural.h"
 #include "Application.h"
 #include "Camera.h"
+#include "Components/PhysicComponent.h"
 #include "Components/RenderComponent.h"
 #include "Components/TransformComponent.h"
+#include "Drawable.h"
 #include "Entity.h"
 #include "Inputs.h"
+#include "Material.h"
 #include "OpenGLWindow.h"
 #include "PlaneGen.h"
 #include "Scene.h"
 #include "SceneManager.h"
-#include "Shaders.h"
-#include "VertexObject.h"
-
-#include "Material.h"
-#include "Drawable.h"
 #include "ShaderLoader.h"
+#include "Shaders.h"
+#include "Texts/FontLoader.h"
+#include "VertexObject.h"
 
 struct Menu : public Sunset::Scene
 {
 	Menu()
+		: Scene()
 	{ }
 
-	~Menu()
+	virtual ~Menu()
 	{ }
 
-	virtual void Begin() override;
+	void Begin();
 
-	virtual void Update(const float deltatime) override;
+	void Render();
+
+	void Update(const float deltatime);
+
+	std::shared_ptr<Sunset::Shader> shaderText = nullptr;
+};
+
+struct Terrain : public Sunset::Scene
+{
+	Terrain()
+		: Scene()
+	{}
+
+	virtual ~Terrain()
+	{}
+
+	void Begin();
+
+	void Update(const float deltatime);
 };
 
 Sunset::Engine* Sunset::Engine::m_Engine = nullptr;
@@ -41,7 +61,7 @@ namespace
 
 	std::unique_ptr<Sunset::OpenGLRender> m_Render = nullptr;
 
-	std::unique_ptr<Sunset::SceneManager<Menu>> m_SceneManager = nullptr;
+	std::unique_ptr<Sunset::SceneManager<Menu, Terrain>> m_SceneManager = nullptr;
 
 	Sunset::Object data = {
 	{
@@ -97,20 +117,47 @@ namespace
 
 void Menu::Begin()
 {
+	Scene::Begin();
+
+	Sunset::FontLoader::LoadFont("Ressources/Delius-Regular.ttf");
+
+	shaderText = Sunset::ShaderLoader::Load("textShader", "Ressources/Shaders/vShaderText.glsl", "Ressources/Shaders/fShaderText.glsl");
+}
+
+void Menu::Render()
+{
+	Scene::Render();
+
+	Sunset::FontLoader::RenderText(shaderText, "Press Space", 1280.f/2.f - 180.f, 720.f/2.f, 1.f, {1.f, 1.f, 1.f});
+}
+
+void Menu::Update(const float deltatime)
+{
+	Scene::Update(deltatime);
+	if (Sunset::Inputs::IsKey(32))
+	{
+		m_SceneManager->LoadScene<Terrain>();
+	}
+}
+
+void Terrain::Begin()
+{
 	Sunset::Scene::Begin();
 
+	/// Ground
 	Sunset::Entity Ground = Sunset::Engine::GetWorld()->CreateEntity();
 	Ground.AddComponent<Sunset::TransformComponent>();
+	auto* transGround = Ground.GetComponent<Sunset::TransformComponent>();
+	transGround->SetPosition({0, -5, 0});
 	Sunset::Object dt;
 	Sunset::PlaneGen::Gen(dt, 10.f, 10.f, 100.f, 100.f);
-	Sunset::AlgoProcedural::PerlinNoise(dt, 0.5f, 5.f);
-	Sunset::AlgoProcedural::Erosion(dt, 100.f, 100.f);
-	//Sunset::PlaneGen::ApplyWaveToTerrain(dt);
-	Sunset::PlaneGen::ProcessNormal(dt);
+	//Sunset::AlgoProcedural::PerlinNoise(dt, 0.5f, 2.f);
+	//Sunset::AlgoProcedural::Erosion(dt, 100.f, 100.f);
+	//Sunset::PlaneGen::ProcessNormal(dt);
 	std::shared_ptr<Sunset::VertexObject> vd = std::make_shared<Sunset::VertexObject>(dt);
 
-	std::shared_ptr<Sunset::Shader> shader = Sunset::ShaderLoader::Load("Base", "Ressources/Shaders/vShader.glsl", "Ressources/Shaders/fShader.glsl");
 
+	std::shared_ptr<Sunset::Shader> shader = Sunset::ShaderLoader::Load("Base", "Ressources/Shaders/vShader.glsl", "Ressources/Shaders/fShader.glsl");
 	Sunset::AnyTexture groundTexture = Sunset::TextureLoader::Load("Ressources/Gravel.jpg");
 	Sunset::AnyTexture grassTexture = Sunset::TextureLoader::Load("Ressources/Grass.jpg");
 	Sunset::AnyTexture snowTexture = Sunset::TextureLoader::Load("Ressources/Snow.jpg");
@@ -120,6 +167,7 @@ void Menu::Begin()
 	std::shared_ptr<Sunset::Drawable> drawableGround = std::make_shared<Sunset::Drawable>(vd, mat);
 	Ground.AddComponent<Sunset::RenderComponent>(drawableGround);
 
+	Ground.AddComponent<Sunset::PhysicComponent>(Sunset::PhyscShape::Plane{{0, -5, 0}});
 
 	std::shared_ptr<Sunset::Shader> SkyBoxshader = Sunset::ShaderLoader::Load("Skybox", "Ressources/Shaders/vShaderSkyBox.glsl", "Ressources/Shaders/fShaderSkyBox.glsl");
 	Sunset::AnyTexture CubeTexture = Sunset::TextureLoader::Load("skybox", TextureList);
@@ -131,9 +179,16 @@ void Menu::Begin()
 	std::shared_ptr<Sunset::VertexObject> SkyDataBox = std::make_shared<Sunset::VertexObject>(data);
 	std::shared_ptr<Sunset::Drawable> drawableSky = std::make_shared<Sunset::Drawable>(SkyDataBox, matSkyBox);
 	SkyBox.AddComponent<Sunset::RenderComponent>(drawableSky);
+
+	Sunset::Entity SimpleCube = Sunset::Engine::GetWorld()->CreateEntity();
+	SimpleCube.AddComponent<Sunset::TransformComponent>();
+	auto* SimplTrans = SimpleCube.GetComponent<Sunset::TransformComponent>();
+	SimplTrans->SetPosition({0, 5, 0});
+	SimpleCube.AddComponent<Sunset::RenderComponent>(drawableSky);
+	SimpleCube.AddComponent<Sunset::PhysicComponent>(Sunset::PhyscShape::Cube{{0, 5, 0}, {0.5, 0.5, 0.5}});
 }
 
-void Menu::Update(const float deltatime)
+void Terrain::Update(const float deltatime)
 {
 	Scene::Update(deltatime);
 
@@ -185,8 +240,7 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Welcome to the engine create by Neo")
 
 		m_Render = std::make_unique<OpenGLRender>();
-		m_SceneManager = std::make_unique<Sunset::SceneManager<Menu>>();
-		m_SceneManager->GetScene()->Begin();
+		m_SceneManager = std::make_unique<Sunset::SceneManager<Menu, Terrain>>();
 	}
 
 	Engine::~Engine()

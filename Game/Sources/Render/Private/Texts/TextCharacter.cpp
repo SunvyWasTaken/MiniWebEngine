@@ -1,6 +1,6 @@
 // Sunset inc.
 
-#pragma once
+#include "TextCharacter.h"
 
 namespace Sunset
 {

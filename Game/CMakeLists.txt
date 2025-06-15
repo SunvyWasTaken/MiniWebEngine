@@ -33,6 +33,7 @@ if(NOT EMSCRIPTEN)
     find_package(glad CONFIG REQUIRED)
     find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
     find_package(spdlog CONFIG REQUIRED)
+    find_package(Freetype REQUIRED)
 endif()
 
 set(TEXTURES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Ressources/")
@@ -103,6 +104,7 @@ else()
         imgui::imgui
 	    spdlog::spdlog_header_only
         unofficial::omniverse-physx-sdk::sdk
+        Freetype::Freetype
     )
 endif()
 
