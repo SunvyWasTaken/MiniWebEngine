@@ -43,11 +43,14 @@ namespace Sunset
 
 		id = glCreateProgram();
 
+		ENGINE_LOG_TRACE("Shader Create : {}, {}", id, vertShader)
+
 		glAttachShader(id, vertex);
 		glAttachShader(id, fragment);
 		glLinkProgram(id);
 		int success;
 		glGetProgramiv(id, GL_LINK_STATUS, &success);
+
 		if (!success)
 		{
 			char infoLog[512];
@@ -65,22 +68,22 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Shader {} Destroyed.", id)
 	}
 
-	void Shader::Use()
+	void Shader::Use() const
 	{
 		glUseProgram(id);
 	}
 
-	void Shader::SetUniformMat4(const std::string& target, const glm::mat4& value)
+	void Shader::SetUniformMat4(const std::string& target, const glm::mat4& value) const
 	{
 		glUniformMatrix4fv(glGetUniformLocation(id, target.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 	}
 
-	void Shader::SetUniformVec3(const std::string& target, const glm::vec3& value)
+	void Shader::SetUniformVec3(const std::string& target, const glm::vec3& value) const
 	{
 		glUniform3fv(glGetUniformLocation(id, target.c_str()), 1, glm::value_ptr(value));
 	}
 
-	void Shader::SetUniformInt1v(const std::string& target, int count, const int* value)
+	void Shader::SetUniformInt1v(const std::string& target, int count, const int* value) const
 	{
 		glUniform1iv(glGetUniformLocation(id, target.c_str()), count, value);
 	}

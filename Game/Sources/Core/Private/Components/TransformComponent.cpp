@@ -2,14 +2,13 @@
 
 #include "Components/TransformComponent.h"
 #include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/quaternion.hpp"
 
 namespace Sunset
 {
 	TransformComponent::TransformComponent(const glm::vec3& position)
 		: m_Position(position)
 		, m_Size(1.f)
-		, m_Rotation(0.f)
+		, m_Rotation(0, 0, 0, 0)
 		, m_Model(1.f)
 		, bDirty(true)
 	{
@@ -52,6 +51,12 @@ namespace Sunset
 
 	void TransformComponent::SetRotation(const glm::vec3& rotation)
 	{
+		m_Rotation = glm::quat(glm::radians(rotation));;
+		bDirty = true;
+	}
+
+	void TransformComponent::SetRotation(const glm::quat& rotation)
+	{
 		m_Rotation = rotation;
 		bDirty = true;
 	}
@@ -64,9 +69,8 @@ namespace Sunset
 
 	void TransformComponent::ProcessModel()
 	{
-		glm::quat rotationQuat = glm::quat(glm::radians(m_Rotation));
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Position);
-		glm::mat4 rotation = glm::mat4_cast(rotationQuat);
+		glm::mat4 rotation = glm::mat4_cast(m_Rotation);
 		glm::mat4 scaling = glm::scale(glm::mat4(1.0f), m_Size);
 
 		m_Model = translation * rotation * scaling;

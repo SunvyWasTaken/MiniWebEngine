@@ -16,29 +16,35 @@ namespace Sunset
 
 	public:
 
-		Scene() = default;
+		Scene();
 
 		virtual ~Scene();
 
-		virtual void Begin() {};
+		virtual void Begin();
 
-		virtual void Update(const float deltatime);
+		// Update all logic like script and inputs.
+		void Update(const float deltatime);
+
+		// Update physic after inputs and before render.
+		void UpdatePhysic(const float deltatime);
 
 		void Render();
 		
 		void DestroyEntity(const entt::entity& entity);
 
-		entt::registry& GetEntitys() { return m_Entitys; }
+		entt::registry& GetEntitys();
 
-		Entity CreateEntity();
+		template <typename T>
+		T CreateEntity()
+		{
+			static_assert(std::is_base_of_v<Entity, T>, "The class should be derived from Entity");
+			T entity{this, GetEntitys().create()};
+			entity.Init();
+			return entity;
+		}
 
 	private:
 
 		void PostUpdate();
-
-	private:
-		entt::registry m_Entitys;
-
-		std::vector<entt::entity> m_EntityToDestroy;
 	};
 }
