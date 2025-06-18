@@ -6,12 +6,14 @@
 #include "Components/RenderComponent.h"
 #include "Components/PhysicComponent.h"
 
-#include "VertexObject.h"
+#include "Mesh.h"
 #include "PlaneGen.h"
 #include "ShaderLoader.h"
 #include "Material.h"
 #include "TextureManager.h"
 #include "Drawable.h"
+
+#include "Meshes/MeshLoader.h"
 
 
 namespace Sunset
@@ -22,7 +24,7 @@ namespace Sunset
 		auto* transComp = GetComponent<Sunset::TransformComponent>();
 		transComp->SetPosition({ 0, 0, 0});
 
-		Sunset::Object dt;
+		Sunset::VertexObject dt;
 		Sunset::PlaneGen::Gen(dt, 10.f, 10.f, 100.f, 100.f);
 		//Sunset::AlgoProcedural::PerlinNoise(dt, 0.5f, 2.f);
 		//Sunset::AlgoProcedural::Erosion(dt, 100.f, 100.f);
@@ -37,10 +39,25 @@ namespace Sunset
 		mat->AddTexture(grassTexture);
 		mat->AddTexture(snowTexture);
 
-		std::shared_ptr<Sunset::VertexObject> vd = std::make_shared<Sunset::VertexObject>(dt);
+		std::shared_ptr<Sunset::Mesh> vd = std::make_shared<Sunset::Mesh>(dt);
 		std::shared_ptr<Sunset::Drawable> drawableGround = std::make_shared<Sunset::Drawable>(vd, mat);
 		AddComponent<Sunset::RenderComponent>(drawableGround);
 
 		AddComponent<Sunset::PhysicComponent>(Sunset::PhyscShape::Plane{ transComp->GetPosition() });
+	}
+
+	void Pig::Init()
+	{
+		AddComponent<TransformComponent>(glm::vec3{0, 5, 0});
+
+		VertexObject vo = MeshLoader::LoadMesh("Ressources/Pig/SK_Pig.fbx");
+
+		std::shared_ptr<Shader> shader = ShaderLoader::Load("Base", "Ressources/Shaders/vShader.glsl", "Ressources/Shaders/fShader.glsl");
+		Sunset::AnyTexture pigTexture = TextureLoader::Load("Ressources/pig/T_Pig_Base_Color.png");
+
+		std::shared_ptr<Material> mat = std::make_shared<Material>(shader, pigTexture);
+		std::shared_ptr<Mesh> m = std::make_shared<Mesh>(vo);
+		std::shared_ptr<Drawable> drawablePig = std::make_shared<Drawable>(m, mat);
+		AddComponent<RenderComponent>(drawablePig);
 	}
 }

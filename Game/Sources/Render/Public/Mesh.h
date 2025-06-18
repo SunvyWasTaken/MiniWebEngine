@@ -12,7 +12,7 @@ namespace Sunset
 		glm::vec2 texCoord;
 	};
 
-	struct Object
+	struct VertexObject
 	{
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
@@ -21,13 +21,16 @@ namespace Sunset
 		void PushIndice(const uint32_t indice) { indices.emplace_back(indice); }
 
 		void Clear() { vertices.clear(); indices.clear(); }
+
+		void ReserveVertices(const size_t size);
+		void ReserveIndices(const size_t size);
 	};
 
-	class VertexObject
+	class Mesh
 	{
 	public:
-		explicit VertexObject(const Object& data);
-		~VertexObject();
+		explicit Mesh(const VertexObject& data);
+		~Mesh();
 
 		void Draw() const;
 	private:

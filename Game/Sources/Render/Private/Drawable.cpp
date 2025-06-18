@@ -2,11 +2,11 @@
 
 #include "Drawable.h"
 #include "Material.h"
-#include "VertexObject.h"
+#include "Mesh.h"
 
 namespace Sunset
 {
-	Drawable::Drawable(const std::shared_ptr<VertexObject>& mesh, const std::shared_ptr<Material>& material)
+	Drawable::Drawable(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material)
 		: m_Mesh(mesh)
 		, m_Material(material)
 	{

@@ -5,7 +5,7 @@
 #include "Components/TransformComponent.h"
 #include "Components/RenderComponent.h"
 
-#include "VertexObject.h"
+#include "Mesh.h"
 #include "PlaneGen.h"
 #include "ShaderLoader.h"
 #include "Material.h"
@@ -14,7 +14,7 @@
 
 namespace
 {
-	Sunset::Object data = {
+	Sunset::VertexObject data = {
 	{
 		{{-0.5f, -0.5f,  0.5f}, { 0,  0,  1}, {0.0f, 0.0f}}, // 0
 		{{ 0.5f, -0.5f,  0.5f}, { 0,  0,  1}, {1.0f, 0.0f}}, // 1
@@ -78,7 +78,7 @@ namespace Sunset
 		Sunset::AnyTexture CubeTexture = Sunset::TextureLoader::Load("skybox", TextureList);
 		std::shared_ptr<Sunset::Material> matSkyBox = std::make_shared<Sunset::Material>(SkyBoxshader, CubeTexture);
 
-		std::shared_ptr<Sunset::VertexObject> SkyDataBox = std::make_shared<Sunset::VertexObject>(data);
+		std::shared_ptr<Sunset::Mesh> SkyDataBox = std::make_shared<Sunset::Mesh>(data);
 		std::shared_ptr<Sunset::Drawable> drawableSky = std::make_shared<Sunset::Drawable>(SkyDataBox, matSkyBox);
 		AddComponent<Sunset::RenderComponent>(drawableSky);
 	}
