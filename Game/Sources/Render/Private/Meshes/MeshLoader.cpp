@@ -75,7 +75,7 @@ namespace
 
 namespace Sunset
 {
-	Sunset::VertexObject MeshLoader::LoadMesh(const std::string& path)
+	Sunset::VertexObject MeshLoader::LoadMesh(const std::string& path, float& m_ImportScale)
 	{
 		Assimp::Importer importer;
 
@@ -92,6 +92,16 @@ namespace Sunset
 
 		std::vector<Sunset::VertexObject> vertexObjects;
 		ProcessNode(scene->mRootNode, scene, vertexObjects);
+
+		float scaleFactor;
+		if (scene->mMetaData && scene->mMetaData->Get("UnitScaleFactor", scaleFactor))
+		{
+			m_ImportScale = scaleFactor * 0.01f;
+		}
+		else
+		{
+			m_ImportScale = 1.0f; // fallback
+		}
 	
 		if (vertexObjects.empty())
 		{
