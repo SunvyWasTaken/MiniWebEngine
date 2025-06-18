@@ -93,6 +93,12 @@ namespace Sunset
 		std::vector<Sunset::VertexObject> vertexObjects;
 		ProcessNode(scene->mRootNode, scene, vertexObjects);
 	
+		if (vertexObjects.empty())
+		{
+			ENGINE_LOG_ERROR("No meshes found in the scene. Returning an empty VertexObject.");
+			return Sunset::VertexObject();
+		}
+	
 		return vertexObjects[0];
 	}
 }
