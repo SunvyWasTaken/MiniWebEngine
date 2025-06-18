@@ -48,11 +48,15 @@ namespace Sunset
 
 	void Pig::Init()
 	{
-		AddComponent<TransformComponent>(glm::vec3{0, 5, 0});
+		AddComponent<TransformComponent>(glm::vec3{0, 1, 0});
+		auto* transComp = GetComponent<TransformComponent>();
 
-		VertexObject vo = MeshLoader::LoadMesh("Ressources/Pig/SK_Pig.fbx");
+		float scale = 1.f;
+		VertexObject vo = MeshLoader::LoadMesh("Ressources/Pig/SK_Pig.fbx", scale);
 
-		std::shared_ptr<Shader> shader = ShaderLoader::Load("Base", "Ressources/Shaders/vShader.glsl", "Ressources/Shaders/fShader.glsl");
+		transComp->SetSize({scale, scale, scale});
+
+		std::shared_ptr<Shader> shader = ShaderLoader::Load("Pig", "Ressources/Shaders/vShaderCharacter.glsl", "Ressources/Shaders/fShaderCharacter.glsl");
 		Sunset::AnyTexture pigTexture = TextureLoader::Load("Ressources/pig/T_Pig_Base_Color.png");
 
 		std::shared_ptr<Material> mat = std::make_shared<Material>(shader, pigTexture);

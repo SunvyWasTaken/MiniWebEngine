@@ -21,21 +21,33 @@ namespace Sunset
 
 	void Material::Use() const
 	{
-		if (m_Shader)
+		if (!m_Shader)
 		{
-			m_Shader->Use();
+			ENGINE_LOG_FATAL("U fortgot to add a shader to the material.");
 		}
-		int units[3] = { 0, 1, 2 };
+
+		if (m_Textures.empty())
+		{
+			ENGINE_LOG_WARN("Material has no texture attached");
+		}
+
+		m_Shader->Use();
+
+		std::vector<int> units;
+		units.reserve(m_Textures.size());
+
 		for (int slot = 0; auto& texture : m_Textures)
 		{
 			if (texture)
 			{
 				glActiveTexture(GL_TEXTURE0 + slot);
-				m_Shader->SetUniformInt1v("textures", m_Textures.size(), units);
 				texture.Use();
+				units.emplace_back(slot);
 				++slot;
 			}
 		}
+
+		m_Shader->SetUniformInt1v("textures", m_Textures.size(), units.data());
 	}
 
 	void Material::Bind(const glm::mat4& model)

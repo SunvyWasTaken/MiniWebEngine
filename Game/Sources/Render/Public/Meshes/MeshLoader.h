@@ -8,6 +8,6 @@ namespace Sunset
 
 	struct MeshLoader
 	{
-		static VertexObject LoadMesh(const std::string& path);
+		static VertexObject LoadMesh(const std::string& path, float& m_ImportScale);
 	};
 }
