@@ -4,13 +4,13 @@
 
 namespace Sunset
 {
-	class Object;
+	class VertexObject;
 
 	class PlaneGen
 	{
 	public:
-		static void Gen(Object& data, float width, float height, int resolutionX, int resolutionY);
-		static void ApplyWaveToTerrain(Object& data);
-		static void ProcessNormal(Object& data);
+		static void Gen(VertexObject& data, float width, float height, int resolutionX, int resolutionY);
+		static void ApplyWaveToTerrain(VertexObject& data);
+		static void ProcessNormal(VertexObject& data);
 	};
 }

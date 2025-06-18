@@ -1,11 +1,11 @@
 // Sunset inc.
 
 #include "PlaneGen.h"
-#include "VertexObject.h"
+#include "Mesh.h"
 
 namespace Sunset
 {
-	void PlaneGen::Gen(Object& data, float width, float height, int resolutionX, int resolutionY)
+	void PlaneGen::Gen(VertexObject& data, float width, float height, int resolutionX, int resolutionY)
 	{
 		data.Clear();
 
@@ -43,7 +43,7 @@ namespace Sunset
 		}
 	}
 
-	void PlaneGen::ApplyWaveToTerrain(Object& data)
+	void PlaneGen::ApplyWaveToTerrain(VertexObject& data)
 	{
 		float amplitude = 0.2f;
 		float frequency = 2.f;
@@ -57,7 +57,7 @@ namespace Sunset
 		}
 	}
 
-	void PlaneGen::ProcessNormal(Object& data)
+	void PlaneGen::ProcessNormal(VertexObject& data)
 	{
 		for (Vertex& v : data.vertices)
 			v.normal = glm::vec3(0.0f);

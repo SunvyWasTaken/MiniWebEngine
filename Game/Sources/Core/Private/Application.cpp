@@ -90,6 +90,8 @@ void Terrain::Begin()
 	/// Ground
 	CreateEntity<Sunset::Ground>();
 	CreateEntity<Sunset::SkyBox>();
+	CreateEntity<Sunset::Pig>();
+
 }
 
 void Terrain::Update(const float deltatime)

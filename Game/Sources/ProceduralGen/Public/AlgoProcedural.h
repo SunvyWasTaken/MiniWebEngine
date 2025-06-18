@@ -4,11 +4,11 @@
 
 namespace Sunset
 {
-	class Object;
+	class VertexObject;
 
 	struct AlgoProcedural
 	{
-		static void PerlinNoise(Object& data, float scale = 0.1f, float amplitude = 1.f);
-		static void Erosion(Object& data, int width, int height);
+		static void PerlinNoise(VertexObject& data, float scale = 0.1f, float amplitude = 1.f);
+		static void Erosion(VertexObject& data, int width, int height);
 	};
 }

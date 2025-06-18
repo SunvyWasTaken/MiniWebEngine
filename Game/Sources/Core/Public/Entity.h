@@ -44,3 +44,5 @@ namespace Sunset
 		Scene* m_Scene;
 	};
 }
+
+#define GENERATED_BODY using Sunset::Entity::Entity; using Super = Sunset::Entity;

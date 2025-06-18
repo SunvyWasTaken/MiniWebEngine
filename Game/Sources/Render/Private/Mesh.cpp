@@ -1,11 +1,21 @@
 // Sunset inc.
 
-#include "VertexObject.h"
+#include "Mesh.h"
 #include "glad/glad.h"
 
 namespace Sunset
 {
-	VertexObject::VertexObject(const Object& data)
+	void VertexObject::ReserveVertices(const size_t size)
+	{
+		vertices.reserve(size);
+	}
+
+	void VertexObject::ReserveIndices(const size_t size)
+	{
+		indices.reserve(size);
+	}
+
+	Mesh::Mesh(const VertexObject& data)
 		: VAO(0)
 		, VBO(0)
 		, EBO(0)
@@ -35,14 +45,14 @@ namespace Sunset
 		glBindVertexArray(0);
 	}
 
-	VertexObject::~VertexObject()
+	Mesh::~Mesh()
 	{
 		glDeleteBuffers(1, &EBO);
 		glDeleteBuffers(1, &VBO);
 		glDeleteVertexArrays(1, &VAO);
 	}
 
-	void VertexObject::Draw() const
+	void Mesh::Draw() const
 	{
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, m_IndicesSize, GL_UNSIGNED_INT, 0);

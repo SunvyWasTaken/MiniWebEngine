@@ -9,7 +9,15 @@ namespace Sunset
 	class Ground : public Sunset::Entity
 	{
 	public:
-		using Sunset::Entity::Entity;
+		GENERATED_BODY;
+
+		virtual void Init() override;
+	};
+
+	class Pig : public Sunset::Entity
+	{
+	public:
+		GENERATED_BODY;
 
 		virtual void Init() override;
 	};

@@ -26,6 +26,7 @@ if (NOT EMSCRIPTEN)
 endif()
 
 if(NOT EMSCRIPTEN)
+    find_package(assimp CONFIG REQUIRED)
     find_package(glm CONFIG REQUIRED)
     find_package(EnTT CONFIG REQUIRED)
     find_package(imgui CONFIG REQUIRED)
@@ -97,6 +98,7 @@ if(EMSCRIPTEN)
 
 else()
     target_link_libraries(${PROJECT_NAME} PUBLIC
+        assimp::assimp
         EnTT::EnTT
         glm::glm-header-only
         glfw
