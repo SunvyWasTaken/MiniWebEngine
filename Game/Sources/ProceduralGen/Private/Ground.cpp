@@ -27,7 +27,7 @@ namespace Sunset
 		Sunset::PlaneGen::Gen(dt, 10.f, 10.f, 100.f, 100.f);
 		//Sunset::AlgoProcedural::PerlinNoise(dt, 0.5f, 2.f);
 		//Sunset::AlgoProcedural::Erosion(dt, 100.f, 100.f);
-		//Sunset::PlaneGen::ProcessNormal(dt);
+		Sunset::PlaneGen::ProcessNormal(dt);
 
 		std::shared_ptr<Sunset::Shader> shader = Sunset::ShaderLoader::Load("Base", "Ressources/Shaders/vShader.glsl", "Ressources/Shaders/fShader.glsl");
 		Sunset::AnyTexture groundTexture = Sunset::TextureLoader::Load("Ressources/Gravel.jpg");
@@ -47,18 +47,18 @@ namespace Sunset
 
 	void Pig::Init()
 	{
-		AddComponent<TransformComponent>(glm::vec3{0, 1, 0});
-		auto* transComp = GetComponent<TransformComponent>();
+		//AddComponent<TransformComponent>(glm::vec3{0, 1, 0});
+		//auto* transComp = GetComponent<TransformComponent>();
 
-		float scale = 1.f;
-		SkeletalVertices vo;
+		//float scale = 1.f;
+		//SkeletalVertices vo;
 
-		transComp->SetSize({scale, scale, scale});
+		//transComp->SetSize({scale, scale, scale});
 
-		std::shared_ptr<Shader> shader = ShaderLoader::Load("Pig", "Ressources/Shaders/vShaderCharacter.glsl", "Ressources/Shaders/fShaderCharacter.glsl");
-		Sunset::AnyTexture pigTexture = TextureLoader::Load("Ressources/pig/T_Pig_Base_Color.png");
+		//std::shared_ptr<Shader> shader = ShaderLoader::Load("Pig", "Ressources/Shaders/vShaderCharacter.glsl", "Ressources/Shaders/fShaderCharacter.glsl");
+		//Sunset::AnyTexture pigTexture = TextureLoader::Load("Ressources/pig/T_Pig_Base_Color.png");
 
-		std::shared_ptr<Material> mat = std::make_shared<Material>(shader, pigTexture);
+		//std::shared_ptr<Material> mat = std::make_shared<Material>(shader, pigTexture);
 		//std::shared_ptr<SkeletalMesh> m = std::make_shared<SkeletalMesh>(vo);
 		//std::shared_ptr<Drawable> drawablePig = std::make_shared<Drawable>(m, mat);
 		//AddComponent<RenderComponent>(drawablePig);

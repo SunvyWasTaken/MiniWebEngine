@@ -35,9 +35,6 @@ namespace Sunset
 
 	void Drawable::Draw() const
 	{
-		if (m_Material)
-			m_Material->Use();
-
 		if (m_Mesh)
 		{
 			std::visit(
