@@ -21,6 +21,8 @@ namespace Sunset
 
 		bool IsOpen() const;
 
+		static void WireframeMode(bool bActivate);
+
 	private:
 
 		void CreateUniformBufferObject();

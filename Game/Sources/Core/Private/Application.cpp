@@ -178,6 +178,15 @@ namespace Sunset
 				bIsAppOpen = false;
 			}
 
+			if (Inputs::IsKey(90))
+			{
+				OpenGLRender::WireframeMode(true);
+			}
+			else
+			{
+				OpenGLRender::WireframeMode(false);
+			}
+
 			m_SceneManager->Update(Deltatime);
 
 			m_Render->Begin(cam);

@@ -1,7 +1,7 @@
 // Sunset inc.
 
 #include "Meshes/MeshLoader.h"
-#include "Mesh.h"
+#include "Meshes/Mesh.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -9,73 +9,79 @@
 
 namespace
 {
-	void ProcessMesh(aiMesh* mesh, Sunset::VertexObject& vertexObject)
+	void ProcessMesh(aiMesh* mesh, Sunset::VerticeType& vertexObject)
 	{
-		vertexObject.Clear();
 
-		vertexObject.ReserveVertices(mesh->mNumVertices);
+		if (mesh->HasBones())
+			vertexObject = Sunset::SkeletalVertices();
 
-		for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
+		else
+			vertexObject = Sunset::StaticVertices();
+
+		std::visit(overloads
 		{
-			glm::vec3 position;
-			position.x = mesh->mVertices[i].x;
-			position.y = mesh->mVertices[i].y;
-			position.z = mesh->mVertices[i].z;
-
-			glm::vec3 normal(0.0f);
-			if (mesh->HasNormals())
+			[&](Sunset::SkeletalVertices& vertices)
 			{
-				normal.x = mesh->mNormals[i].x;
-				normal.y = mesh->mNormals[i].y;
-				normal.z = mesh->mNormals[i].z;
-			}
 
-			glm::vec2 texCoord(0.0f);
-			if (mesh->mTextureCoords[0])
+			},
+			[&](Sunset::StaticVertices& vertices)
 			{
-				texCoord.x = mesh->mTextureCoords[0][i].x;
-				texCoord.y = mesh->mTextureCoords[0][i].y;
+				vertices.Clear();
+				vertices.ReserveVertices(mesh->mNumVertices);
+
+				for (uint32_t i = 0; i < mesh->mNumVertices; ++i)
+				{
+					glm::vec3 position;
+					position.x = mesh->mVertices[i].x;
+					position.y = mesh->mVertices[i].y;
+					position.z = mesh->mVertices[i].z;
+
+					glm::vec3 normal(0.0f);
+					if (mesh->HasNormals())
+					{
+						normal.x = mesh->mNormals[i].x;
+						normal.y = mesh->mNormals[i].y;
+						normal.z = mesh->mNormals[i].z;
+					}
+
+					glm::vec2 texCoord(0.0f);
+					if (mesh->mTextureCoords[0])
+					{
+						texCoord.x = mesh->mTextureCoords[0][i].x;
+						texCoord.y = mesh->mTextureCoords[0][i].y;
+					}
+
+
+					Sunset::Vertex vertex{position, normal, texCoord};
+
+					vertices.PushVertice(vertex);
+				}
+
+				vertices.ReserveIndices(mesh->mNumFaces);
+
+				for (uint32_t i = 0; i < mesh->mNumFaces; ++i)
+				{
+					aiFace face = mesh->mFaces[i];
+					for (uint32_t j = 0; j < face.mNumIndices; ++j)
+					{
+						uint32_t index = face.mIndices[j];
+						vertices.PushIndice(index);
+					}
+				}
 			}
-
-
-			Sunset::Vertex vertex{position, normal, texCoord};
-
-			vertexObject.PushVertice(vertex);
-		}
-
-		vertexObject.ReserveIndices(mesh->mNumFaces);
-
-		for (uint32_t i = 0; i < mesh->mNumFaces; ++i)
-		{
-			aiFace face = mesh->mFaces[i];
-			for (uint32_t j = 0; j < face.mNumIndices; ++j)
-			{
-				uint32_t index = face.mIndices[j];
-				vertexObject.PushIndice(index);
-			}
-		}
+		}, vertexObject);
 	}
 
-	void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Sunset::VertexObject>& vertexObjects)
+	void ProcessNode(aiNode* node, const aiScene* scene, Sunset::VerticeType& vertexObjects)
 	{
-		for (unsigned int i = 0; i < node->mNumMeshes; ++i)
-		{
-			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			Sunset::VertexObject vo;
-			ProcessMesh(mesh, vo);
-			vertexObjects.emplace_back(vo);
-		}
-
-		for (unsigned int i = 0; i < node->mNumChildren; ++i)
-		{
-			ProcessNode(node->mChildren[i], scene, vertexObjects);
-		}
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
+		ProcessMesh(mesh, vertexObjects);
 	}
 }
 
 namespace Sunset
 {
-	Sunset::VertexObject MeshLoader::LoadMesh(const std::string& path, float& m_ImportScale)
+	void MeshLoader::LoadMesh(const std::string& path, VerticeType& vertices, float& m_ImportScale)
 	{
 		Assimp::Importer importer;
 
@@ -90,8 +96,7 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Modele load with success !")
 		ENGINE_LOG_TRACE("Nombre de meshes : {}", scene->mNumMeshes);
 
-		std::vector<Sunset::VertexObject> vertexObjects;
-		ProcessNode(scene->mRootNode, scene, vertexObjects);
+		ProcessNode(scene->mRootNode, scene, vertices);
 
 		float scaleFactor;
 		if (scene->mMetaData && scene->mMetaData->Get("UnitScaleFactor", scaleFactor))
@@ -102,13 +107,5 @@ namespace Sunset
 		{
 			m_ImportScale = 1.0f; // fallback
 		}
-	
-		if (vertexObjects.empty())
-		{
-			ENGINE_LOG_ERROR("No meshes found in the scene. Returning an empty VertexObject.");
-			return Sunset::VertexObject();
-		}
-	
-		return vertexObjects[0];
 	}
 }

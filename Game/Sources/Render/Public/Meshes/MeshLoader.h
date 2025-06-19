@@ -4,10 +4,13 @@
 
 namespace Sunset
 {
+	template <typename VertexType>
 	class VertexObject;
+
+	using VerticeType = std::variant<VertexObject<struct Vertex>, VertexObject<struct VertexSkeletal>>;
 
 	struct MeshLoader
 	{
-		static VertexObject LoadMesh(const std::string& path, float& m_ImportScale);
+		static void LoadMesh(const std::string& path, VerticeType& vertices, float& m_ImportScale);
 	};
 }

@@ -1,6 +1,6 @@
 // Sunset inc.
 
-#include "Texture.h"
+#include "Textures/Texture.h"
 
 #include "glad/glad.h"
 

@@ -1,26 +1,16 @@
 // Sunset inc.
 
-#include "Mesh.h"
+#include "Meshes/StaticMesh.h"
+
 #include "glad/glad.h"
 
 namespace Sunset
 {
-	void VertexObject::ReserveVertices(const size_t size)
+	StaticMesh::StaticMesh(const StaticVertices& data)
+		: Mesh()
 	{
-		vertices.reserve(size);
-	}
+		m_IndicesSize = data.indices.size();
 
-	void VertexObject::ReserveIndices(const size_t size)
-	{
-		indices.reserve(size);
-	}
-
-	Mesh::Mesh(const VertexObject& data)
-		: VAO(0)
-		, VBO(0)
-		, EBO(0)
-		, m_IndicesSize(data.indices.size())
-	{
 		glCreateVertexArrays(1, &VAO);
 		glCreateBuffers(1, &VBO);
 		glCreateBuffers(1, &EBO);
@@ -45,16 +35,17 @@ namespace Sunset
 		glBindVertexArray(0);
 	}
 
-	Mesh::~Mesh()
+	StaticMesh::~StaticMesh()
 	{
-		glDeleteBuffers(1, &EBO);
-		glDeleteBuffers(1, &VBO);
-		glDeleteVertexArrays(1, &VAO);
+		if (VAO) glDeleteVertexArrays(1, &VAO);
+		if (VBO) glDeleteBuffers(1, &VBO);
+		if (EBO) glDeleteBuffers(1, &EBO);
 	}
 
-	void Mesh::Draw() const
+	void StaticMesh::Draw() const
 	{
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, m_IndicesSize, GL_UNSIGNED_INT, 0);
 	}
+
 }

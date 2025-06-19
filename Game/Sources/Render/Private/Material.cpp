@@ -2,7 +2,7 @@
 
 #include "Material.h"
 #include "Shaders.h"
-#include "TextureBase.h"
+#include "Textures/TextureBase.h"
 
 #include "glad/glad.h"
 
