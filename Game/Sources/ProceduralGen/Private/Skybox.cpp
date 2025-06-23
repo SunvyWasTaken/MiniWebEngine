@@ -5,17 +5,15 @@
 #include "Components/TransformComponent.h"
 #include "Components/RenderComponent.h"
 
-#include "Meshes/StaticMesh.h"
-#include "Meshes/SkeletalMesh.h"
 #include "PlaneGen.h"
 #include "ShaderLoader.h"
 #include "Material.h"
 #include "Textures/TextureManager.h"
-#include "Drawable.h"
+#include "Meshes/Drawable.h"
 
 namespace
 {
-	Sunset::StaticVertices data = {
+	Sunset::StaticMeshData data = {
 	{
 		{{-0.5f, -0.5f,  0.5f}, { 0,  0,  1}, {0.0f, 0.0f}}, // 0
 		{{ 0.5f, -0.5f,  0.5f}, { 0,  0,  1}, {1.0f, 0.0f}}, // 1

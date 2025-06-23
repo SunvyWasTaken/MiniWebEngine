@@ -7,26 +7,55 @@
 
 #include <fstream>
 #include <sstream>
+#include <filesystem>
+
+namespace
+{
+	std::string PreprocessShader(const std::string& path, const std::string& parentDir = "")
+	{
+		std::ifstream file(path);
+		if (!file.is_open()) {
+			ENGINE_LOG_INFO("Erreur : impossible d'ouvrir le fichier shader : {}", path);
+			return "";
+		}
+
+		std::stringstream processedShader;
+		std::string line;
+		std::string baseDir = parentDir.empty() ? std::filesystem::path(path).parent_path().string() : parentDir;
+
+		while (std::getline(file, line)) {
+			if (line.find("#include") == 0) {
+				size_t firstQuote = line.find('\"');
+				size_t lastQuote = line.rfind('\"');
+				if (firstQuote != std::string::npos && lastQuote != std::string::npos && lastQuote > firstQuote) {
+					std::string includeFile = line.substr(firstQuote + 1, lastQuote - firstQuote - 1);
+					std::string includePath = baseDir + "/" + includeFile;
+
+					std::string includedCode = PreprocessShader(includePath, std::filesystem::path(includePath).parent_path().string());
+					processedShader << "// Begin include: " << includeFile << "\n";
+					processedShader << includedCode << "\n";
+					processedShader << "// End include: " << includeFile << "\n";
+				}
+				else {
+					ENGINE_LOG_INFO("Erreur de syntaxe dans le #include : {}", line);
+				}
+			}
+			else {
+				processedShader << line << "\n";
+			}
+		}
+
+		return processedShader.str();
+	}
+}
 
 namespace Sunset
 {
 	Shader::Shader(const char* vertShader, const char* fragShader)
 		: id(0)
 	{
-		std::string vertexCode;
-		std::string fragmentCode;
-		std::ifstream vShaderFile;
-		std::ifstream fShaderFile;
-
-		vShaderFile.open(vertShader);
-		fShaderFile.open(fragShader);
-		std::stringstream vShaderStream, fShaderStream;
-		vShaderStream << vShaderFile.rdbuf();
-		fShaderStream << fShaderFile.rdbuf();
-		vShaderFile.close();
-		fShaderFile.close();
-		vertexCode = vShaderStream.str();
-		fragmentCode = fShaderStream.str();
+		std::string vertexCode = PreprocessShader(vertShader);
+		std::string fragmentCode = PreprocessShader(fragShader);
 
 		const char* vShaderCode = vertexCode.c_str();
 		const char* fShaderCode = fragmentCode.c_str();

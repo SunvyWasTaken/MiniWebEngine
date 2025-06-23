@@ -1,9 +1,7 @@
 // Sunset inc.
 
-#include "Drawable.h"
+#include "Meshes/Drawable.h"
 #include "Material.h"
-#include "Meshes/StaticMesh.h"
-#include "Meshes/SkeletalMesh.h"
 
 namespace Sunset
 {
@@ -11,7 +9,6 @@ namespace Sunset
 		: m_Mesh(mesh)
 		, m_Material(material)
 	{
-		ENGINE_LOG_INFO("Drawable create")
 	}
 
 	Drawable::~Drawable()

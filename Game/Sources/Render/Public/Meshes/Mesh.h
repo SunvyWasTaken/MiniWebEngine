@@ -6,17 +6,32 @@
 
 namespace Sunset
 {
+	struct SubMesh final
+	{
+		SubMesh();
+		~SubMesh();
+
+		NO_COPY_BUT_MOVE(SubMesh)
+
+		void Draw() const;
+
+		uint32_t VAO = 0;
+		uint32_t VBO = 0;
+		uint32_t EBO = 0;
+
+		size_t m_IndicesSize = 0;
+	};
+
 	class Mesh
 	{
+		friend class MeshLoader;
 	public:
 		Mesh();
 		virtual ~Mesh();
 
-		Mesh(const Mesh&) = delete;
-		Mesh& operator=(const Mesh&) = delete;
+		NO_COPY_BUT_MOVE(Mesh)
 
-		Mesh(Mesh&& other) noexcept;
-		Mesh& operator=(Mesh&& other) noexcept;
+		void Draw() const;
 
 	protected:
 		uint32_t VAO = 0;
@@ -24,5 +39,7 @@ namespace Sunset
 		uint32_t EBO = 0;
 
 		size_t m_IndicesSize = 0;
+
+		size_t m_ImportSize = 0;
 	};
 }

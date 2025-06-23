@@ -5,15 +5,15 @@
 namespace Sunset
 {
 	template <typename T>
-	struct VertexObject;
+	struct MeshData;
 
-	using StaticVertices = VertexObject<struct Vertex>;
+	using StaticMeshData = MeshData<struct StaticVertex>;
 
 	class PlaneGen
 	{
 	public:
-		static void Gen(StaticVertices& data, float width, float height, int resolutionX, int resolutionY);
-		static void ApplyWaveToTerrain(StaticVertices& data);
-		static void ProcessNormal(StaticVertices& data);
+		static void Gen(StaticMeshData& data, float width, float height, int resolutionX, int resolutionY);
+		static void ApplyWaveToTerrain(StaticMeshData& data);
+		static void ProcessNormal(StaticMeshData& data);
 	};
 }

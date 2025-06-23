@@ -88,7 +88,7 @@ void Terrain::Begin()
 	Sunset::Scene::Begin();
 
 	/// Ground
-	CreateEntity<Sunset::Ground>();
+	//CreateEntity<Sunset::Ground>();
 	CreateEntity<Sunset::SkyBox>();
 	CreateEntity<Sunset::Pig>();
 

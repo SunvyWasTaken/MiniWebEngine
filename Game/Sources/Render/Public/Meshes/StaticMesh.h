@@ -9,12 +9,10 @@ namespace Sunset
 	class StaticMesh final : public Mesh
 	{
 	public:
-		explicit StaticMesh(const StaticVertices& data);
-
-		NO_COPY_BUT_MOVE(StaticMesh);
+		explicit StaticMesh(const StaticMeshData& data);
 
 		virtual ~StaticMesh();
 
-		void Draw() const;
+		NO_COPY_BUT_MOVE(StaticMesh)
 	};
 }

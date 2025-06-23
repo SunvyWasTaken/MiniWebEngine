@@ -1,12 +1,13 @@
 // Sunset inc.
 
 #include "Meshes/StaticMesh.h"
+#include "Meshes/Vertex.h"
 
 #include "glad/glad.h"
 
 namespace Sunset
 {
-	StaticMesh::StaticMesh(const StaticVertices& data)
+	StaticMesh::StaticMesh(const StaticMeshData& data)
 		: Mesh()
 	{
 		m_IndicesSize = data.indices.size();
@@ -18,19 +19,19 @@ namespace Sunset
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-		glBufferData(GL_ARRAY_BUFFER, data.vertices.size() * sizeof(Vertex), data.vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, data.vertices.size() * sizeof(StaticVertex), data.vertices.data(), GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.indices.size() * sizeof(uint32_t), data.indices.data(), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(StaticVertex), (void*)0);
 
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(StaticVertex), (void*)offsetof(StaticVertex, normal));
 
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(StaticVertex), (void*)offsetof(StaticVertex, texCoord));
 
 		glBindVertexArray(0);
 	}
@@ -42,10 +43,17 @@ namespace Sunset
 		if (EBO) glDeleteBuffers(1, &EBO);
 	}
 
-	void StaticMesh::Draw() const
+	StaticMesh::StaticMesh(StaticMesh&& other) noexcept
+		: Mesh(std::move(other))
 	{
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, m_IndicesSize, GL_UNSIGNED_INT, 0);
 	}
 
+	StaticMesh& StaticMesh::operator=(StaticMesh&& other) noexcept
+	{
+		if (this != &other)
+		{
+			Mesh::operator=(std::move(other));
+		}
+		return *this;
+	}
 }

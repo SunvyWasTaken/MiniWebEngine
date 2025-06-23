@@ -4,22 +4,24 @@
 
 namespace Sunset
 {
-	struct Vertex
+	struct StaticVertex
 	{
 		glm::vec3 position;
 		glm::vec3 normal;
 		glm::vec2 texCoord;
 	};
 
-	struct VertexSkeletal : public Vertex
+	struct SkeletalVertex : public StaticVertex
 	{
-		int boneIDs[4] = {0};
-		int weights[4] = {0};
+		int boneIDs[4] = {-1, -1, -1, -1};
+		float weights[4] = {0, 0, 0, 0};
 	};
 
 	template <typename VertexType>
-	struct VertexObject
+	struct MeshData
 	{
+		using Type = VertexType;
+
 		std::vector<VertexType> vertices;
 		std::vector<uint32_t> indices;
 
@@ -50,8 +52,6 @@ namespace Sunset
 		}
 	};
 
-	using StaticVertices = VertexObject<Vertex>;
-	using SkeletalVertices = VertexObject<VertexSkeletal>;
-
-	using VerticeType = std::variant<StaticVertices, SkeletalVertices>;
+	using StaticMeshData = MeshData<StaticVertex>;
+	using SkeletalMeshData = MeshData<SkeletalVertex>;
 }

@@ -1,13 +1,13 @@
 // Sunset inc.
 
 #include "AlgoProcedural.h"
-#include "Meshes/Mesh.h"
+#include "Meshes/Vertex.h"
 
 #include "glm/gtc/noise.hpp"
 
 namespace Sunset
 {
-	void AlgoProcedural::PerlinNoise(StaticVertices& data, float scale /*= 0.1f*/, float amplitude /*= 1.f*/)
+	void AlgoProcedural::PerlinNoise(StaticMeshData& data, float scale /*= 0.1f*/, float amplitude /*= 1.f*/)
 	{
 		for (auto& v : data.vertices)
 		{
@@ -18,7 +18,7 @@ namespace Sunset
 		}
 	}
 
-	void AlgoProcedural::Erosion(StaticVertices& data, int width, int height)
+	void AlgoProcedural::Erosion(StaticMeshData& data, int width, int height)
 	{
 		SCOPE_PERF
 		const float talus = 0.1f;

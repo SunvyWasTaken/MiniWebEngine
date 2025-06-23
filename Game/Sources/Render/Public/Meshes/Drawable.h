@@ -3,11 +3,11 @@
 #pragma once
 
 #include "Textures/TextureManager.h"
+#include "Meshes/StaticMesh.h"
+#include "Meshes/SkeletalMesh.h"
 
 namespace Sunset
 {
-	class StaticMesh;
-	class SkeletalMesh;
 	class Material;
 
 	using Meshes = std::variant<StaticMesh, SkeletalMesh>;

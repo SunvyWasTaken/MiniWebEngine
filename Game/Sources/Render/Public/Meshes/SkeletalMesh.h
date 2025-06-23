@@ -3,16 +3,21 @@
 #pragma once
 
 #include "Mesh.h"
+#include "Meshes/SkeletalBone.h"
 
 namespace Sunset
 {
 	class SkeletalMesh final : public Mesh
 	{
 	public:
-		explicit SkeletalMesh(const SkeletalVertices& data);
+		explicit SkeletalMesh(const SkeletalMeshData& data);
 		virtual ~SkeletalMesh();
 
-		void Draw() const;
+		NO_COPY_BUT_MOVE(SkeletalMesh)
+
 		void Update(float deltatime);
+
+	private:
+		Skeletal m_Skeletal;
 	};
 }

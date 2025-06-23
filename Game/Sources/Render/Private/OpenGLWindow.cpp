@@ -63,6 +63,7 @@ namespace Sunset
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(camera.GetProjection()));
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(camera.GetView()));
+		glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(camera.GetRelativeView()));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
@@ -90,7 +91,7 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Create uniform buffer for the camera.")
 		glGenBuffers(1, &m_Ubo);
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);
-		glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), nullptr, GL_STATIC_DRAW);
+		glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, GL_STATIC_DRAW);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_Ubo);
 	}

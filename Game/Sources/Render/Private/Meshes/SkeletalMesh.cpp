@@ -2,21 +2,63 @@
 
 #include "Meshes/SkeletalMesh.h"
 
+#include "glad/glad.h"
+
 namespace Sunset
 {
-	SkeletalMesh::SkeletalMesh(const SkeletalVertices& data)
+	SkeletalMesh::SkeletalMesh(const SkeletalMeshData& data)
 	{
+		m_IndicesSize = data.indices.size();
 
+		glCreateVertexArrays(1, &VAO);
+		glCreateBuffers(1, &VBO);
+		glCreateBuffers(1, &EBO);
+
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+		glBufferData(GL_ARRAY_BUFFER, data.vertices.size() * sizeof(typename SkeletalMeshData::Type), data.vertices.data(), GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.indices.size() * sizeof(uint32_t), data.indices.data(), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (void*)0);
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (void*)offsetof(SkeletalVertex, normal));
+
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (void*)offsetof(SkeletalVertex, texCoord));
+
+		glEnableVertexAttribArray(3);
+		glVertexAttribIPointer(3, 4, GL_INT, sizeof(SkeletalVertex), (void*)offsetof(SkeletalVertex, boneIDs));
+
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (void*)offsetof(SkeletalVertex, weights));
+
+		glBindVertexArray(0);
 	}
 
 	SkeletalMesh::~SkeletalMesh()
 	{
-
+		if (VAO) glDeleteVertexArrays(1, &VAO);
+		if (VBO) glDeleteBuffers(1, &VBO);
+		if (EBO) glDeleteBuffers(1, &EBO);
 	}
 
-	void SkeletalMesh::Draw() const
+	SkeletalMesh::SkeletalMesh(SkeletalMesh&& other) noexcept
+		: Mesh(std::move(other))
 	{
+	}
 
+	SkeletalMesh& SkeletalMesh::operator=(SkeletalMesh&& other) noexcept
+	{
+		if (this != &other)
+		{
+			Mesh::operator=(std::move(other));
+		}
+		return *this;
 	}
 
 	void SkeletalMesh::Update(float deltatime)
