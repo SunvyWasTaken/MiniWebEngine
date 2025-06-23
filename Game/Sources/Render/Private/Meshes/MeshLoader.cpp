@@ -108,11 +108,39 @@ namespace
 				}
 			}
 		}
+
+		for (auto& vertex : data.vertices)
+		{
+			float sum = vertex.weights[0] + vertex.weights[1] + vertex.weights[2] + vertex.weights[3];
+			if (sum > 0.0f)
+			{
+				vertex.weights[0] /= sum;
+				vertex.weights[1] /= sum;
+				vertex.weights[2] /= sum;
+				vertex.weights[3] /= sum;
+			}
+		}
 	}
 
 	glm::mat4 ConvertMatrix(const aiMatrix4x4& m)
 	{
 		return glm::transpose(glm::make_mat4(&m.a1));
+	}
+
+	std::string Mat4ToString(const glm::mat4& m) {
+		std::ostringstream oss;
+		oss << "[";
+		for (int row = 0; row < 4; ++row) {
+			oss << "[";
+			for (int col = 0; col < 4; ++col) {
+				oss << m[col][row];
+				if (col < 3) oss << ", ";
+			}
+			oss << "]";
+			if (row < 3) oss << ", ";
+		}
+		oss << "]";
+		return oss.str();
 	}
 
 	// Recursively builds the bone hierarchy for the skeleton
@@ -145,9 +173,10 @@ namespace
 						bone.offsetMatrix = ConvertMatrix(aiBone->mOffsetMatrix); // Bone offset (bind pose)
 						bone.localTransform = ConvertMatrix(node->mTransformation); // Local transform from the node
 						bone.parentIndex = parentIndex; // Index of the parent bone
+						ENGINE_LOG_INFO("{} : offset : {}, local : {}", boneName, Mat4ToString(bone.offsetMatrix), Mat4ToString(bone.localTransform));
 
 						int index = static_cast<int>(skeletal.bones.size());
-						skeletal.bones.push_back(bone);
+						skeletal.bones.emplace_back(bone);
 						skeletal.boneNameToIndex[boneName] = index;
 
 						parentIndex = index; // Update parent index for children
@@ -182,7 +211,7 @@ namespace
 	{
 		float scaleFactor = 1.0f;
 		if (scene->mMetaData && scene->mMetaData->Get("UnitScaleFactor", scaleFactor))
-			return scaleFactor * 0.01f;
+			return scaleFactor;
 		return 1.0f;
 	}
 }
@@ -238,7 +267,7 @@ namespace Sunset
 
 		result.m_ImportSize = GetImportScale(scene);
 
-		return std::make_shared<Meshes>(std::move(result));
+		return std::make_shared<Meshes>(std::exchange(result, {}));
 	}
 
 }

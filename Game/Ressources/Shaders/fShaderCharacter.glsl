@@ -1,8 +1,10 @@
-#version 330 core
+#version 420 core
 
 in vec3 FragPos;
 in vec3 Normal;
 in vec2 texCoords;
+
+in float bone1Influence;
 
 uniform sampler2D textures;
 
@@ -25,8 +27,12 @@ void main()
 
     float y = FragPos.y;
 
-    vec4 color = texture(textures, texCoords * 4.0);
+    vec4 color = texture(textures, texCoords);
 
     vec3 lighting = color.rgb * diffuse;
-    FragColor = vec4(lighting, color.a);
+    //FragColor = vec4(lighting, color.a);
+    if (bone1Influence > 0.01)
+        FragColor = vec4(bone1Influence, 1.0, 1.0, 1.0); // Rouge
+    else
+        FragColor = vec4(0.0, 0.0, 0.0, 1.0); // Blanc ou autre couleur
 }

@@ -53,14 +53,13 @@ namespace Sunset
 
 		float scale = 1.f;
 
-
 		transComp->SetSize({ scale, scale, scale });
 
 		std::shared_ptr<Shader> shader = ShaderLoader::Load("Pig", "Ressources/Shaders/vShaderCharacter.glsl", "Ressources/Shaders/fShaderCharacter.glsl");
-		Sunset::AnyTexture pigTexture = TextureLoader::Load("Ressources/Pig/T_Pig_Base_Color.png");
+		Sunset::AnyTexture pigTexture = TextureLoader::Load("Ressources/Cisailleur/T_Cisailleur_D.png");
 
 		std::shared_ptr<Material> mat = std::make_shared<Material>(shader, pigTexture);
-		std::shared_ptr<Meshes> mesh = MeshLoader::LoadSkeletalMesh("Ressources/Cisailleur/SKM_Cisailleur.fbx");
+		std::shared_ptr<Meshes> mesh = MeshLoader::LoadSkeletalMesh("Ressources/Cuby.fbx");
 		std::shared_ptr<Drawable> drawablePig = std::make_shared<Drawable>(mesh, mat);
 		AddComponent<RenderComponent>(drawablePig);
 	}

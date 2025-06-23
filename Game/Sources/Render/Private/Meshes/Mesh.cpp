@@ -75,7 +75,7 @@ namespace Sunset
 
 	Mesh& Mesh::operator=(Mesh&& other) noexcept
 	{
-		if (this != &other) 
+		if (this != &other)
 		{
 			m_SubMeshes = std::exchange(other.m_SubMeshes, {});
 			m_ImportSize = std::exchange(other.m_ImportSize, 0.f);

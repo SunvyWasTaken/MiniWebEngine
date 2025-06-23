@@ -15,6 +15,8 @@ namespace Sunset
 		explicit RenderComponent(std::shared_ptr<Drawable>& mesh);
 		virtual ~RenderComponent();
 
+		void Update(float deltatime);
+
 		void operator()(const glm::mat4& model) const;
 
 	private:

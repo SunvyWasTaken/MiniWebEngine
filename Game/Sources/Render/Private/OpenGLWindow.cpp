@@ -37,6 +37,9 @@ namespace Sunset
 			assert(false);
 		}
 
+		const GLubyte* version = glGetString(GL_VERSION);
+		ENGINE_LOG_TRACE("OpenGL version: {}", (const char*)version);
+
 		glViewport(0, 0, 1280, 720);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
@@ -92,7 +95,7 @@ namespace Sunset
 		glGenBuffers(1, &m_Ubo);
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);
 		glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, GL_STATIC_DRAW);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_Ubo);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 }

@@ -55,6 +55,12 @@ namespace Sunset
 		{
 			script.m_FuncUpdate(entity, deltatime);
 		}
+
+		auto RenderComp = GetEntities().view<RenderComponent>();
+		for (auto&& [entity, render] : RenderComp.each())
+		{
+			render.Update(deltatime);
+		}
 	}
 
 	void Scene::UpdatePhysic(const float deltatime)

@@ -1,4 +1,4 @@
-layout (std140) uniform Matrices
+layout (std140, binding = 0) uniform Camera
 {
 	mat4 projection;
 	mat4 view;

@@ -2,6 +2,7 @@
 
 #include "Meshes/Drawable.h"
 #include "Material.h"
+#include "Shaders.h"
 
 namespace Sunset
 {

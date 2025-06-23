@@ -16,6 +16,11 @@ namespace Sunset
 	{
 	}
 
+	void RenderComponent::Update(float deltatime)
+	{
+		m_Mesh->Update(deltatime);
+	}
+
 	void RenderComponent::operator()(const glm::mat4& model) const
 	{
 		m_Mesh->Bind(model);

@@ -1,4 +1,4 @@
-#version 330 core
+#version 420 core
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -25,7 +25,7 @@ void main()
 
     float y = FragPos.y;
 
-    vec4 color = texture(textures[1], texCoords * 4.0);
+    vec4 color = texture(textures[1], texCoords);
 
     vec3 lighting = color.rgb * diffuse;
     FragColor = vec4(lighting, color.a);
