@@ -4,6 +4,8 @@
 #include "Meshes/SkeletalMesh.h"
 #include "Meshes/StaticMesh.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -108,6 +110,74 @@ namespace
 		}
 	}
 
+	glm::mat4 ConvertMatrix(const aiMatrix4x4& m)
+	{
+		return glm::transpose(glm::make_mat4(&m.a1));
+	}
+
+	// Recursively builds the bone hierarchy for the skeleton
+	void BuildSkeletalRecursive(
+		const aiNode* node,
+		const aiScene* scene,
+		Sunset::Skeletal& skeletal,
+		int parentIndex = -1)
+	{
+		// Get the name of the current node
+		std::string nodeName = node->mName.C_Str();
+
+		// For each mesh in the scene, check if this node corresponds to a bone used in any mesh
+		for (unsigned int meshIdx = 0; meshIdx < scene->mNumMeshes; ++meshIdx)
+		{
+			aiMesh* mesh = scene->mMeshes[meshIdx];
+			for (unsigned int boneIdx = 0; boneIdx < mesh->mNumBones; ++boneIdx)
+			{
+				aiBone* aiBone = mesh->mBones[boneIdx];
+				std::string boneName = aiBone->mName.C_Str();
+
+				// If the node name matches a bone name
+				if (boneName == nodeName)
+				{
+					// If the bone is not already in the skeleton, add it
+					if (skeletal.boneNameToIndex.find(boneName) == skeletal.boneNameToIndex.end())
+					{
+						Sunset::Bone bone;
+						bone.name = boneName;
+						bone.offsetMatrix = ConvertMatrix(aiBone->mOffsetMatrix); // Bone offset (bind pose)
+						bone.localTransform = ConvertMatrix(node->mTransformation); // Local transform from the node
+						bone.parentIndex = parentIndex; // Index of the parent bone
+
+						int index = static_cast<int>(skeletal.bones.size());
+						skeletal.bones.push_back(bone);
+						skeletal.boneNameToIndex[boneName] = index;
+
+						parentIndex = index; // Update parent index for children
+					}
+					else
+					{
+						// If already present, update parent index for children
+						parentIndex = skeletal.boneNameToIndex[boneName];
+					}
+					break; // Bone found, no need to check other bones in this mesh
+				}
+			}
+		}
+
+		// Recursively process all child nodes
+		for (unsigned int i = 0; i < node->mNumChildren; ++i)
+		{
+			BuildSkeletalRecursive(node->mChildren[i], scene, skeletal, parentIndex);
+		}
+	}
+
+
+	void BuildSkeletal(const aiScene* scene, Sunset::Skeletal& skeletal)
+	{
+		skeletal.bones.clear();
+		skeletal.boneNameToIndex.clear();
+		BuildSkeletalRecursive(scene->mRootNode, scene, skeletal, -1);
+	}
+
+
 	float GetImportScale(const aiScene* scene)
 	{
 		float scaleFactor = 1.0f;
@@ -163,6 +233,8 @@ namespace Sunset
 
 			result.AddSubMesh(data);
 		}
+
+		BuildSkeletal(scene, result.m_Skeletal);
 
 		result.m_ImportSize = GetImportScale(scene);
 

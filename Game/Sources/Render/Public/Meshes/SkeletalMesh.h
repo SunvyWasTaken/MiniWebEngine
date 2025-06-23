@@ -9,6 +9,7 @@ namespace Sunset
 {
 	class SkeletalMesh final : public Mesh
 	{
+		friend class MeshLoader;
 	public:
 		SkeletalMesh();
 		virtual ~SkeletalMesh();
