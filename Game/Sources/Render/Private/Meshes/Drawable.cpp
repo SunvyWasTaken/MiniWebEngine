@@ -44,7 +44,15 @@ namespace Sunset
 
 	void Drawable::Bind(const glm::mat4& model)
 	{
+		glm::mat4 tmp = model;
+
+		std::visit([&](auto&& mesh)
+		{
+			float s = mesh.GetSize();
+			tmp = glm::scale(model, {s, s, s});
+		}, *m_Mesh);
+
 		if (m_Material)
-			m_Material->Bind(model);
+			m_Material->Bind(tmp);
 	}
 }

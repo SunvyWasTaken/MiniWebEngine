@@ -10,12 +10,14 @@ namespace Sunset
 	class SkeletalMesh final : public Mesh
 	{
 	public:
-		explicit SkeletalMesh(const SkeletalMeshData& data);
+		SkeletalMesh();
 		virtual ~SkeletalMesh();
 
 		NO_COPY_BUT_MOVE(SkeletalMesh)
 
 		void Update(float deltatime);
+
+		void AddSubMesh(const SkeletalMeshData& data);
 
 	private:
 		Skeletal m_Skeletal;

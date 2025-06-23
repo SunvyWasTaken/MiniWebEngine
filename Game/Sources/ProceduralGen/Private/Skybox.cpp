@@ -77,7 +77,8 @@ namespace Sunset
 		AnyTexture CubeTexture = Sunset::TextureLoader::Load("skybox", TextureList);
 		std::shared_ptr<Material> matSkyBox = std::make_shared<Material>(SkyBoxshader, CubeTexture);
 
-		std::shared_ptr<Meshes> SkyDataBox = std::make_shared<Meshes>(StaticMesh(data));
+		std::shared_ptr<Meshes> SkyDataBox = std::make_shared<Meshes>();
+		std::get<StaticMesh>(*SkyDataBox).AddSubMesh(data);
 		std::shared_ptr<Drawable> drawableSky = std::make_shared<Drawable>(SkyDataBox, matSkyBox);
 		AddComponent<RenderComponent>(drawableSky);
 	}

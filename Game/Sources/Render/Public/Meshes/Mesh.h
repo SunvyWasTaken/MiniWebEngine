@@ -8,16 +8,16 @@ namespace Sunset
 {
 	struct SubMesh final
 	{
-		SubMesh();
+		SubMesh(uint32_t vao, uint32_t vbo, uint32_t ebo, size_t size);
 		~SubMesh();
 
 		NO_COPY_BUT_MOVE(SubMesh)
 
 		void Draw() const;
 
-		uint32_t VAO = 0;
-		uint32_t VBO = 0;
-		uint32_t EBO = 0;
+	private:
+
+		uint32_t VAO, VBO, EBO;
 
 		size_t m_IndicesSize = 0;
 	};
@@ -33,13 +33,12 @@ namespace Sunset
 
 		void Draw() const;
 
+		float GetSize() const { return m_ImportSize; }
+
 	protected:
-		uint32_t VAO = 0;
-		uint32_t VBO = 0;
-		uint32_t EBO = 0;
 
-		size_t m_IndicesSize = 0;
+		std::vector<SubMesh> m_SubMeshes;
 
-		size_t m_ImportSize = 0;
+		float m_ImportSize;
 	};
 }

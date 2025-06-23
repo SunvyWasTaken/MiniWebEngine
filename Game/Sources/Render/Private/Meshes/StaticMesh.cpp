@@ -7,10 +7,35 @@
 
 namespace Sunset
 {
-	StaticMesh::StaticMesh(const StaticMeshData& data)
+	StaticMesh::StaticMesh()
 		: Mesh()
 	{
-		m_IndicesSize = data.indices.size();
+	}
+
+	StaticMesh::~StaticMesh()
+	{
+
+	}
+
+	StaticMesh::StaticMesh(StaticMesh&& other) noexcept
+		: Mesh(std::move(other))
+	{
+	}
+
+	StaticMesh& StaticMesh::operator=(StaticMesh&& other) noexcept
+	{
+		if (this != &other)
+		{
+			Mesh::operator=(std::move(other));
+		}
+		return *this;
+	}
+
+	void StaticMesh::AddSubMesh(const StaticMeshData& data)
+	{
+		uint32_t VAO, VBO, EBO;
+
+		size_t size = data.indices.size();
 
 		glCreateVertexArrays(1, &VAO);
 		glCreateBuffers(1, &VBO);
@@ -34,26 +59,7 @@ namespace Sunset
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(StaticVertex), (void*)offsetof(StaticVertex, texCoord));
 
 		glBindVertexArray(0);
-	}
 
-	StaticMesh::~StaticMesh()
-	{
-		if (VAO) glDeleteVertexArrays(1, &VAO);
-		if (VBO) glDeleteBuffers(1, &VBO);
-		if (EBO) glDeleteBuffers(1, &EBO);
-	}
-
-	StaticMesh::StaticMesh(StaticMesh&& other) noexcept
-		: Mesh(std::move(other))
-	{
-	}
-
-	StaticMesh& StaticMesh::operator=(StaticMesh&& other) noexcept
-	{
-		if (this != &other)
-		{
-			Mesh::operator=(std::move(other));
-		}
-		return *this;
+		m_SubMeshes.emplace_back(VAO, VBO, EBO, size);
 	}
 }

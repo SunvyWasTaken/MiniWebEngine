@@ -29,12 +29,8 @@ namespace
 	}
 
 	template <typename vertexDataType>
-	void ProcessVertexData(const aiScene* scene, vertexDataType& vertices)
+	void ProcessVertexData(aiMesh* mesh, vertexDataType& vertices)
 	{
-		aiNode* root = scene->mRootNode;
-
-		aiMesh* mesh = scene->mMeshes[0];;
-
 		assert(mesh);
 
 		vertices.Clear();
@@ -80,10 +76,9 @@ namespace
 		}
 	}
 
-	void ProcessSkeletonData(const aiScene* scene, Sunset::SkeletalMeshData& data)
+	void ProcessSkeletonData(const aiMesh* mesh, Sunset::SkeletalMeshData& data)
 	{
-		aiNode* root = scene->mRootNode;
-		aiMesh* mesh = scene->mMeshes[0];
+		assert(mesh);
 
 		if (!mesh->HasBones())
 		{
@@ -117,7 +112,7 @@ namespace
 	{
 		float scaleFactor = 1.0f;
 		if (scene->mMetaData && scene->mMetaData->Get("UnitScaleFactor", scaleFactor))
-			return scaleFactor;
+			return scaleFactor * 0.01f;
 		return 1.0f;
 	}
 }
@@ -126,15 +121,22 @@ namespace Sunset
 {
 	std::shared_ptr<Meshes> MeshLoader::LoadStaticMesh(const std::string& path) noexcept
 	{
-		StaticMeshData data;
+		StaticMesh result;
 
 		Assimp::Importer importer;
 
 		const aiScene* scene = OpenFileAndCreateImportScene(importer, path);
+		
+		for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
+		{
+			StaticMeshData data;
 
-		ProcessVertexData(scene, data);
+			aiMesh* mesh = scene->mMeshes[i];
 
-		StaticMesh result{std::move(data)};
+			ProcessVertexData(mesh, data);
+
+			result.AddSubMesh(data);
+		}
 
 		result.m_ImportSize = GetImportScale(scene);
 
@@ -143,17 +145,24 @@ namespace Sunset
 
 	std::shared_ptr<Meshes> MeshLoader::LoadSkeletalMesh(const std::string& path) noexcept
 	{
-		SkeletalMeshData data;
+		SkeletalMesh result;
 
 		Assimp::Importer importer;
 
 		const aiScene* scene = OpenFileAndCreateImportScene(importer, path);
 
-		ProcessVertexData(scene, data);
+		for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
+		{
+			SkeletalMeshData data;
 
-		ProcessSkeletonData(scene, data);
+			aiMesh* mesh = scene->mMeshes[i];
 
-		SkeletalMesh result{std::move(data)};
+			ProcessVertexData(mesh, data);
+
+			ProcessSkeletonData(mesh, data);
+
+			result.AddSubMesh(data);
+		}
 
 		result.m_ImportSize = GetImportScale(scene);
 

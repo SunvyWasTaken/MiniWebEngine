@@ -6,9 +6,39 @@
 
 namespace Sunset
 {
-	SkeletalMesh::SkeletalMesh(const SkeletalMeshData& data)
+	SkeletalMesh::SkeletalMesh()
 	{
-		m_IndicesSize = data.indices.size();
+
+	}
+
+	SkeletalMesh::~SkeletalMesh()
+	{
+
+	}
+
+	SkeletalMesh::SkeletalMesh(SkeletalMesh&& other) noexcept
+		: Mesh(std::move(other))
+	{
+	}
+
+	SkeletalMesh& SkeletalMesh::operator=(SkeletalMesh&& other) noexcept
+	{
+		if (this != &other)
+		{
+			Mesh::operator=(std::move(other));
+		}
+		return *this;
+	}
+
+	void SkeletalMesh::Update(float deltatime)
+	{
+
+	}
+
+	void SkeletalMesh::AddSubMesh(const SkeletalMeshData& data)
+	{
+		uint32_t VAO, VBO, EBO;
+		uint32_t size = data.indices.size();
 
 		glCreateVertexArrays(1, &VAO);
 		glCreateBuffers(1, &VBO);
@@ -38,32 +68,7 @@ namespace Sunset
 		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (void*)offsetof(SkeletalVertex, weights));
 
 		glBindVertexArray(0);
+
+		m_SubMeshes.emplace_back(VAO, VBO, EBO, size);
 	}
-
-	SkeletalMesh::~SkeletalMesh()
-	{
-		if (VAO) glDeleteVertexArrays(1, &VAO);
-		if (VBO) glDeleteBuffers(1, &VBO);
-		if (EBO) glDeleteBuffers(1, &EBO);
-	}
-
-	SkeletalMesh::SkeletalMesh(SkeletalMesh&& other) noexcept
-		: Mesh(std::move(other))
-	{
-	}
-
-	SkeletalMesh& SkeletalMesh::operator=(SkeletalMesh&& other) noexcept
-	{
-		if (this != &other)
-		{
-			Mesh::operator=(std::move(other));
-		}
-		return *this;
-	}
-
-	void SkeletalMesh::Update(float deltatime)
-	{
-
-	}
-
 }
