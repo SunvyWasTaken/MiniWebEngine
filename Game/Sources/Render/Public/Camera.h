@@ -21,6 +21,8 @@ namespace Sunset
 
 		glm::mat4 GetProjection() const;
 
+		glm::mat4 GetRelativeView() const;
+
 		const glm::vec3& GetRotation() const { return m_Rotation; }
 
 		void SetRotation(const glm::vec3& rotation);

@@ -88,7 +88,7 @@ void Terrain::Begin()
 	Sunset::Scene::Begin();
 
 	/// Ground
-	CreateEntity<Sunset::Ground>();
+	//CreateEntity<Sunset::Ground>();
 	CreateEntity<Sunset::SkyBox>();
 	CreateEntity<Sunset::Pig>();
 
@@ -176,6 +176,15 @@ namespace Sunset
 			if (Inputs::IsKey(256))
 			{
 				bIsAppOpen = false;
+			}
+
+			if (Inputs::IsKey(90))
+			{
+				OpenGLRender::WireframeMode(true);
+			}
+			else
+			{
+				OpenGLRender::WireframeMode(false);
 			}
 
 			m_SceneManager->Update(Deltatime);

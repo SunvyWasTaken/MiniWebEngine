@@ -1,6 +1,6 @@
 // Sunset inc.
 
-#include "Texture.h"
+#include "Textures/Texture.h"
 
 #include "glad/glad.h"
 
@@ -41,6 +41,8 @@ namespace Sunset
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 			stbi_image_free(data);
+
+			glBindTexture(GL_TEXTURE_2D, 0);
 			return true;
 		}
 

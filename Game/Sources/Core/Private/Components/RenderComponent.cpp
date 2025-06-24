@@ -2,7 +2,7 @@
 
 #include "Components/RenderComponent.h"
 #include "Shaders.h"
-#include "Drawable.h"
+#include "Meshes/Drawable.h"
 
 namespace Sunset
 {
@@ -14,6 +14,11 @@ namespace Sunset
 
 	RenderComponent::~RenderComponent()
 	{
+	}
+
+	void RenderComponent::Update(float deltatime)
+	{
+		m_Mesh->Update(deltatime);
 	}
 
 	void RenderComponent::operator()(const glm::mat4& model) const

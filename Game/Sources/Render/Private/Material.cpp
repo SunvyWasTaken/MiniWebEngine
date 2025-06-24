@@ -2,7 +2,7 @@
 
 #include "Material.h"
 #include "Shaders.h"
-#include "TextureBase.h"
+#include "Textures/TextureBase.h"
 
 #include "glad/glad.h"
 
@@ -12,31 +12,31 @@ namespace Sunset
 		: m_Shader(shader)
 	{
 		AddTexture(texture);
+		ENGINE_LOG_TRACE("Material Create")
 	}
 
 	Material::~Material()
 	{
-
+		ENGINE_LOG_TRACE("Material Delete")
 	}
 
-	void Material::Use() const
+	void Material::Bind(const glm::mat4& model)
 	{
 		if (!m_Shader)
 		{
-			ENGINE_LOG_FATAL("U fortgot to add a shader to the material.");
+			ENGINE_LOG_FATAL("Shader is not assigned to this material.")
 		}
 
 		if (m_Textures.empty())
-		{
 			ENGINE_LOG_WARN("Material has no texture attached");
-		}
 
 		m_Shader->Use();
+		m_Shader->SetUniformMat4("model", model);
 
 		std::vector<int> units;
 		units.reserve(m_Textures.size());
 
-		for (int slot = 0; auto& texture : m_Textures)
+		for (int slot = 0; auto & texture : m_Textures)
 		{
 			if (texture)
 			{
@@ -48,15 +48,6 @@ namespace Sunset
 		}
 
 		m_Shader->SetUniformInt1v("textures", m_Textures.size(), units.data());
-	}
-
-	void Material::Bind(const glm::mat4& model)
-	{
-		if (!m_Shader)
-			ENGINE_LOG_ERROR("There is no Shader attrib")
-
-		m_Shader->Use();
-		m_Shader->SetUniformMat4("model", model);
 	}
 
 	void Material::AddTexture(const AnyTexture& texture)

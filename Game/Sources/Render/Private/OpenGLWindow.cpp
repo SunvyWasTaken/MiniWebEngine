@@ -37,10 +37,11 @@ namespace Sunset
 			assert(false);
 		}
 
+		const GLubyte* version = glGetString(GL_VERSION);
+		ENGINE_LOG_TRACE("OpenGL version: {}", (const char*)version);
+
 		glViewport(0, 0, 1280, 720);
 		glEnable(GL_DEPTH_TEST);
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -65,6 +66,7 @@ namespace Sunset
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(camera.GetProjection()));
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(camera.GetView()));
+		glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(camera.GetRelativeView()));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
@@ -79,13 +81,21 @@ namespace Sunset
 		return !glfwWindowShouldClose(m_Window);
 	}
 
+	void OpenGLRender::WireframeMode(bool bActivate)
+	{
+		if (bActivate)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+
 	void OpenGLRender::CreateUniformBufferObject()
 	{
 		ENGINE_LOG_TRACE("Create uniform buffer for the camera.")
 		glGenBuffers(1, &m_Ubo);
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);
-		glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), nullptr, GL_STATIC_DRAW);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, GL_STATIC_DRAW);
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_Ubo);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 }

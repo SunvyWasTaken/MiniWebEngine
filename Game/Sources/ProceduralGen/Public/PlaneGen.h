@@ -4,13 +4,16 @@
 
 namespace Sunset
 {
-	class VertexObject;
+	template <typename T>
+	struct MeshData;
+
+	using StaticMeshData = MeshData<struct StaticVertex>;
 
 	class PlaneGen
 	{
 	public:
-		static void Gen(VertexObject& data, float width, float height, int resolutionX, int resolutionY);
-		static void ApplyWaveToTerrain(VertexObject& data);
-		static void ProcessNormal(VertexObject& data);
+		static void Gen(StaticMeshData& data, float width, float height, int resolutionX, int resolutionY);
+		static void ApplyWaveToTerrain(StaticMeshData& data);
+		static void ProcessNormal(StaticMeshData& data);
 	};
 }

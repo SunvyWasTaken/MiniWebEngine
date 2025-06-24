@@ -1,9 +1,9 @@
 // Sunset inc.
 
-#include "TextureManager.h"
-#include "TextureBase.h"
-#include "Texture.h"
-#include "CubeTexture.h"
+#include "Textures/TextureManager.h"
+#include "Textures/TextureBase.h"
+#include "Textures/Texture.h"
+#include "Textures/CubeTexture.h"
 
 namespace
 {

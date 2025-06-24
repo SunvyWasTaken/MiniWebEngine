@@ -1,11 +1,11 @@
 // Sunset inc.
 
 #include "PlaneGen.h"
-#include "Mesh.h"
+#include "Meshes/Vertex.h"
 
 namespace Sunset
 {
-	void PlaneGen::Gen(VertexObject& data, float width, float height, int resolutionX, int resolutionY)
+	void PlaneGen::Gen(StaticMeshData& data, float width, float height, int resolutionX, int resolutionY)
 	{
 		data.Clear();
 
@@ -17,7 +17,7 @@ namespace Sunset
 				float xpos = -width / 2.0f + x * dx;
 				float ypos = -height / 2.0f + y * dy;
 
-				Vertex v;
+				StaticVertex v;
 				v.position = { xpos, 0.0f, ypos };
 				v.normal = { 0.0f, 1.0f, 0.0f };
 				// v.uv = { (float)x / (resolutionX - 1), (float)y / (resolutionY - 1) };
@@ -43,7 +43,7 @@ namespace Sunset
 		}
 	}
 
-	void PlaneGen::ApplyWaveToTerrain(VertexObject& data)
+	void PlaneGen::ApplyWaveToTerrain(StaticMeshData& data)
 	{
 		float amplitude = 0.2f;
 		float frequency = 2.f;
@@ -57,15 +57,15 @@ namespace Sunset
 		}
 	}
 
-	void PlaneGen::ProcessNormal(VertexObject& data)
+	void PlaneGen::ProcessNormal(StaticMeshData& data)
 	{
-		for (Vertex& v : data.vertices)
+		for (StaticVertex& v : data.vertices)
 			v.normal = glm::vec3(0.0f);
 
 		for (size_t i = 0; i < data.indices.size(); i += 3) {
-			Vertex& v0 = data.vertices[data.indices[i]];
-			Vertex& v1 = data.vertices[data.indices[i + 1]];
-			Vertex& v2 = data.vertices[data.indices[i + 2]];
+			StaticVertex& v0 = data.vertices[data.indices[i]];
+			StaticVertex& v1 = data.vertices[data.indices[i + 1]];
+			StaticVertex& v2 = data.vertices[data.indices[i + 2]];
 
 			glm::vec3 edge1 = v1.position - v0.position;
 			glm::vec3 edge2 = v2.position - v0.position;
@@ -77,7 +77,7 @@ namespace Sunset
 			v2.normal += faceNormal;
 		}
 
-		for (Vertex& v : data.vertices)
+		for (StaticVertex& v : data.vertices)
 			v.normal = glm::normalize(v.normal);
 	}
 }

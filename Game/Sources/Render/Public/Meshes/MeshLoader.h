@@ -4,10 +4,14 @@
 
 namespace Sunset
 {
-	class VertexObject;
+	class StaticMesh;
+	class SkeletalMesh;
+
+	using Meshes = std::variant<StaticMesh, SkeletalMesh>;
 
 	struct MeshLoader
 	{
-		static VertexObject LoadMesh(const std::string& path, float& m_ImportScale);
+		static [[nodiscard("You forgot to store the loaded static mesh")]] std::shared_ptr<Meshes> LoadStaticMesh(const std::string& path) noexcept;
+		static [[nodiscard("You forgot to store the loaded skeletal mesh")]] std::shared_ptr<Meshes> LoadSkeletalMesh(const std::string& path) noexcept;
 	};
 }

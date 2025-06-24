@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "TextureBase.h"
+#include "Textures/TextureBase.h"
 
 namespace Sunset
 {
@@ -13,7 +13,6 @@ namespace Sunset
 	public:
 		Material(const std::shared_ptr<Shader>& shader, const AnyTexture& texture);
 		~Material();
-		void Use() const;
 		void Bind(const glm::mat4& model);
 		void AddTexture(const AnyTexture& texture);
 	private:

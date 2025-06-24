@@ -44,6 +44,11 @@ namespace Sunset
 		return pro;
 	}
 
+	glm::mat4 Camera::GetRelativeView() const
+	{
+		return glm::mat4(glm::mat3(GetView()));
+	}
+
 	void Camera::SetRotation(const glm::vec3& rotation)
 	{
 		m_Rotation = rotation;
