@@ -24,7 +24,7 @@ namespace Sunset
 	{
 		if (!m_Shader)
 		{
-			ENGINE_LOG_FATAL("There is no Shader attrib")
+			ENGINE_LOG_FATAL("Shader is not assigned to this material.")
 		}
 
 		if (m_Textures.empty())
