@@ -12,7 +12,6 @@ namespace Sunset
 		, m_TicksPerSecond(ticksPerSecond)
 		, m_Tracks()
 	{
-
 	}
 
 	const std::string& AnimationClip::GetName() const
@@ -30,14 +29,14 @@ namespace Sunset
 		return m_TicksPerSecond;
 	}
 
-	const std::unordered_map<std::string, std::shared_ptr<Sunset::AnimationTrack>>& AnimationClip::GetTracks() const
+	const std::vector<std::shared_ptr<Sunset::AnimationTrack>>& AnimationClip::GetTracks() const
 	{
 		return m_Tracks;
 	}
 
-	void AnimationClip::AddTrack(const std::string& boneName, const std::shared_ptr<AnimationTrack>& track)
+	void AnimationClip::AddTrack(const std::shared_ptr<AnimationTrack>& track)
 	{
-		m_Tracks.emplace(boneName, track);
+		m_Tracks.emplace_back(track);
 	}
 
 }

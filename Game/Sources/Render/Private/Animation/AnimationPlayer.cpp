@@ -69,8 +69,14 @@ namespace Sunset
 		const auto& tracks = m_CurrentClip->m_Tracks;
 		outBoneTransforms.reserve(tracks.size());
 
-		for (const auto& [boneName, track] : tracks)
+		for (const auto& track : tracks)
 		{
+			if (!track)
+			{
+				outBoneTransforms.emplace_back(glm::mat4(1.f));
+				continue;
+			}
+
 			glm::vec3 pos = track->InterpolatePosition(m_CurrentTime);
 			glm::quat rot = track->InterpolateRotation(m_CurrentTime);
 			glm::vec3 scale = track->InterpolateScale(m_CurrentTime);
@@ -81,7 +87,7 @@ namespace Sunset
 			glm::mat4 S = glm::scale(glm::mat4(1.0f), scale);
 
 			glm::mat4 localTransform = T * R * S;
-			outBoneTransforms.push_back(localTransform);
+			outBoneTransforms.emplace_back(localTransform);
 		}
 	}
 

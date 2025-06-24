@@ -13,6 +13,8 @@
 
 #include "Meshes/Vertex.h"
 
+#include "Meshes/SkeletalMesh.h"
+
 #include "Meshes/MeshLoader.h"
 #include "Animation/AnimationLoader.h"
 
@@ -60,7 +62,8 @@ namespace Sunset
 
 		std::shared_ptr<Material> mat = std::make_shared<Material>(shader, pigTexture);
 		std::shared_ptr<Meshes> mesh = MeshLoader::LoadSkeletalMesh("Ressources/Hiro/A_GardeIdle.fbx");
-		std::shared_ptr<AnimationClip> anim = AnimLoader::LoadAnimation("Ressources/Hiro/A_GardeIdle.fbx");
+		Skeletal& skel = std::get_if<SkeletalMesh>(mesh.get())->GetSkel();
+		std::shared_ptr<AnimationClip> anim = AnimLoader::LoadAnimation("Ressources/Hiro/A_GardeIdle.fbx", skel.bones);
 		std::get_if<SkeletalMesh>(mesh.get())->AddAnimation(anim);
 		std::shared_ptr<Drawable> drawablePig = std::make_shared<Drawable>(mesh, mat);
 		AddComponent<RenderComponent>(drawablePig);

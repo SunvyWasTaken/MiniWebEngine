@@ -54,32 +54,42 @@ namespace Sunset
 
 	void Skeletal::Update(float deltatime)
 	{
-		if (m_Animation)
-		{
-			m_Animation->Update(deltatime);
-			m_Animation->GetPose(finalBoneMatrices);
-		}
-		else
-		{
-			if (finalBoneMatrices.size() != bones.size())
-				finalBoneMatrices.resize(bones.size(), glm::mat4(1.0f));
+		if (finalBoneMatrices.size() != bones.size())
+			finalBoneMatrices.resize(bones.size(), glm::mat4(1.0f));
 
-			// Calcul des globalTransforms
-			std::vector<glm::mat4> globalTransforms(bones.size(), glm::mat4(1.0f));
+		// Calcul des globalTransforms
+		std::vector<glm::mat4> globalTransforms(bones.size(), glm::mat4(1.0f));
+
+		if (m_Animation->IsPlaying())
+		{
+			std::vector<glm::mat4> localTransforms;
+
+			m_Animation->Update(deltatime);
+			m_Animation->GetPose(localTransforms);
 
 			for (size_t i = 0; i < bones.size(); ++i)
 			{
 				const Bone& bone = bones[i];
-				if (bone.parentIndex == -1)
-				{
-					globalTransforms[i] = bone.localTransform;
-				}
+				if (bone.parentIndex >= 0)
+					globalTransforms[i] = globalTransforms[bone.parentIndex] * localTransforms[i];
 				else
-				{
-					globalTransforms[i] = globalTransforms[bone.parentIndex] * bone.localTransform;
-				}
+					globalTransforms[i] = localTransforms[i];
+
 				finalBoneMatrices[i] = globalTransforms[i] * bone.offsetMatrix;
 			}
+
+			return;
+		}
+
+		for (size_t i = 0; i < bones.size(); ++i)
+		{
+			const Bone& bone = bones[i];
+			if (bone.parentIndex >= 0)
+				globalTransforms[i] = globalTransforms[bone.parentIndex] * bone.localTransform;
+			else
+				globalTransforms[i] = bone.localTransform;
+
+			finalBoneMatrices[i] = globalTransforms[i] * bone.offsetMatrix;
 		}
 	}
 

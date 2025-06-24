@@ -111,13 +111,24 @@ namespace
 
 		for (auto& vertex : data.vertices)
 		{
-			float sum = vertex.weights[0] + vertex.weights[1] + vertex.weights[2] + vertex.weights[3];
-			if (sum > 0.0f)
+			float sum = 0.0f;
+			for (int i = 0; i < 4; ++i)
+				sum += std::max(0.0f, vertex.weights[i]);
+
+			if (sum > 0.0001f)
 			{
-				vertex.weights[0] /= sum;
-				vertex.weights[1] /= sum;
-				vertex.weights[2] /= sum;
-				vertex.weights[3] /= sum;
+				for (int i = 0; i < 4; ++i)
+					vertex.weights[i] /= sum;
+			}
+			else
+			{
+				vertex.weights[0] = 1.0f;
+				vertex.boneIDs[0] = 0;
+				for (int i = 1; i < 4; ++i)
+				{
+					vertex.weights[i] = 0.0f;
+					vertex.boneIDs[i] = 0;
+				}
 			}
 		}
 	}
@@ -144,11 +155,7 @@ namespace
 	}
 
 	// Recursively builds the bone hierarchy for the skeleton
-	void BuildSkeletalRecursive(
-		const aiNode* node,
-		const aiScene* scene,
-		Sunset::Skeletal& skeletal,
-		int parentIndex = -1)
+	void BuildSkeletalRecursive(const aiNode* node, const aiScene* scene, Sunset::Skeletal& skeletal, int parentIndex = -1)
 	{
 		// Get the name of the current node
 		std::string nodeName = node->mName.C_Str();

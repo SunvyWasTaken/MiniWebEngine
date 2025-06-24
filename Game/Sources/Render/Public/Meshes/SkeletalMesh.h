@@ -25,6 +25,8 @@ namespace Sunset
 		// Todo : tmp
 		void AddAnimation(std::shared_ptr<AnimationClip>& anim);
 
+		Skeletal& GetSkel() {return m_Skeletal; }
+
 	private:
 		Skeletal m_Skeletal;
 	};
