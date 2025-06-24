@@ -173,7 +173,6 @@ namespace
 						bone.offsetMatrix = ConvertMatrix(aiBone->mOffsetMatrix); // Bone offset (bind pose)
 						bone.localTransform = ConvertMatrix(node->mTransformation); // Local transform from the node
 						bone.parentIndex = parentIndex; // Index of the parent bone
-						ENGINE_LOG_INFO("{} : offset : {}, local : {}", boneName, Mat4ToString(bone.offsetMatrix), Mat4ToString(bone.localTransform));
 
 						int index = static_cast<int>(skeletal.bones.size());
 						skeletal.bones.emplace_back(bone);
@@ -267,7 +266,7 @@ namespace Sunset
 
 		result.m_ImportSize = GetImportScale(scene);
 
-		return std::make_shared<Meshes>(std::exchange(result, {}));
+		return std::make_shared<Meshes>(std::move(result));
 	}
 
 }

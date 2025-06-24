@@ -9,19 +9,20 @@ namespace Sunset
 	Skeletal::Skeletal()
 		: m_Ubo(0)
 	{
-		ENGINE_LOG_TRACE("Ubo skeletal bone init");
-
 		glGenBuffers(1, &m_Ubo);
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);
 		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4) * 100, nullptr, GL_DYNAMIC_DRAW);
 		glBindBufferBase(GL_UNIFORM_BUFFER, 1, m_Ubo);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+		ENGINE_LOG_INFO("Ubo skeletal bone init {}", m_Ubo);
 	}
 
 	Skeletal::~Skeletal()
 	{
 		if (m_Ubo)
 		{
+			ENGINE_LOG_INFO("Ubo skeletal bone delete {}", m_Ubo);
 			glDeleteBuffers(1, &m_Ubo);
 		}
 	}

@@ -19,8 +19,6 @@ out vec3 FragPos;
 out vec3 Normal;
 out vec2 texCoords;
 
-out float bone1Influence;
-
 void main()
 {
 mat4 skinMatrix = 
@@ -39,13 +37,4 @@ mat4 skinMatrix =
     Normal = mat3(transpose(inverse(model))) * skinnedNormal;
 
 	texCoords = aTexCoord;
-
-    int boneNum = 1;
-
-    float influence = 0.0;
-    if (inBoneIDs.x == boneNum) influence += inWeights.x;
-    if (inBoneIDs.y == boneNum) influence += inWeights.y;
-    if (inBoneIDs.z == boneNum) influence += inWeights.z;
-    if (inBoneIDs.w == boneNum) influence += inWeights.w;
-    bone1Influence = influence;
 }

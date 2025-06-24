@@ -18,9 +18,8 @@ namespace Sunset
 
 	SkeletalMesh::SkeletalMesh(SkeletalMesh&& other) noexcept
 		: Mesh(std::move(other))
+		, m_Skeletal(std::move(other.m_Skeletal))
 	{
-		m_Skeletal = std::move(other.m_Skeletal);
-		other.m_Skeletal = {};
 	}
 
 	SkeletalMesh& SkeletalMesh::operator=(SkeletalMesh&& other) noexcept
@@ -28,8 +27,7 @@ namespace Sunset
 		if (this != &other)
 		{
 			Mesh::operator=(std::move(other));
-			m_Skeletal = std::exchange(other.m_Skeletal, {});
-			other.m_Skeletal = {};
+			m_Skeletal = std::move(other.m_Skeletal);
 		}
 		return *this;
 	}
