@@ -71,7 +71,7 @@ namespace Sunset
 	{
 		AddComponent<TransformComponent>();
 		TransformComponent* transComp = GetComponent<TransformComponent>();
-		transComp->SetSize({100, 100, 100});
+		transComp->SetSize({1000, 1000, 1000});
 
 		std::shared_ptr<Shader> SkyBoxshader = ShaderLoader::Load("Skybox", "Ressources/Shaders/vShaderSkyBox.glsl", "Ressources/Shaders/fShaderSkyBox.glsl");
 		AnyTexture CubeTexture = Sunset::TextureLoader::Load("skybox", TextureList);

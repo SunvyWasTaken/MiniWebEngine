@@ -6,6 +6,9 @@
 
 namespace Sunset
 {
+	class AnimationPlayer;
+	class AnimationClip;
+
 	using Bones = std::vector<Bone>;
 	
 	struct Skeletal final
@@ -22,6 +25,8 @@ namespace Sunset
 
 		uint32_t operator()() const { return m_Ubo; }
 
+		void operator()(std::shared_ptr<AnimationClip>& anim);
+
 	public:
 
 		Bones bones;
@@ -32,5 +37,7 @@ namespace Sunset
 
 	private:
 		uint32_t m_Ubo;
+
+		std::unique_ptr<AnimationPlayer> m_Animation;
 	};
 }

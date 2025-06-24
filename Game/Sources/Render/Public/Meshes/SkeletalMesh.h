@@ -7,6 +7,8 @@
 
 namespace Sunset
 {
+	class AnimationClip;
+
 	class SkeletalMesh final : public Mesh
 	{
 		friend class MeshLoader;
@@ -19,6 +21,11 @@ namespace Sunset
 		void Update(float deltatime);
 
 		void AddSubMesh(const SkeletalMeshData& data);
+
+		// Todo : tmp
+		void AddAnimation(std::shared_ptr<AnimationClip>& anim);
+
+		Skeletal& GetSkel() {return m_Skeletal; }
 
 	private:
 		Skeletal m_Skeletal;

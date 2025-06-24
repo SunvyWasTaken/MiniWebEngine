@@ -22,10 +22,10 @@ out vec2 texCoords;
 void main()
 {
 mat4 skinMatrix = 
-    inWeights.x * boneTransform[clamp(inBoneIDs.x, 0, 99)] +
-    inWeights.y * boneTransform[clamp(inBoneIDs.y, 0, 99)] +
-    inWeights.z * boneTransform[clamp(inBoneIDs.z, 0, 99)] +
-    inWeights.w * boneTransform[clamp(inBoneIDs.w, 0, 99)];
+    inWeights.x * boneTransform[inBoneIDs.x]+
+    inWeights.y * boneTransform[inBoneIDs.y]+
+    inWeights.z * boneTransform[inBoneIDs.z]+
+    inWeights.w * boneTransform[inBoneIDs.w];
 
     //skinMatrix = mat4(1.0);
 
