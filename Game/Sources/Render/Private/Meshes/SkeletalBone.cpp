@@ -1,6 +1,7 @@
 // Sunset inc.
 
 #include "Meshes/SkeletalBone.h"
+#include "Animation/AnimationPlayer.h"
 
 #include <glad/glad.h>
 
@@ -8,6 +9,7 @@ namespace Sunset
 {
 	Skeletal::Skeletal()
 		: m_Ubo(0)
+		, m_Animation(std::unique_ptr<AnimationPlayer>(new AnimationPlayer()))
 	{
 		glGenBuffers(1, &m_Ubo);
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);
@@ -28,10 +30,11 @@ namespace Sunset
 	}
 
 	Skeletal::Skeletal(Skeletal&& other) noexcept
-		: m_Ubo(std::exchange(other.m_Ubo, 0)),
-		bones(std::move(other.bones)),
-		boneNameToIndex(std::move(other.boneNameToIndex)),
-		finalBoneMatrices(std::move(other.finalBoneMatrices))
+		: m_Ubo(std::exchange(other.m_Ubo, 0))
+		, bones(std::move(other.bones))
+		, boneNameToIndex(std::move(other.boneNameToIndex))
+		, finalBoneMatrices(std::move(other.finalBoneMatrices))
+		, m_Animation(std::move(other.m_Animation))
 	{
 	}
 
@@ -43,6 +46,7 @@ namespace Sunset
 			bones = std::move(other.bones);
 			boneNameToIndex = std::move(other.boneNameToIndex);
 			finalBoneMatrices = std::move(other.finalBoneMatrices);
+			m_Animation = std::move(other.m_Animation);
 		}
 		return *this;
 	}
@@ -50,24 +54,32 @@ namespace Sunset
 
 	void Skeletal::Update(float deltatime)
 	{
-		if (finalBoneMatrices.size() != bones.size())
-			finalBoneMatrices.resize(bones.size(), glm::mat4(1.0f));
-
-		// Calcul des globalTransforms
-		std::vector<glm::mat4> globalTransforms(bones.size(), glm::mat4(1.0f));
-
-		for (size_t i = 0; i < bones.size(); ++i)
+		if (m_Animation)
 		{
-			const Bone& bone = bones[i];
-			if (bone.parentIndex == -1)
+			m_Animation->Update(deltatime);
+			m_Animation->GetPose(finalBoneMatrices);
+		}
+		else
+		{
+			if (finalBoneMatrices.size() != bones.size())
+				finalBoneMatrices.resize(bones.size(), glm::mat4(1.0f));
+
+			// Calcul des globalTransforms
+			std::vector<glm::mat4> globalTransforms(bones.size(), glm::mat4(1.0f));
+
+			for (size_t i = 0; i < bones.size(); ++i)
 			{
-				globalTransforms[i] = bone.localTransform;
+				const Bone& bone = bones[i];
+				if (bone.parentIndex == -1)
+				{
+					globalTransforms[i] = bone.localTransform;
+				}
+				else
+				{
+					globalTransforms[i] = globalTransforms[bone.parentIndex] * bone.localTransform;
+				}
+				finalBoneMatrices[i] = globalTransforms[i] * bone.offsetMatrix;
 			}
-			else
-			{
-				globalTransforms[i] = globalTransforms[bone.parentIndex] * bone.localTransform;
-			}
-			finalBoneMatrices[i] = globalTransforms[i] * bone.offsetMatrix;
 		}
 	}
 
@@ -76,6 +88,11 @@ namespace Sunset
 		glBindBuffer(GL_UNIFORM_BUFFER, m_Ubo);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4) * finalBoneMatrices.size(), finalBoneMatrices.data());
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	void Skeletal::operator()(std::shared_ptr<AnimationClip>& anim)
+	{
+		m_Animation->Play(anim);
 	}
 
 }

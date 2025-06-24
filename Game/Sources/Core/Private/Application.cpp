@@ -97,36 +97,36 @@ void Terrain::Begin()
 void Terrain::Update(const float deltatime)
 {
 	Scene::Update(deltatime);
-
+	float s = 10.f;
 	if (Sunset::Inputs::IsKey(68))
 	{
 		glm::vec3 dir = cam.GetCameraRightVector();
-		cam.AddPosition(dir * deltatime);
+		cam.AddPosition(dir * deltatime * s);
 	}
 	if (Sunset::Inputs::IsKey(65))
 	{
 		glm::vec3 dir = cam.GetCameraRightVector();
-		cam.AddPosition(-dir * deltatime);
+		cam.AddPosition(-dir * deltatime * s);
 	}
 	if (Sunset::Inputs::IsKey(83))
 	{
 		glm::vec3 dir = cam.GetCameraForwardVector();
-		cam.AddPosition(-dir * deltatime);
+		cam.AddPosition(-dir * deltatime * s);
 	}
 	if (Sunset::Inputs::IsKey(87))
 	{
 		glm::vec3 dir = cam.GetCameraForwardVector();
-		cam.AddPosition(dir * deltatime);
+		cam.AddPosition(dir * deltatime * s);
 	}
 	if (Sunset::Inputs::IsKey(69))
 	{
 		glm::vec3 dir = cam.GetCameraUpVector();
-		cam.AddPosition(dir * deltatime);
+		cam.AddPosition(dir * deltatime * s);
 	}
 	if (Sunset::Inputs::IsKey(81))
 	{
 		glm::vec3 dir = cam.GetCameraUpVector();
-		cam.AddPosition(-dir * deltatime);
+		cam.AddPosition(-dir * deltatime * s);
 	}
 
 	glm::vec3 rot = cam.GetRotation();

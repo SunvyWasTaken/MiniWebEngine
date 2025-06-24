@@ -74,4 +74,9 @@ namespace Sunset
 
 		m_SubMeshes.emplace_back(VAO, VBO, EBO, size);
 	}
+
+	void SkeletalMesh::AddAnimation(std::shared_ptr<AnimationClip>& anim)
+	{
+		m_Skeletal(anim);
+	}
 }
