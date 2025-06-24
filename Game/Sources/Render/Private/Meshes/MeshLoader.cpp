@@ -84,7 +84,7 @@ namespace
 
 		if (!mesh->HasBones())
 		{
-			ENGINE_LOG_WARN("U load a skeletal mesh even thought there is no bones in the given fbx.")
+			ENGINE_LOG_WARN("Loaded a skeletal mesh even though no bones were found in the given FBX.")
 			return;
 		}
 
