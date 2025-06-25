@@ -124,7 +124,7 @@ namespace Sunset
 			},
 			[&](const PhyscShape::Plane& plane) -> physx::PxRigidActor*
 			{
-				physx::PxTransform pose = physx::PxTransform(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 1, 0)));
+				physx::PxTransform pose = physx::PxTransform();
 
 				physx::PxRigidStatic* rigidPlane = m_Physics->createRigidStatic(pose);
 				physx::PxShape* shape = m_Physics->createShape(physx::PxPlaneGeometry(), *m_DefaultMaterial);

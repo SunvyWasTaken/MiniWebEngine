@@ -91,7 +91,7 @@ void Terrain::Begin()
 
 	/// Ground
 	CreateEntity<Sunset::Ground>();
-	//CreateEntity<Sunset::SkyBox>();
+	CreateEntity<Sunset::SkyBox>();
 	CreateEntity<Sunset::Pig>();
 
 }
