@@ -13,6 +13,8 @@ namespace Sunset
 
 		void Use() const;
 
+		void Stop() const;
+
 		void SetUniformMat4(const std::string& target, const glm::mat4& value) const;
 
 		void SetUniformVec3(const std::string& target, const glm::vec3& value) const;

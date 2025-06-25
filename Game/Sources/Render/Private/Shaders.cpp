@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include <iostream>
 
 namespace
 {
@@ -94,12 +95,17 @@ namespace Sunset
 	Shader::~Shader()
 	{
 		glDeleteProgram(id);
-		ENGINE_LOG_TRACE("Shader {} Destroyed.", id)
+		std::cerr << "Shader " << id << "Destroyed.\n";
 	}
 
 	void Shader::Use() const
 	{
 		glUseProgram(id);
+	}
+
+	void Shader::Stop() const
+	{
+		glUseProgram(0);
 	}
 
 	void Shader::SetUniformMat4(const std::string& target, const glm::mat4& value) const

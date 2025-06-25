@@ -7,3 +7,9 @@
     name(name&&) noexcept; \
     name& operator=(name&&) noexcept;
 
+#ifdef _DEBUG
+#define ASSERT(con, ...) !!(!!con) || []()->bool{ ENGINE_LOG_ERROR(__VA_ARGS__); __debugbreak(); return false; }()
+#else
+#define ASSERT(con, ...)
+#endif // DEBUG
+

@@ -29,10 +29,12 @@ namespace Sunset
 				scene.PostUpdate();
 			}, m_Scenes);
 
-			PostUpdate();
+			if (HasToLoadNewScene())
+				return;
 
 			std::visit([&](auto&& scene)
 			{
+				scene.PreUpdatePhysic();
 				scene.UpdatePhysic(deltatime);
 			}, m_Scenes);
 		}
@@ -65,12 +67,14 @@ namespace Sunset
 
 	private:
 		
-		void PostUpdate()
+		bool HasToLoadNewScene()
 		{
-			if (Impl_LoadScene)
-				Impl_LoadScene();
+			if (!Impl_LoadScene)
+				return false;
 
+			Impl_LoadScene();
 			Impl_LoadScene = nullptr;
+			return true;
 		}
 
 	private:

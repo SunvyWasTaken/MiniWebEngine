@@ -1,14 +1,18 @@
 // Sunset inc.
 
 #include "Components/TransformComponent.h"
+
+#include "Application.h"
+#include "Components/PhysicComponent.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Entity.h"
 
 namespace Sunset
 {
-	TransformComponent::TransformComponent(const glm::vec3& position)
+	TransformComponent::TransformComponent(const glm::vec3& position, const glm::quat& rotation)
 		: m_Position(position)
 		, m_Size(1.f)
-		, m_Rotation(0, 0, 0, 0)
+		, m_Rotation(rotation)
 		, m_Model(1.f)
 		, bDirty(true)
 	{
@@ -76,5 +80,16 @@ namespace Sunset
 		m_Model = translation * rotation * scaling;
 
 		bDirty = false;
+	}
+
+	void TransformComponent::UpdatePhysic()
+	{
+		if (bDirty)
+		{
+			if (PhysicComponent* physComp = owner->GetComponent<PhysicComponent>())
+			{
+				physComp->Set({m_Position, m_Rotation, m_Size});
+			}
+		}
 	}
 }

@@ -25,6 +25,8 @@ namespace Sunset
 		// Update all logic like script and inputs.
 		void Update(const float deltatime);
 
+		void PreUpdatePhysic();
+
 		// Update physic after inputs and before render.
 		void UpdatePhysic(const float deltatime);
 

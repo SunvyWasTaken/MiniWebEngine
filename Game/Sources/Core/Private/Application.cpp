@@ -12,6 +12,10 @@
 
 #include "Ground.h"
 #include "Skybox.h"
+namespace
+{
+	std::shared_ptr<Sunset::Shader> shaderText = nullptr;
+}
 
 struct Menu : public Sunset::Scene
 {
@@ -27,8 +31,6 @@ struct Menu : public Sunset::Scene
 	void Render();
 
 	void Update(const float deltatime);
-
-	std::shared_ptr<Sunset::Shader> shaderText = nullptr;
 };
 
 struct Terrain : public Sunset::Scene
@@ -55,7 +57,7 @@ namespace
 
 	std::unique_ptr<Sunset::OpenGLRender> m_Render = nullptr;
 
-	std::unique_ptr<Sunset::SceneManager<Menu, Terrain>> m_SceneManager = nullptr;
+	std::unique_ptr<Sunset::SceneManager<Terrain>> m_SceneManager = nullptr;
 }
 
 void Menu::Begin()
@@ -88,8 +90,8 @@ void Terrain::Begin()
 	Sunset::Scene::Begin();
 
 	/// Ground
-	//CreateEntity<Sunset::Ground>();
-	CreateEntity<Sunset::SkyBox>();
+	CreateEntity<Sunset::Ground>();
+	//CreateEntity<Sunset::SkyBox>();
 	CreateEntity<Sunset::Pig>();
 
 }
@@ -146,7 +148,7 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Welcome to the engine create by Neo")
 
 		m_Render = std::make_unique<OpenGLRender>();
-		m_SceneManager = std::make_unique<Sunset::SceneManager<Menu, Terrain>>();
+		m_SceneManager = std::make_unique<Sunset::SceneManager<Terrain>>();
 	}
 
 	Engine::~Engine()

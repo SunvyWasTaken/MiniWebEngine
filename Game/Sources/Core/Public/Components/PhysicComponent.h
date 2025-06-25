@@ -15,10 +15,13 @@ namespace Sunset
 	class PhysicComponent : public BaseComponent
 	{
 	public:
-		explicit PhysicComponent(const PhyscShape::Type& shape);
+		explicit PhysicComponent(const PhyscShape::Type& shape, bool IsStatic = true);
 		~PhysicComponent();
 		glm::vec3 GetPosition() const;
 		glm::quat GetRotation() const;
+
+		void Set(const Transform& transform);
+
 	private:
 		PhyscShape::Type m_Shape;
 		physx::PxRigidActor* m_Actor;
