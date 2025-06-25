@@ -22,6 +22,8 @@ namespace Sunset
 
 		void Set(const Transform& transform);
 
+		void AddImpulse(const glm::vec3& dir, float force);
+
 	private:
 		PhyscShape::Type m_Shape;
 		physx::PxRigidActor* m_Actor;

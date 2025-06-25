@@ -74,7 +74,7 @@ namespace Sunset
 
 		ENGINE_LOG_TRACE("Physx : Scene init success")
 
-		m_DefaultMaterial = m_Physics->createMaterial(0.5f, 0.5f, 0.6f);
+		m_DefaultMaterial = m_Physics->createMaterial(0.f, 0.f, 0.f);
 	}
 
 	void PhysicSystem::Update(float deltatime)

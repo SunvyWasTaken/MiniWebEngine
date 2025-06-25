@@ -37,7 +37,9 @@ struct Terrain : public Sunset::Scene
 {
 	Terrain()
 		: Scene()
-	{}
+		, oui({})
+	{
+	}
 
 	virtual ~Terrain()
 	{}
@@ -45,6 +47,8 @@ struct Terrain : public Sunset::Scene
 	void Begin();
 
 	void Update(const float deltatime);
+
+	Sunset::Pig oui;
 };
 
 Sunset::Engine* Sunset::Engine::m_Engine = nullptr;
@@ -92,14 +96,14 @@ void Terrain::Begin()
 	/// Ground
 	CreateEntity<Sunset::Ground>();
 	CreateEntity<Sunset::SkyBox>();
-	CreateEntity<Sunset::Pig>();
+	oui = CreateEntity<Sunset::Pig>();
 
 }
 
 void Terrain::Update(const float deltatime)
 {
 	Scene::Update(deltatime);
-	float s = 10.f;
+	float s = 100.f;
 	if (Sunset::Inputs::IsKey(68))
 	{
 		glm::vec3 dir = cam.GetCameraRightVector();
@@ -129,6 +133,10 @@ void Terrain::Update(const float deltatime)
 	{
 		glm::vec3 dir = cam.GetCameraUpVector();
 		cam.AddPosition(-dir * deltatime * s);
+	}
+	if (Sunset::Inputs::IsKey(static_cast<int>(' ')))
+	{
+		oui.Jump();
 	}
 
 	glm::vec3 rot = cam.GetRotation();

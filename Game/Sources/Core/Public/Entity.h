@@ -10,7 +10,7 @@ namespace Sunset
 	class Entity
 	{
 	public:
-		Entity(Scene* _scene, const entt::entity& id);
+		Entity(Scene* _scene = nullptr, const entt::entity& id = entt::null);
 
 		virtual ~Entity();
 

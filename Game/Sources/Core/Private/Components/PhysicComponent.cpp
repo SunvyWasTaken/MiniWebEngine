@@ -36,4 +36,10 @@ namespace Sunset
 		);
 		m_Actor->setGlobalPose(pxTransform);
 	}
+
+	void PhysicComponent::AddImpulse(const glm::vec3& dir, float force)
+	{
+		physx::PxVec3 tmpDir{dir.x, dir.y, dir.z};
+		static_cast<physx::PxRigidDynamic*>(m_Actor)->addForce(tmpDir * force, physx::PxForceMode::eVELOCITY_CHANGE);
+	}
 }

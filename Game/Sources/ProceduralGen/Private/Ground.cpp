@@ -30,8 +30,10 @@ namespace Sunset
 		AddComponent<TransformComponent>(glm::vec3{0, 0, 0}, planeRotation);
 		auto* transComp = GetComponent<Sunset::TransformComponent>();
 
+		float PlaneSize = 2000.f;
+
 		Sunset::StaticMeshData dt;
-		Sunset::PlaneGen::Gen(dt, 100.f, 100.f, 100.f, 100.f);
+		Sunset::PlaneGen::Gen(dt, PlaneSize, PlaneSize, 100.f, 100.f);
 		//Sunset::AlgoProcedural::PerlinNoise(dt, 0.5f, 2.f);
 		//Sunset::AlgoProcedural::Erosion(dt, 100.f, 100.f);
 		Sunset::PlaneGen::ProcessNormal(dt);
@@ -51,7 +53,7 @@ namespace Sunset
 		std::shared_ptr<Sunset::Drawable> drawableGround = std::make_shared<Sunset::Drawable>(vd, mat);
 		AddComponent<Sunset::RenderComponent>(drawableGround);
 
-		AddComponent<Sunset::PhysicComponent>(Sunset::PhyscShape::Cube{ transComp->GetPosition(), planeRotation, {50.f, 0.1f, 50.f}});
+		AddComponent<Sunset::PhysicComponent>(Sunset::PhyscShape::Cube{ transComp->GetPosition(), planeRotation, {PlaneSize / 2.f, 0.1f, PlaneSize/2.f}});
 	}
 
 	void Pig::Init()
@@ -75,5 +77,10 @@ namespace Sunset
 		AddComponent<RenderComponent>(drawablePig);
 
 		AddComponent<PhysicComponent>(PhyscShape::Capsule{transComp->GetPosition(), transComp->GetRotation(), 32.f, 40.f}, false);
+	}
+
+	void Pig::Jump()
+	{
+		GetComponent<PhysicComponent>()->AddImpulse({0, 1, 0}, 1);
 	}
 }

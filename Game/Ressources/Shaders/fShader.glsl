@@ -14,13 +14,12 @@ void main()
     float horizon = 1.0;
     float highGround = 2.0;
 
-    vec3 lightPos = vec3(0.0, 10.0, 5.0);
+    vec3 lightDir = normalize(vec3(-0.5, -1.0, -0.3));
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
     vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(lightPos - FragPos);
-
-    float diff = max(dot(norm, lightDir), 0.0);
+    // Pour une light directionnelle, on inverse la direction car elle "vient de" la source
+    float diff = max(dot(norm, -lightDir), 0.0);
     vec3 diffuse = diff * lightColor;
 
     float y = FragPos.y;

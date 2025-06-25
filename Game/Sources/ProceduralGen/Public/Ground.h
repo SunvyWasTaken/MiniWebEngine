@@ -20,5 +20,7 @@ namespace Sunset
 		GENERATED_BODY;
 
 		virtual void Init() override;
+
+		void Jump();
 	};
 }
