@@ -27,7 +27,10 @@ namespace Sunset
 		{
 			static_assert(std::is_base_of_v<BaseComponent, T>, "The class should be a child of BaseComponent");
 			if (m_Scene)
-				m_Scene->GetEntitys().emplace<T>(m_Id, std::forward<Args>(args)...);
+			{
+				T& comp = m_Scene->GetEntitys().emplace<T>(m_Id, std::forward<Args>(args)...);
+				comp.owner = this;
+			}
 		}
 
 		template <typename T>
@@ -36,7 +39,7 @@ namespace Sunset
 			if(!m_Scene)
 				return nullptr;
 
-			return &m_Scene->GetEntitys().get<T>(m_Id);
+			return m_Scene->GetEntitys().try_get<T>(m_Id);
 		}
 
 	private:

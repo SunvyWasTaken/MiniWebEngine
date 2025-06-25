@@ -8,8 +8,9 @@ namespace Sunset
 {
 	class TransformComponent : public BaseComponent
 	{
+		friend class Scene;
 	public:
-		explicit TransformComponent(const glm::vec3& position = {0, 0, 0});
+		explicit TransformComponent(const glm::vec3& position = {0, 0, 0}, const glm::quat& rotation = glm::quat(1.f, 0.f, 0.f, 0.f));
 
 		~TransformComponent();
 
@@ -18,6 +19,8 @@ namespace Sunset
 		void SetPosition(const glm::vec3& newPosition);
 
 		void AddPosition(const glm::vec3& direction);
+
+		const glm::quat GetRotation() const { return m_Rotation; }
 
 		void AddPitch(float value);
 
@@ -38,6 +41,8 @@ namespace Sunset
 	private:
 
 		void ProcessModel();
+
+		void UpdatePhysic();
 
 	private:
 		glm::vec3 m_Position;

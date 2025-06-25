@@ -6,7 +6,7 @@
 namespace Sunset
 {
 	Camera::Camera()
-		: m_Position(0)
+		: m_Position(0, 50, 0)
 		, m_Forward(0)
 		, m_UpVector(0)
 		, m_Resolution(1280, 720)

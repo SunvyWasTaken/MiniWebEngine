@@ -2,6 +2,7 @@
 
 #include "OpenGLWindow.h"
 #include "Camera.h"
+#include "Debug/DrawDebug.h"
 
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
@@ -40,6 +41,8 @@ namespace Sunset
 		const GLubyte* version = glGetString(GL_VERSION);
 		ENGINE_LOG_TRACE("OpenGL version: {}", (const char*)version);
 
+		DrawDebug::Init();
+
 		glViewport(0, 0, 1280, 720);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
@@ -51,6 +54,8 @@ namespace Sunset
 
 	OpenGLRender::~OpenGLRender()
 	{
+		DrawDebug::Shutdown();
+
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 

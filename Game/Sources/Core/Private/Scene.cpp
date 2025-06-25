@@ -10,6 +10,11 @@
 #include "Entity.h"
 #include "Scene.h"
 
+#ifdef _DEBUG
+#include "Debug/DrawDebug.h"
+#include "physx/PxPhysicsAPI.h"
+#endif // _DEBUG
+
 namespace
 {
 	entt::registry& GetEntities()
@@ -63,6 +68,15 @@ namespace Sunset
 		}
 	}
 
+	void Scene::PreUpdatePhysic()
+	{
+		auto physcEntity = GetEntities().view<TransformComponent, PhysicComponent>();
+		for (auto&& [entity, transComp, physComp] : physcEntity.each())
+		{
+			transComp.UpdatePhysic();
+		}
+	}
+
 	void Scene::UpdatePhysic(const float deltatime)
 	{
 		// Update physic after inputs and before render.
@@ -83,6 +97,48 @@ namespace Sunset
 		{
 			rendComp(transComp.GetModel());
 		}
+
+#ifdef _DEBUG
+		auto* scene = GetPhysicSystem().GetScene();
+		physx::PxU32 nbActors = scene->getNbActors(physx::PxActorTypeFlag::eRIGID_STATIC | physx::PxActorTypeFlag::eRIGID_DYNAMIC);
+		std::vector<physx::PxActor*> actors(nbActors);
+		scene->getActors(physx::PxActorTypeFlag::eRIGID_STATIC | physx::PxActorTypeFlag::eRIGID_DYNAMIC, actors.data(), nbActors);
+
+		for (physx::PxActor* actor : actors)
+		{
+			auto* rigidActor = static_cast<physx::PxRigidActor*>(actor);
+			physx::PxU32 nbShapes = rigidActor->getNbShapes();
+			std::vector<physx::PxShape*> shapes(nbShapes);
+			rigidActor->getShapes(shapes.data(), nbShapes);
+
+			for (physx::PxShape* shape : shapes)
+			{
+				physx::PxTransform globalPose = physx::PxShapeExt::getGlobalPose(*shape, *rigidActor);
+
+				if (shape->getGeometry().getType() == physx::PxGeometryType::eBOX)
+				{
+					const physx::PxBoxGeometry& box = static_cast<const physx::PxBoxGeometry&>(shape->getGeometry());
+					DrawDebug::get()->DrawDebugBox(globalPose, box.halfExtents);
+				}
+				else if (shape->getGeometry().getType() == physx::PxGeometryType::eSPHERE)
+				{
+					const physx::PxSphereGeometry& sphere = static_cast<const physx::PxSphereGeometry&>(shape->getGeometry());
+					DrawDebug::get()->DrawDebugSphere(globalPose, sphere.radius);
+				}
+				else if (shape->getGeometry().getType() == physx::PxGeometryType::eCAPSULE)
+				{
+					const physx::PxCapsuleGeometry& capsule = static_cast<const physx::PxCapsuleGeometry&>(shape->getGeometry());
+					DrawDebug::get()->DrawDebugCapsule(globalPose, capsule.radius, capsule.halfHeight);
+				}
+				else if (shape->getGeometry().getType() == physx::PxGeometryType::ePLANE)
+				{
+					DrawDebug::get()->DrawDebugPlane(globalPose);
+				}
+			}
+		}
+
+#endif // DEBUG
+
 	}
 
 	void Scene::DestroyEntity(const entt::entity& entity)

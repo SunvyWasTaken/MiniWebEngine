@@ -13,4 +13,5 @@
 #include "Log.h"
 #include "Tools/Defines.h"
 #include "Tools/Profiling.h"
+#include "Transform.h"
 #include "Variant.h"
