@@ -2,12 +2,25 @@
 
 #include "OpenGLWindow.h"
 #include "Camera.h"
+
+#include "Inputs/InputManager.h"
+
+#ifdef _DEBUG
 #include "Debug/DrawDebug.h"
+#endif
 
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
 #include "glm/gtc/type_ptr.hpp"
+
+namespace
+{
+	void KeyCalls(GLFWwindow* windowint, int key, int scancode, int action, int mods)
+	{
+		Sunset::InputManager::KeyDispatch(static_cast<char>(key), (action == GLFW_PRESS));
+	}
+}
 
 namespace Sunset
 {
@@ -24,6 +37,7 @@ namespace Sunset
 		glfwSwapInterval(1);
 		glfwSetCursorPos(m_Window, 0, 0);
 		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetKeyCallback(m_Window, &KeyCalls);
 
 		glfwSetFramebufferSizeCallback(m_Window,
 			[](GLFWwindow* window, int width, int height)
@@ -40,9 +54,9 @@ namespace Sunset
 
 		const GLubyte* version = glGetString(GL_VERSION);
 		ENGINE_LOG_TRACE("OpenGL version: {}", (const char*)version);
-
+#ifdef _DEBUG
 		DrawDebug::Init();
-
+#endif
 		glViewport(0, 0, 1280, 720);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
@@ -54,7 +68,9 @@ namespace Sunset
 
 	OpenGLRender::~OpenGLRender()
 	{
+#ifdef _DEBUG
 		DrawDebug::Shutdown();
+#endif // _DEBUG
 
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();

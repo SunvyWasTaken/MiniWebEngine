@@ -10,6 +10,23 @@ namespace Sunset
 	{
 	}
 
+	Entity::Entity(const Entity& other)
+		: m_Id(other.m_Id)
+		, m_Scene(other.m_Scene)
+	{
+
+	}
+
+	Entity& Entity::operator=(const Entity& other)
+	{
+		if (this != &other)
+		{
+			m_Id = other.m_Id;
+			m_Scene = other.m_Scene;
+		}
+		return *this;
+	}
+
 	Entity::~Entity()
 	{
 	}

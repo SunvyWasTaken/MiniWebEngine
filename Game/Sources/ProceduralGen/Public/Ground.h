@@ -9,7 +9,7 @@ namespace Sunset
 	class Ground : public Sunset::Entity
 	{
 	public:
-		GENERATED_BODY;
+		GENERATED_BODY(Ground);
 
 		virtual void Init() override;
 	};
@@ -17,10 +17,10 @@ namespace Sunset
 	class Pig : public Sunset::Entity
 	{
 	public:
-		GENERATED_BODY;
+		GENERATED_BODY(Pig);
 
 		virtual void Init() override;
 
-		void Jump();
+		void Jump(bool pressed) const;
 	};
 }

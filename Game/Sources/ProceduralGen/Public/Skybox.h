@@ -9,7 +9,7 @@ namespace Sunset
 	class SkyBox : public Entity
 	{
 	public:
-		using Entity::Entity;
+		GENERATED_BODY(SkyBox)
 
 		virtual void Init() override;
 	};

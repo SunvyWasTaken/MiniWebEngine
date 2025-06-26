@@ -13,6 +13,11 @@ namespace Sunset
 		return glfwGetKey((*(Engine::Get()->GetWindow()))(), key) == GLFW_PRESS;
 	}
 
+	bool Inputs::IsKey(const char key)
+	{
+		return IsKey(static_cast<int>(key));
+	}
+
 	glm::f64vec2 Inputs::GetMouseScreenPosition()
 	{
 		glm::f64vec2 loc{0.0};

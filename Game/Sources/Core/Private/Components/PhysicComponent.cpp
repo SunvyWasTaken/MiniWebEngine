@@ -10,10 +10,12 @@ namespace Sunset
 		: m_Shape(shape)
 		, m_Actor((IsStatic ? Sunset::PhysicSystem::CreateStaticShape(shape) : Sunset::PhysicSystem::CreateDynamicShape(shape)))
 	{
+		ENGINE_LOG_TRACE("Physic Component create")
 	}
 
 	PhysicComponent::~PhysicComponent()
 	{
+		ENGINE_LOG_TRACE("Physic Component destroy")
 	}
 
 	glm::vec3 PhysicComponent::GetPosition() const
@@ -37,7 +39,7 @@ namespace Sunset
 		m_Actor->setGlobalPose(pxTransform);
 	}
 
-	void PhysicComponent::AddImpulse(const glm::vec3& dir, float force)
+	void PhysicComponent::AddImpulse(const glm::vec3& dir, float force) const
 	{
 		physx::PxVec3 tmpDir{dir.x, dir.y, dir.z};
 		static_cast<physx::PxRigidDynamic*>(m_Actor)->addForce(tmpDir * force, physx::PxForceMode::eVELOCITY_CHANGE);

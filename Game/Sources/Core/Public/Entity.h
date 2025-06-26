@@ -14,6 +14,10 @@ namespace Sunset
 
 		virtual ~Entity();
 
+		Entity(const Entity& other);
+
+		Entity& operator=(const Entity& other);
+
 		virtual void Init();
 
 		void Destroy();
@@ -34,7 +38,7 @@ namespace Sunset
 		}
 
 		template <typename T>
-		T* GetComponent()
+		T* GetComponent() const
 		{
 			if(!m_Scene)
 				return nullptr;
@@ -42,10 +46,16 @@ namespace Sunset
 			return m_Scene->GetEntitys().try_get<T>(m_Id);
 		}
 
+		int Id() const { return static_cast<int>(m_Id); }
+
 	private:
 		entt::entity m_Id;
 		Scene* m_Scene;
 	};
 }
 
-#define GENERATED_BODY using Sunset::Entity::Entity; using Super = Sunset::Entity;
+#define GENERATED_BODY(name) using Sunset::Entity::Entity; using Super = Sunset::Entity; \
+		name(const name& other) \
+			: Super(other) \
+		{} \
+		name& operator=(const name& other) { if (this != &other) {Super::operator=(other);} return *this; }

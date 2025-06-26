@@ -12,6 +12,7 @@
 
 #include "Ground.h"
 #include "Skybox.h"
+
 namespace
 {
 	std::shared_ptr<Sunset::Shader> shaderText = nullptr;
@@ -52,6 +53,7 @@ struct Terrain : public Sunset::Scene
 };
 
 Sunset::Engine* Sunset::Engine::m_Engine = nullptr;
+using Scenes = Sunset::SceneManager<Menu, Terrain>;
 
 namespace
 {
@@ -61,7 +63,7 @@ namespace
 
 	std::unique_ptr<Sunset::OpenGLRender> m_Render = nullptr;
 
-	std::unique_ptr<Sunset::SceneManager<Terrain>> m_SceneManager = nullptr;
+	std::unique_ptr<Scenes> m_SceneManager = nullptr;
 }
 
 void Menu::Begin()
@@ -96,7 +98,7 @@ void Terrain::Begin()
 	/// Ground
 	CreateEntity<Sunset::Ground>();
 	CreateEntity<Sunset::SkyBox>();
-	oui = CreateEntity<Sunset::Pig>();
+	CreateEntity<Sunset::Pig>();
 
 }
 
@@ -116,8 +118,8 @@ void Terrain::Update(const float deltatime)
 	}
 	if (Sunset::Inputs::IsKey(83))
 	{
-		glm::vec3 dir = cam.GetCameraForwardVector();
-		cam.AddPosition(-dir * deltatime * s);
+		glm::vec3 dir = cam.GetCameraForwardVector() * deltatime * s;
+		cam.AddPosition(-dir);
 	}
 	if (Sunset::Inputs::IsKey(87))
 	{
@@ -133,10 +135,6 @@ void Terrain::Update(const float deltatime)
 	{
 		glm::vec3 dir = cam.GetCameraUpVector();
 		cam.AddPosition(-dir * deltatime * s);
-	}
-	if (Sunset::Inputs::IsKey(static_cast<int>(' ')))
-	{
-		oui.Jump();
 	}
 
 	glm::vec3 rot = cam.GetRotation();
@@ -156,7 +154,7 @@ namespace Sunset
 		ENGINE_LOG_TRACE("Welcome to the engine create by Neo")
 
 		m_Render = std::make_unique<OpenGLRender>();
-		m_SceneManager = std::make_unique<Sunset::SceneManager<Terrain>>();
+		m_SceneManager = std::make_unique<Scenes>();
 	}
 
 	Engine::~Engine()
@@ -202,6 +200,8 @@ namespace Sunset
 			m_Render->Begin(cam);
 
 			m_SceneManager->Render();
+
+			Sunset::FontLoader::RenderText(shaderText, std::format("x: {}, y: {}, z: {}", cam.GetCameraPosition().x, cam.GetCameraPosition().y, cam.GetCameraPosition().z), 0.f, 0.f, 1.f, { 1.f, 1.f, 1.f });
 
 			m_Render->End();
 		}

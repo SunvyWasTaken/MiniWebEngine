@@ -22,7 +22,7 @@ namespace Sunset
 
 		void Set(const Transform& transform);
 
-		void AddImpulse(const glm::vec3& dir, float force);
+		void AddImpulse(const glm::vec3& dir, float force) const;
 
 	private:
 		PhyscShape::Type m_Shape;

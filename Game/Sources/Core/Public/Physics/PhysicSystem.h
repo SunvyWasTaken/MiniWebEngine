@@ -43,7 +43,7 @@ namespace Sunset
 			glm::quat rotation;
 			float radius;
 			float halfHeight;
-			float mass = 1.0f;
+			float mass = 100.0f;
 			float friction = 0.5f;
 			float restitution = 0.6f;
 		};

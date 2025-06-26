@@ -6,11 +6,11 @@
 namespace Sunset
 {
 	Camera::Camera()
-		: m_Position(0, 50, 0)
+		: m_Position(0, 200, -200)
 		, m_Forward(0)
 		, m_UpVector(0)
 		, m_Resolution(1280, 720)
-		, m_Rotation(-90.f, 0.f, 0.f)
+		, m_Rotation(90.f, -20.f, 0.f)
 		, m_Fov(45.f)
 		, m_RenderDistance(2e7)
 		, m_Projection(Projection::Perspective)

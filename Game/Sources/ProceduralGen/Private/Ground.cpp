@@ -11,6 +11,8 @@
 #include "ShaderLoader.h"
 #include "Textures/TextureManager.h"
 
+#include "Inputs/InputManager.h"
+
 #include "Meshes/Vertex.h"
 
 #include "Meshes/SkeletalMesh.h"
@@ -77,10 +79,17 @@ namespace Sunset
 		AddComponent<RenderComponent>(drawablePig);
 
 		AddComponent<PhysicComponent>(PhyscShape::Capsule{transComp->GetPosition(), transComp->GetRotation(), 32.f, 40.f}, false);
+
+		BIND_ACTION_KEY(' ', &Pig::Jump, *this);
 	}
 
-	void Pig::Jump()
+	void Pig::Jump(bool pressed) const
 	{
-		GetComponent<PhysicComponent>()->AddImpulse({0, 1, 0}, 1);
+		if (!pressed)
+			return;
+
+		PhysicComponent* tmp = GetComponent<PhysicComponent>();
+		if (tmp)
+			tmp->AddImpulse({0, 1, 0}, 360);
 	}
 }

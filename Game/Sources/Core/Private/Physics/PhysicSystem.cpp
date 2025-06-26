@@ -66,7 +66,7 @@ namespace Sunset
 	void PhysicSystem::Init()
 	{
 		physx::PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
-		sceneDesc.gravity = physx::PxVec3(0, -9.81f, 0);
+		sceneDesc.gravity = physx::PxVec3(0, -981.f, 0);
 		sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(0);
 		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 		sceneDesc.flags |= physx::PxSceneFlag::eENABLE_ACTIVE_ACTORS;

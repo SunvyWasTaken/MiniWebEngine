@@ -6,6 +6,7 @@
 #include "glm/gtc/quaternion.hpp"
 
 #include <chrono>
+#include <functional>
 #include <memory>
 #include <string>
 #include <variant>
