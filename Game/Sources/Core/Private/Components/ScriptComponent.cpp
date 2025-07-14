@@ -4,8 +4,7 @@
 
 namespace Sunset
 {
-	ScriptComponent::ScriptComponent(const FunctionUpdate& functionUpdate, ScriptState* states)
+	ScriptComponent::ScriptComponent(const FunctionUpdate& functionUpdate)
 		: m_FuncUpdate(functionUpdate)
-		, m_States(states)
 	{ }
 }

@@ -6,6 +6,7 @@
 namespace
 {
 	Sunset::Camera* m_ActiveCamera = nullptr;
+	Sunset::Camera backup_cam;
 }
 
 namespace Sunset
@@ -18,7 +19,10 @@ namespace Sunset
 
 	Camera* CameraManager::GetActiveCamera()
 	{
-		return m_ActiveCamera;
+		if (m_ActiveCamera)
+			return m_ActiveCamera;
+		else
+			return &backup_cam;
 	}
 
 }

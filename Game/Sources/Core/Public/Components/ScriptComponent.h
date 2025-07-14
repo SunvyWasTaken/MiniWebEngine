@@ -11,22 +11,14 @@ namespace entt
 
 namespace Sunset
 {
-	struct ScriptState : public BaseComponent
-	{
-		virtual ~ScriptState() = default;
-	};
-
-	class ScriptComponent
+	class ScriptComponent : public BaseComponent
 	{
 		friend class Scene;
-		using FunctionUpdate = std::function<void(entt::entity, const float)>;
-		using States = std::unique_ptr<ScriptState>;
+		using FunctionUpdate = std::function<void(float)>;
 
 	public:
-		ScriptComponent(const FunctionUpdate& functionUpdate, ScriptState* states);
+		ScriptComponent(const FunctionUpdate& functionUpdate);
 
 		FunctionUpdate m_FuncUpdate;
-		
-		States m_States;
 	};
 }

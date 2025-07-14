@@ -19,7 +19,10 @@ namespace Sunset
 
 		void Bind(const std::function<void(Args...)>& func)
 		{
-			funcs.emplace_back(func);
+			if (func)
+				funcs.emplace_back(func);
+			else
+				ENGINE_LOG_ERROR("The given function to the bind is not valid");
 		}
 
 		operator bool() const

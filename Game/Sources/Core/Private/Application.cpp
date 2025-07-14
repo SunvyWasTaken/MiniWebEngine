@@ -61,8 +61,6 @@ namespace
 {
 	bool bIsAppOpen = false;
 
-	Sunset::Camera cam;
-
 	std::unique_ptr<Sunset::OpenGLRender> m_Render = nullptr;
 
 	std::unique_ptr<Scenes> m_SceneManager = nullptr;
@@ -101,55 +99,14 @@ void Terrain::Begin()
 	CreateEntity<Sunset::Ground>();
 	CreateEntity<Sunset::SkyBox>();
 	oui = CreateEntity<Sunset::Pawn>();
-
 }
 
 void Terrain::Update(const float deltatime)
 {
-	Scene::Update(deltatime);
-	float s = 100.f;
-	if (Sunset::Inputs::IsKey('D')) // 68
+	if (Sunset::Inputs::IsKey(' '))
 	{
-		glm::vec3 dir = cam.GetCameraRightVector() * deltatime * s;
-		//cam.AddPosition(dir);
-		oui->AddPosition(dir);
+		oui->Jump();
 	}
-	if (Sunset::Inputs::IsKey('A')) // 65
-	{
-		glm::vec3 dir = cam.GetCameraRightVector() * deltatime * s;
-		//cam.AddPosition(-dir);
-		oui->AddPosition(-dir);
-	}
-	if (Sunset::Inputs::IsKey('S')) // 83
-	{
-		glm::vec3 dir = cam.GetCameraForwardVector() * deltatime * s;
-		//cam.AddPosition(-dir);
-		oui->AddPosition(-dir);
-	}
-	if (Sunset::Inputs::IsKey('W')) // 87
-	{
-		glm::vec3 dir = cam.GetCameraForwardVector() * deltatime * s;
-		//cam.AddPosition(dir);
-		oui->AddPosition(dir);
-	}
-	//if (Sunset::Inputs::IsKey('E')) // 69
-	//{
-	//	glm::vec3 dir = cam.GetCameraUpVector() * deltatime * s;
-	//	cam.AddPosition(dir);
-	//}
-
-	//if (Sunset::Inputs::IsKey('Q')) // 81
-	//{
-	//	glm::vec3 dir = cam.GetCameraUpVector() * deltatime * s;
-	//	cam.AddPosition(-dir);
-	//}
-
-	glm::vec3 rot = cam.GetRotation();
-	glm::vec2 mosM = Sunset::Inputs::MouseMovement() * 0.1f;
-	rot.x += mosM.x;
-	rot.y -= mosM.y;
-	rot.y = glm::clamp(rot.y, -89.0f, 89.0f);
-	cam.SetRotation({ rot.x, rot.y, 0.f });
 }
 
 namespace Sunset
@@ -158,9 +115,8 @@ namespace Sunset
 	{
 		bIsAppOpen = true;
 		Log::Init();
-		ENGINE_LOG_TRACE("Welcome to the engine create by Neo")
 
-		CameraManager::SetActiveCamera(&cam);
+		ENGINE_LOG_TRACE("Welcome to the engine create by Neo")
 
 		m_Render = std::make_unique<OpenGLRender>();
 		m_SceneManager = std::make_unique<Scenes>();
@@ -222,10 +178,5 @@ namespace Sunset
 	Scene* Engine::GetWorld()
 	{
 		return m_SceneManager->GetScene();
-	}
-
-	Camera& Engine::GetCam() const
-	{
-		return cam;
 	}
 }

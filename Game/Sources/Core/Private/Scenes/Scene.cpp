@@ -54,6 +54,7 @@ namespace Sunset
 
 	Scene::~Scene()
 	{
+		ComponentUpdater::Clear();
 		GetEntityList().clear();
 		GetEntities().clear();
 		GetPhysicSystem().Shutdown();
@@ -68,7 +69,7 @@ namespace Sunset
 		auto scripts = GetEntities().view<ScriptComponent>();
 		for (auto&& [entity, script] : scripts.each())
 		{
-			script.m_FuncUpdate(entity, deltatime);
+			script.m_FuncUpdate(deltatime);
 		}
 
 		ComponentUpdater::Update(deltatime);
@@ -175,14 +176,14 @@ namespace Sunset
 		GetEntityList().emplace_back(value);
 	}
 
-	void Scene::AddUpdateComponent(const std::function<void(float)>& func)
+	void Scene::AddUpdateComponent(uint32_t id, const std::function<void(float)>& func)
 	{
-		ComponentUpdater::AddComponent(func);
+		ComponentUpdater::AddComponent(id, func);
 	}
 
-	void Scene::DeleteUpdateComponent(const std::function<void(float)>& func)
+	void Scene::DeleteUpdateComponent(uint32_t id)
 	{
-		ComponentUpdater::RemoveComp(func);
+		ComponentUpdater::RemoveComp(id);
 	}
 
 }

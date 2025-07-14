@@ -32,6 +32,19 @@ namespace Sunset
 
 	void ComponentUpdater::RemoveComp(uint32_t id)
 	{
-		
+		auto it = std::remove_if(funcs.begin(), funcs.end(), [id](const ComponentsUpdate& f)
+			{
+				return f.id == id;
+			});
+
+		if (it != funcs.end())
+		{
+			funcs.erase(it);
+		}
+	}
+
+	void ComponentUpdater::Clear()
+	{
+		funcs.clear();
 	}
 }

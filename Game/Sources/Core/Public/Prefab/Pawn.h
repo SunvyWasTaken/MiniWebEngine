@@ -14,11 +14,16 @@ namespace Sunset
 	{
 	public:
 		GENERATED_BODY(Pawn);
+
 		void Init() override;
+
+		void Update(float deltatime);
 
 		void AddPosition(const glm::vec3& dir);
 
 		glm::vec3 GetPosition() const;
+
+		void Jump();
 
 	private:
 		TransformComponent* m_TransComp = nullptr;

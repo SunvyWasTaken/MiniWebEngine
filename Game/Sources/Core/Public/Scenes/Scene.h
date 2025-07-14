@@ -54,8 +54,8 @@ namespace Sunset
 
 		void AddEntityToList(Entity* value);
 
-		void AddUpdateComponent(const std::function<void(float)>& func);
+		void AddUpdateComponent(uint32_t id, const std::function<void(float)>& func);
 
-		void DeleteUpdateComponent(const std::function<void(float)>& func);
+		void DeleteUpdateComponent(uint32_t id);
 	};
 }

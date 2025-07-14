@@ -43,16 +43,16 @@ namespace Sunset
 				T& comp = m_Scene->GetEntitys().emplace<T>(m_Id, std::forward<Args>(args)...);
 				if constexpr (has_Update<T>::value)
 				{
-					auto& func = [&](float dt)
+					const std::function<void(float)>& func = [&](float dt)
 						{
 							comp.Update(dt);
 						};
 
-					m_Scene->AddUpdateComponent(func);
+					m_Scene->AddUpdateComponent(static_cast<uint32_t>(m_Id), func);
 
 					OnEntityDestroy.Bind([&]()
 					{
-						m_Scene->DeleteUpdateComponent(func);
+						m_Scene->DeleteUpdateComponent(static_cast<uint32_t>(m_Id));
 					});
 				}
 				comp.owner = this;
