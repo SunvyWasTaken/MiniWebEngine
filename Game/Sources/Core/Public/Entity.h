@@ -2,13 +2,21 @@
 
 #pragma once
 
-#include "Scene.h"
+#include "Scenes/Scene.h"
 #include "Components/BaseComponent.h"
 
 namespace Sunset
 {
 	class Entity
 	{
+		CALLBACKS_MULTI(OnDestroy);
+
+		template <typename, typename = void>
+		struct has_Update : std::false_type {};
+
+		template <typename T>
+		struct has_Update<T, std::void_t<decltype(std::declval<T>().Update(std::declval<float>()))>> : std::true_type {};
+
 	public:
 		Entity(Scene* _scene = nullptr, const entt::entity& id = entt::null);
 
@@ -27,14 +35,30 @@ namespace Sunset
 		Scene* GetScene() const { return m_Scene; }
 
 		template <typename T, typename ...Args>
-		void AddComponent(Args&&... args)
+		T* AddComponent(Args&&... args)
 		{
 			static_assert(std::is_base_of_v<BaseComponent, T>, "The class should be a child of BaseComponent");
 			if (m_Scene)
 			{
 				T& comp = m_Scene->GetEntitys().emplace<T>(m_Id, std::forward<Args>(args)...);
+				if constexpr (has_Update<T>::value)
+				{
+					auto& func = [&](float dt)
+						{
+							comp.Update(dt);
+						};
+
+					m_Scene->AddUpdateComponent(func);
+
+					OnEntityDestroy.Bind([&]()
+					{
+						m_Scene->DeleteUpdateComponent(func);
+					});
+				}
 				comp.owner = this;
+				return &comp;
 			}
+			return nullptr;
 		}
 
 		template <typename T>
@@ -48,14 +72,14 @@ namespace Sunset
 
 		int Id() const { return static_cast<int>(m_Id); }
 
+		OnDestroy OnEntityDestroy;
+
 	private:
 		entt::entity m_Id;
 		Scene* m_Scene;
 	};
 }
 
-#define GENERATED_BODY(name) using Sunset::Entity::Entity; using Super = Sunset::Entity; \
-		name(const name& other) \
-			: Super(other) \
-		{} \
-		name& operator=(const name& other) { if (this != &other) {Super::operator=(other);} return *this; }
+#define GENERATED_BODY(name) \
+		using Sunset::Entity::Entity; \
+		using Super = Sunset::Entity;

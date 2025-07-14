@@ -17,6 +17,8 @@ namespace Sunset
 
 		void AddPosition(const glm::vec3& position);
 
+		void SetPosition(const glm::vec3& newPosition);
+
 		glm::mat4 GetView() const;
 
 		glm::mat4 GetProjection() const;

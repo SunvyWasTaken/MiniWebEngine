@@ -2,13 +2,15 @@
 
 #pragma once
 
-#include "Physics/PhysicSystem.h"
+#include "Components/CameraComponent.h"
+#include "Components/PhysicComponent.h"
 #include "Components/RenderComponent.h"
 #include "Components/ScriptComponent.h"
 #include "Components/TransformComponent.h"
-#include "Components/PhysicComponent.h"
+#include "ComponentsUpdate.h"
 #include "Entity.h"
-#include "Scene.h"
+#include "Physics/PhysicSystem.h"
+#include "Scenes/Scene.h"
 
 #ifdef _DEBUG
 #include "Debug/DrawDebug.h"
@@ -29,6 +31,12 @@ namespace
 		return m_EntityToDestroy;
 	}
 
+	std::vector<std::unique_ptr<Sunset::Entity>>& GetEntityList()
+	{
+		static std::vector<std::unique_ptr<Sunset::Entity>> m_Entitys;
+		return m_Entitys;
+	}
+
 	Sunset::PhysicSystem& GetPhysicSystem()
 	{
 		static Sunset::PhysicSystem m_PhysicSystem;
@@ -41,10 +49,12 @@ namespace Sunset
 	Scene::Scene()
 	{
 		GetPhysicSystem().Init();
+		GetEntityList().clear();
 	}
 
 	Scene::~Scene()
 	{
+		GetEntityList().clear();
 		GetEntities().clear();
 		GetPhysicSystem().Shutdown();
 	}
@@ -61,11 +71,7 @@ namespace Sunset
 			script.m_FuncUpdate(entity, deltatime);
 		}
 
-		auto RenderComp = GetEntities().view<RenderComponent>();
-		for (auto&& [entity, render] : RenderComp.each())
-		{
-			render.Update(deltatime);
-		}
+		ComponentUpdater::Update(deltatime);
 	}
 
 	void Scene::PreUpdatePhysic()
@@ -162,6 +168,21 @@ namespace Sunset
 			GetEntities().destroy(entity);
 		}
 		GetEntitiesToDestroy().clear();
+	}
+
+	void Scene::AddEntityToList(Entity* value)
+	{
+		GetEntityList().emplace_back(value);
+	}
+
+	void Scene::AddUpdateComponent(const std::function<void(float)>& func)
+	{
+		ComponentUpdater::AddComponent(func);
+	}
+
+	void Scene::DeleteUpdateComponent(const std::function<void(float)>& func)
+	{
+		ComponentUpdater::RemoveComp(func);
 	}
 
 }

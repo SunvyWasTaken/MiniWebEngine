@@ -14,6 +14,8 @@ namespace Sunset
 		template <typename ...TScenes>
 		friend class SceneManager;
 
+		friend class Entity;
+
 	public:
 
 		Scene();
@@ -37,16 +39,23 @@ namespace Sunset
 		entt::registry& GetEntitys();
 
 		template <typename T>
-		T CreateEntity()
+		T* CreateEntity()
 		{
 			static_assert(std::is_base_of_v<Entity, T>, "The class should be derived from Entity");
-			T entity{this, GetEntitys().create()};
-			entity.Init();
+			T* entity = new T(this, GetEntitys().create());
+			AddEntityToList(entity);
+			entity->Init();
 			return entity;
 		}
 
 	private:
 
 		void PostUpdate();
+
+		void AddEntityToList(Entity* value);
+
+		void AddUpdateComponent(const std::function<void(float)>& func);
+
+		void DeleteUpdateComponent(const std::function<void(float)>& func);
 	};
 }

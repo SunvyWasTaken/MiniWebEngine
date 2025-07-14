@@ -4,6 +4,22 @@
 
 #include "physx/PxPhysicsAPI.h"
 
+namespace
+{
+	physx::PxForceMode::Enum ToPxForceMode(const Sunset::Physc& mode)
+	{
+		switch (mode)
+		{
+		case Sunset::Physc::eForce:    return physx::PxForceMode::eFORCE;
+		case Sunset::Physc::eImpusle:  return physx::PxForceMode::eIMPULSE;
+		case Sunset::Physc::eSet:      return physx::PxForceMode::eVELOCITY_CHANGE;
+		case Sunset::Physc::eAcc:      return physx::PxForceMode::eACCELERATION;
+		default:               return physx::PxForceMode::eFORCE;
+		}
+	}
+
+}
+
 namespace Sunset
 {
 	PhysicComponent::PhysicComponent(const PhyscShape::Type& shape, bool IsStatic)
@@ -39,9 +55,20 @@ namespace Sunset
 		m_Actor->setGlobalPose(pxTransform);
 	}
 
-	void PhysicComponent::AddImpulse(const glm::vec3& dir, float force) const
+	void PhysicComponent::AddForce(const glm::vec3& dir, const Physc& type /* = Physc::eForce*/, float force /* = 1.f */) const
 	{
 		physx::PxVec3 tmpDir{dir.x, dir.y, dir.z};
-		static_cast<physx::PxRigidDynamic*>(m_Actor)->addForce(tmpDir * force, physx::PxForceMode::eVELOCITY_CHANGE);
+		static_cast<physx::PxRigidDynamic*>(m_Actor)->addForce(tmpDir * force, ToPxForceMode(type));
+	}
+
+	glm::vec3 PhysicComponent::GetVelocity() const
+	{
+		physx::PxVec3 vel = static_cast<physx::PxRigidDynamic*>(m_Actor)->getLinearVelocity();
+		return {vel.x , vel.y, vel.z};
+	}
+
+	bool PhysicComponent::IsFalling() const
+	{
+		return !(GetVelocity().z != 0.f);
 	}
 }

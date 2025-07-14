@@ -4,14 +4,16 @@
 #include "Camera.h"
 #include "Inputs.h"
 #include "OpenGLWindow.h"
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Scenes/Scene.h"
+#include "Scenes/SceneManager.h"
 #include "ShaderLoader.h"
 #include "Shaders.h"
 #include "Texts/FontLoader.h"
+#include "CameraManager.h"
 
 #include "Ground.h"
 #include "Skybox.h"
+#include "Prefab/Pawn.h"
 
 namespace
 {
@@ -38,7 +40,7 @@ struct Terrain : public Sunset::Scene
 {
 	Terrain()
 		: Scene()
-		, oui({})
+		, oui(nullptr)
 	{
 	}
 
@@ -49,7 +51,7 @@ struct Terrain : public Sunset::Scene
 
 	void Update(const float deltatime);
 
-	Sunset::Pig oui;
+	Sunset::Pawn* oui;
 };
 
 Sunset::Engine* Sunset::Engine::m_Engine = nullptr;
@@ -98,7 +100,7 @@ void Terrain::Begin()
 	/// Ground
 	CreateEntity<Sunset::Ground>();
 	CreateEntity<Sunset::SkyBox>();
-	CreateEntity<Sunset::Pig>();
+	oui = CreateEntity<Sunset::Pawn>();
 
 }
 
@@ -106,36 +108,41 @@ void Terrain::Update(const float deltatime)
 {
 	Scene::Update(deltatime);
 	float s = 100.f;
-	if (Sunset::Inputs::IsKey(68))
+	if (Sunset::Inputs::IsKey('D')) // 68
 	{
-		glm::vec3 dir = cam.GetCameraRightVector();
-		cam.AddPosition(dir * deltatime * s);
+		glm::vec3 dir = cam.GetCameraRightVector() * deltatime * s;
+		//cam.AddPosition(dir);
+		oui->AddPosition(dir);
 	}
-	if (Sunset::Inputs::IsKey(65))
+	if (Sunset::Inputs::IsKey('A')) // 65
 	{
-		glm::vec3 dir = cam.GetCameraRightVector();
-		cam.AddPosition(-dir * deltatime * s);
+		glm::vec3 dir = cam.GetCameraRightVector() * deltatime * s;
+		//cam.AddPosition(-dir);
+		oui->AddPosition(-dir);
 	}
-	if (Sunset::Inputs::IsKey(83))
+	if (Sunset::Inputs::IsKey('S')) // 83
 	{
 		glm::vec3 dir = cam.GetCameraForwardVector() * deltatime * s;
-		cam.AddPosition(-dir);
+		//cam.AddPosition(-dir);
+		oui->AddPosition(-dir);
 	}
-	if (Sunset::Inputs::IsKey(87))
+	if (Sunset::Inputs::IsKey('W')) // 87
 	{
-		glm::vec3 dir = cam.GetCameraForwardVector();
-		cam.AddPosition(dir * deltatime * s);
+		glm::vec3 dir = cam.GetCameraForwardVector() * deltatime * s;
+		//cam.AddPosition(dir);
+		oui->AddPosition(dir);
 	}
-	if (Sunset::Inputs::IsKey(69))
-	{
-		glm::vec3 dir = cam.GetCameraUpVector();
-		cam.AddPosition(dir * deltatime * s);
-	}
-	if (Sunset::Inputs::IsKey(81))
-	{
-		glm::vec3 dir = cam.GetCameraUpVector();
-		cam.AddPosition(-dir * deltatime * s);
-	}
+	//if (Sunset::Inputs::IsKey('E')) // 69
+	//{
+	//	glm::vec3 dir = cam.GetCameraUpVector() * deltatime * s;
+	//	cam.AddPosition(dir);
+	//}
+
+	//if (Sunset::Inputs::IsKey('Q')) // 81
+	//{
+	//	glm::vec3 dir = cam.GetCameraUpVector() * deltatime * s;
+	//	cam.AddPosition(-dir);
+	//}
 
 	glm::vec3 rot = cam.GetRotation();
 	glm::vec2 mosM = Sunset::Inputs::MouseMovement() * 0.1f;
@@ -152,6 +159,8 @@ namespace Sunset
 		bIsAppOpen = true;
 		Log::Init();
 		ENGINE_LOG_TRACE("Welcome to the engine create by Neo")
+
+		CameraManager::SetActiveCamera(&cam);
 
 		m_Render = std::make_unique<OpenGLRender>();
 		m_SceneManager = std::make_unique<Scenes>();
@@ -197,11 +206,9 @@ namespace Sunset
 
 			m_SceneManager->Update(Deltatime);
 
-			m_Render->Begin(cam);
+			m_Render->Begin(*CameraManager::GetActiveCamera());
 
 			m_SceneManager->Render();
-
-			Sunset::FontLoader::RenderText(shaderText, std::format("x: {}, y: {}, z: {}", cam.GetCameraPosition().x, cam.GetCameraPosition().y, cam.GetCameraPosition().z), 0.f, 0.f, 1.f, { 1.f, 1.f, 1.f });
 
 			m_Render->End();
 		}

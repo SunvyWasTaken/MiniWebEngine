@@ -24,6 +24,12 @@ namespace Sunset
 		ProcessVector();
 	}
 
+	void Camera::SetPosition(const glm::vec3& newPosition)
+	{
+		m_Position = newPosition;
+		ProcessVector();
+	}
+
 	glm::mat4 Camera::GetView() const
 	{
 		return glm::lookAt(m_Position, m_Position + m_Forward, m_UpVector);

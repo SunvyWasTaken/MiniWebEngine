@@ -11,15 +11,6 @@
 #include "ShaderLoader.h"
 #include "Textures/TextureManager.h"
 
-#include "Inputs/InputManager.h"
-
-#include "Meshes/Vertex.h"
-
-#include "Meshes/SkeletalMesh.h"
-
-#include "Meshes/MeshLoader.h"
-#include "Animation/AnimationLoader.h"
-
 namespace
 {
 }
@@ -56,40 +47,5 @@ namespace Sunset
 		AddComponent<Sunset::RenderComponent>(drawableGround);
 
 		AddComponent<Sunset::PhysicComponent>(Sunset::PhyscShape::Cube{ transComp->GetPosition(), planeRotation, {PlaneSize / 2.f, 0.1f, PlaneSize/2.f}});
-	}
-
-	void Pig::Init()
-	{
-		AddComponent<TransformComponent>(glm::vec3{ 0, 200, 0 });
-		auto* transComp = GetComponent<TransformComponent>();
-
-		float scale = 1.f;
-
-		transComp->SetSize({ scale, scale, scale });
-
-		std::shared_ptr<Shader> shader = ShaderLoader::Load("Pig", "Ressources/Shaders/vShaderCharacter.glsl", "Ressources/Shaders/fShaderCharacter.glsl");
-		Sunset::AnyTexture pigTexture = TextureLoader::Load("Ressources/Cisailleur/T_Cisailleur_D.png");
-
-		std::shared_ptr<Material> mat = std::make_shared<Material>(shader, pigTexture);
-		std::shared_ptr<Meshes> mesh = MeshLoader::LoadSkeletalMesh("Ressources/Hiro/A_GardeIdle.fbx");
-		Skeletal& skel = std::get_if<SkeletalMesh>(mesh.get())->GetSkel();
-		std::shared_ptr<AnimationClip> anim = AnimLoader::LoadAnimation("Ressources/Hiro/A_GardeIdle.fbx", skel.bones);
-		std::get_if<SkeletalMesh>(mesh.get())->AddAnimation(anim);
-		std::shared_ptr<Drawable> drawablePig = std::make_shared<Drawable>(mesh, mat);
-		AddComponent<RenderComponent>(drawablePig);
-
-		AddComponent<PhysicComponent>(PhyscShape::Capsule{transComp->GetPosition(), transComp->GetRotation(), 32.f, 40.f}, false);
-
-		BIND_ACTION_KEY(' ', &Pig::Jump, *this);
-	}
-
-	void Pig::Jump(bool pressed) const
-	{
-		if (!pressed)
-			return;
-
-		PhysicComponent* tmp = GetComponent<PhysicComponent>();
-		if (tmp)
-			tmp->AddImpulse({0, 1, 0}, 360);
 	}
 }

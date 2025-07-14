@@ -12,6 +12,7 @@
 #include <variant>
 
 #include "Log.h"
+#include "Tools/Callbacks.h"
 #include "Tools/Defines.h"
 #include "Tools/Profiling.h"
 #include "Transform.h"

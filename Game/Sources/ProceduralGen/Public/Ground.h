@@ -13,14 +13,4 @@ namespace Sunset
 
 		virtual void Init() override;
 	};
-
-	class Pig : public Sunset::Entity
-	{
-	public:
-		GENERATED_BODY(Pig);
-
-		virtual void Init() override;
-
-		void Jump(bool pressed) const;
-	};
 }

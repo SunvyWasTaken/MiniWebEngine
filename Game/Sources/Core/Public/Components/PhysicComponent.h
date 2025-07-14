@@ -12,6 +12,14 @@ namespace physx
 
 namespace Sunset
 {
+	enum class Physc
+	{
+		eForce,
+		eImpusle,
+		eSet,
+		eAcc
+	};
+
 	class PhysicComponent : public BaseComponent
 	{
 	public:
@@ -22,7 +30,11 @@ namespace Sunset
 
 		void Set(const Transform& transform);
 
-		void AddImpulse(const glm::vec3& dir, float force) const;
+		void AddForce(const glm::vec3& dir, const Physc& type = Physc::eForce, float force = 1.f) const;
+
+		glm::vec3 GetVelocity() const;
+
+		bool IsFalling() const;
 
 	private:
 		PhyscShape::Type m_Shape;
