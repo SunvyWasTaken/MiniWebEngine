@@ -103,6 +103,8 @@ void Terrain::Begin()
 
 void Terrain::Update(const float deltatime)
 {
+	Scene::Update(deltatime);
+
 	if (Sunset::Inputs::IsKey(' '))
 	{
 		oui->Jump();

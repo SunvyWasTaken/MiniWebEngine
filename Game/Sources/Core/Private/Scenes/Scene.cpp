@@ -42,6 +42,12 @@ namespace
 		static Sunset::PhysicSystem m_PhysicSystem;
 		return m_PhysicSystem;
 	}
+
+	bool& GetHasUpdateBaseScene()
+	{
+		static bool HasUpdateBaseScene = false;
+		return HasUpdateBaseScene;
+	}
 }
 
 namespace Sunset
@@ -66,6 +72,8 @@ namespace Sunset
 
 	void Scene::Update(const float deltatime)
 	{
+		GetHasUpdateBaseScene() = true;
+
 		auto scripts = GetEntities().view<ScriptComponent>();
 		for (auto&& [entity, script] : scripts.each())
 		{
@@ -164,6 +172,11 @@ namespace Sunset
 
 	void Scene::PostUpdate()
 	{
+		if (!GetHasUpdateBaseScene())
+			ENGINE_LOG_ERROR("You forgot to call the Udpate parent of scene. resulting in error")
+
+		GetHasUpdateBaseScene() = false;
+
 		for (entt::entity& entity : GetEntitiesToDestroy())
 		{
 			GetEntities().destroy(entity);

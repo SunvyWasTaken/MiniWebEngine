@@ -27,12 +27,14 @@ namespace Sunset
 	{
 		m_Position = newPosition;
 		bDirty = true;
+		OnTransformChange.Calls(m_Position);
 	}
 
 	void TransformComponent::AddPosition(const glm::vec3& direction)
 	{
 		m_Position += direction;
 		bDirty = true;
+		OnTransformChange.Calls(m_Position);
 	}
 
 	void TransformComponent::AddPitch(float value)

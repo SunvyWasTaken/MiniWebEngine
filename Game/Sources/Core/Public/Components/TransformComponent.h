@@ -8,6 +8,8 @@ namespace Sunset
 {
 	class TransformComponent : public BaseComponent
 	{
+		CALLBACKS_MULTI(FOnTransformChange, glm::vec3);
+
 		friend class Scene;
 	public:
 		explicit TransformComponent(const glm::vec3& position = {0, 0, 0}, const glm::quat& rotation = glm::quat(1.f, 0.f, 0.f, 0.f));
@@ -43,6 +45,10 @@ namespace Sunset
 		void ProcessModel();
 
 		void UpdatePhysic();
+
+	public:
+
+		FOnTransformChange OnTransformChange;
 
 	private:
 		glm::vec3 m_Position;

@@ -10,11 +10,11 @@ namespace
 	{
 		switch (mode)
 		{
-		case Sunset::Physc::eForce:    return physx::PxForceMode::eFORCE;
-		case Sunset::Physc::eImpusle:  return physx::PxForceMode::eIMPULSE;
-		case Sunset::Physc::eSet:      return physx::PxForceMode::eVELOCITY_CHANGE;
-		case Sunset::Physc::eAcc:      return physx::PxForceMode::eACCELERATION;
-		default:               return physx::PxForceMode::eFORCE;
+		case Sunset::Physc::eForce:		return physx::PxForceMode::eFORCE;
+		case Sunset::Physc::eImpusle:	return physx::PxForceMode::eIMPULSE;
+		case Sunset::Physc::eSet:		return physx::PxForceMode::eVELOCITY_CHANGE;
+		case Sunset::Physc::eAcc:		return physx::PxForceMode::eACCELERATION;
+		default:						return physx::PxForceMode::eFORCE;
 		}
 	}
 

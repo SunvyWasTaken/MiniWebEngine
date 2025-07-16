@@ -4,11 +4,6 @@
 
 #include "BaseComponent.h"
 
-namespace entt
-{
-	enum class entity : uint32_t;
-}
-
 namespace Sunset
 {
 	class ScriptComponent : public BaseComponent
@@ -17,7 +12,7 @@ namespace Sunset
 		using FunctionUpdate = std::function<void(float)>;
 
 	public:
-		ScriptComponent(const FunctionUpdate& functionUpdate);
+		explicit ScriptComponent(const FunctionUpdate& functionUpdate);
 
 		FunctionUpdate m_FuncUpdate;
 	};

@@ -13,3 +13,5 @@
 #define ASSERT(con, ...)
 #endif // DEBUG
 
+#define MOUSE_SPEED 10.f
+

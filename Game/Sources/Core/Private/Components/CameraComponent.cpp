@@ -17,15 +17,6 @@ namespace Sunset
 	{
 	}
 
-	void CameraComponent::Update(float deltatime)
-	{
-		if (m_Camera && owner)
-		{
-			glm::vec3 pos = static_cast<Pawn*>(owner)->GetPosition() + m_Offset;
-			m_Camera->SetPosition(pos);
-		}
-	}
-
 	void CameraComponent::SetOffset(const glm::vec3& offset)
 	{
 		m_Offset = offset;
@@ -40,6 +31,18 @@ namespace Sunset
 	glm::vec3 CameraComponent::GetForwardVector() const
 	{
 		return m_Camera->GetCameraForwardVector();
+	}
+
+	void CameraComponent::AddRotation(const glm::vec3& rotation)
+	{
+		const glm::vec3 rot = m_Camera->GetRotation() + rotation;
+		m_Camera->SetRotation(rot);
+	}
+
+	void CameraComponent::UpdatePosition(const glm::vec3& pos)
+	{
+		glm::vec3 newPos = pos + m_Offset;
+		m_Camera->SetPosition(newPos);
 	}
 
 }

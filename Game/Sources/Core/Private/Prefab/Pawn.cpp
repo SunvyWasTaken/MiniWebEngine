@@ -25,14 +25,14 @@ namespace Sunset
 		m_TransComp = AddComponent<TransformComponent>();
 		m_PhysComp = AddComponent<PhysicComponent>(PhyscShape::Capsule{ m_TransComp->GetPosition(), m_TransComp->GetRotation(), 0.32f, 1.8f }, false);
 		m_CameraComp = AddComponent<CameraComponent>();
-
-		m_CameraComp->SetOffset({0.f, 90.f, -180.f});
+		m_TransComp->OnTransformChange.Bind(std::bind(&CameraComponent::UpdatePosition, m_CameraComp, std::placeholders::_1));
+		m_CameraComp->SetOffset({0.f, 0.9f, -1.f});
 		
 		CameraManager::SetActiveCamera(m_CameraComp->GetCamera());
 
 		AddComponent<ScriptComponent>(std::bind(&Pawn::Update, this, std::placeholders::_1));
 
-		//m_TransComp->SetSize({0.01f, 0.01f, 0.01f});
+		m_TransComp->SetSize({0.01f, 0.01f, 0.01f});
 
 		std::shared_ptr<Shader> shader = ShaderLoader::Load("Pig", "Ressources/Shaders/vShaderCharacter.glsl", "Ressources/Shaders/fShaderCharacter.glsl");
 		Sunset::AnyTexture pigTexture = TextureLoader::Load("Ressources/Cisailleur/T_Cisailleur_D.png");
@@ -48,7 +48,7 @@ namespace Sunset
 
 	void Pawn::Update(float deltatime)
 	{
-		const float speed = 10.0f;
+		const float speed = 1000.0f;
 
 		glm::vec3 forward = m_CameraComp->GetForwardVector();
 
@@ -62,11 +62,22 @@ namespace Sunset
 			// Reculer
 			m_PhysComp->AddForce(-forward * speed * deltatime);
 		}
+
+		if (Inputs::IsKey(' '))
+		{
+			Jump();
+		}
+
+		glm::vec2 mos = Inputs::MouseMovement() * deltatime * MOUSE_SPEED;
+		if (glm::length(mos) > 0.f)
+		{
+			m_CameraComp->AddRotation({mos.x, -mos.y, 0.f});
+		}
 	}
 
 	void Pawn::AddPosition(const glm::vec3& dir)
 	{
-		m_PhysComp->AddForce(dir);
+		m_PhysComp->AddForce(dir, Physc::eAcc);
 	}
 
 	glm::vec3 Pawn::GetPosition() const
@@ -76,7 +87,7 @@ namespace Sunset
 
 	void Pawn::Jump()
 	{
-		m_PhysComp->AddForce({0.f, 1.f, 0.f}, Physc::eImpusle);
+		m_PhysComp->AddForce({0.f, 1.f, 0.f}, Physc::eSet, 1.f);
 	}
 
 }

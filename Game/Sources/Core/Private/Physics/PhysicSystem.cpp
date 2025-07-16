@@ -66,7 +66,7 @@ namespace Sunset
 	void PhysicSystem::Init()
 	{
 		physx::PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
-		sceneDesc.gravity = physx::PxVec3(0, -981.f, 0);
+		sceneDesc.gravity = physx::PxVec3(0, -9.81f, 0);
 		sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(0);
 		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 		sceneDesc.flags |= physx::PxSceneFlag::eENABLE_ACTIVE_ACTORS;
@@ -195,6 +195,7 @@ namespace Sunset
 				physx::PxRigidDynamic* capsuleActor = m_Physics->createRigidDynamic(GetTransform(capsule));
 				capsuleActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
 				capsuleActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
+				capsuleActor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
 				physx::PxShape* shapePx = m_Physics->createShape(capsuleGeom, *m_DefaultMaterial);
 				capsuleActor->attachShape(*shapePx);
 				shapePx->release();

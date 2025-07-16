@@ -9,11 +9,11 @@ namespace Sunset
 	{
 		std::vector<std::function<void(Args...)>> funcs;
 	public:
-		void Calls(Args&&... args)
+		void Calls(const Args&... args)
 		{
 			for (std::function<void(Args...)>& func : funcs)
 			{
-				func(std::forward<Args>(args)...);
+				func(args...);
 			}
 		}
 
@@ -34,4 +34,4 @@ namespace Sunset
 
 #define CALLBACKS_MULTI(name, ...) \
 class name : public ::Sunset::Callbacks<__VA_ARGS__> \
-{}
+{};
